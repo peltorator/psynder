@@ -1,0 +1,18 @@
+server:
+  host: localhost
+  port: 443
+
+tls:
+  cert-path: server.crt
+  key-path: server.key
+
+jwt:
+  key-path: server.key
+  token-duration: 5m
+  cookie-duration: 2d
+  issuer: psynder
+  url: https://localhost:443
+
+oauth:
+  vk:
+    client-id: 7948171
