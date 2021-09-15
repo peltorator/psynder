@@ -147,3 +147,4 @@ lint/tmp/
 .cxx
 local.properties
 
+**/.idea

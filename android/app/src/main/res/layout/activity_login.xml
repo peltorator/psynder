@@ -79,6 +79,7 @@
             <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                 android:id="@+id/cirLoginButton"
                 style="@style/loginButton"
+                android:onClick="onLoginClick"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/loginViewsMargin"
                 android:text="Login"
@@ -90,7 +91,7 @@
             <TextView
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin"
-                android:onClick="onLoginClick"
+                android:onClick="onRegisterClick"
                 android:text="New user? Register Now"
                 android:textAlignment="center"
                 android:textColor="#000000"
@@ -132,6 +133,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="11dp"
         android:layout_marginBottom="30dp"
-        android:onClick="onLoginClick"
+        android:onClick="onRegisterClick"
         android:src="@drawable/ic_add_img" />
 </RelativeLayout>

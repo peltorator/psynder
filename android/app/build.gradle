@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -49,4 +50,22 @@ dependencies {
     implementation 'br.com.simplepass:loading-button-android:1.14.0'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.google.android.material:material:1.0.0'
+    // AndroidX.
+    def lifecycleVersion = "2.4.0-alpha03"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+
+    // HTTP client.
+    def retrofitVersion = "2.9.0"
+    def okhttpVersion = '4.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:okhttp-tls:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+
+    // JSON parser.
+    def moshiVersion = '1.12.0'
+    implementation "com.squareup.moshi:moshi:$moshiVersion"
+    implementation "com.squareup.moshi:moshi-adapters:$moshiVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 }
