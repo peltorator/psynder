@@ -3,7 +3,6 @@ package com.psinder.myapplication.network
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface Api {
@@ -19,12 +18,14 @@ data class Token(
     @Json(name="token") val token: String
 )
 
+data class ErrorResponse(
+    @Json(name="error") val error: String
+)
+
 @JsonClass(generateAdapter = true)
 data class LoginData(
-    @Json(name="email")
-    val email: String,
-    @Json(name="password")
-    val password: String
+    @Json(name="email") val email: String,
+    @Json(name="password") val password: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -40,3 +41,9 @@ data class User(
     @Json(name = "first_name") val userName: String,
     @Json(name = "email") val groupName: String
 )
+
+sealed class ResultWrapper<out T> {
+    data class Success<out T>(val value: T): ResultWrapper<T>()
+    data class GenericError(val code: Int? = null, val error: ErrorResponse? = null): ResultWrapper<Nothing>()
+    object NetworkError: ResultWrapper<Nothing>()
+}
