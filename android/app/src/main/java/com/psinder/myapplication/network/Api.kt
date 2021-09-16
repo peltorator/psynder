@@ -8,30 +8,38 @@ import retrofit2.http.POST
 interface Api {
     @POST("login")
     suspend fun login(@Body loginData: LoginData): Token
-//
-//    @POST("register")
-//    suspend fun register(): RegistrationResponse
+
+    @POST("register")
+    suspend fun register(@Body registerData: RegisterData): RegistrationResponse
 }
 
 @JsonClass(generateAdapter = true)
 data class Token(
-    @Json(name="token") val token: String
+    @Json(name = "token") val token: String
 )
 
 data class ErrorResponse(
-    @Json(name="error") val error: String
+    @Json(name = "error") val error: String
 )
 
 @JsonClass(generateAdapter = true)
 data class LoginData(
-    @Json(name="email") val email: String,
-    @Json(name="password") val password: String
+    @Json(name = "email") val email: String,
+    @Json(name = "password") val password: String
+)
+
+@JsonClass(generateAdapter = true)
+data class RegisterData(
+    // @Json(name = "name") val name: String, TODO: add when api is ready
+    @Json(name = "email") val email: String,
+    @Json(name = "password") val password: String,
+    // @Json(name = "mobile number") val mobileNumber: String
 )
 
 @JsonClass(generateAdapter = true)
 data class RegistrationResponse(
-    val id: String,
-    val token: String
+    @Json(name = "id") val id: String,
+    @Json(name = "token") val token: String
 )
 
 
@@ -43,7 +51,9 @@ data class User(
 )
 
 sealed class ResultWrapper<out T> {
-    data class Success<out T>(val value: T): ResultWrapper<T>()
-    data class GenericError(val code: Int? = null, val error: ErrorResponse? = null): ResultWrapper<Nothing>()
-    object NetworkError: ResultWrapper<Nothing>()
+    data class Success<out T>(val value: T) : ResultWrapper<T>()
+    data class GenericError(val code: Int? = null, val error: ErrorResponse? = null) :
+        ResultWrapper<Nothing>()
+
+    object NetworkError : ResultWrapper<Nothing>()
 }
