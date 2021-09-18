@@ -2,8 +2,8 @@ package account
 
 import (
 "fmt"
-"github.com/psynder/internal/domain/account"
-"github.com/psynder/internal/service/token"
+"psynder/internal/domain/account"
+"psynder/internal/service/token"
 "time"
 
 "errors"

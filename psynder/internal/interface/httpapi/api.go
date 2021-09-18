@@ -5,10 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
-
-	"github.com/psynder/internal/interface/prom"
-	"github.com/psynder/internal/usecases/account"
-	"github.com/psynder/internal/usecases/link"
+	"psynder/internal/usecases/account"
 )
 
 type Api struct {
@@ -25,10 +22,9 @@ func (a *Api) Router() http.Handler {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/signup/giver", a.postSignupGiver).Methods(http.MethodPost)
-	r.HandleFunc("/signin/giver", a.postSigninGiver).Methods(http.MethodPost)
-
 	r.HandleFunc("/signup/taker", a.postSignupTaker).Methods(http.MethodPost)
-	r.HandleFunc("/signin/taker", a.postSigninTaker).Methods(http.MethodPost)
+
+	r.HandleFunc("/signin", a.postSignin).Methods(http.MethodPost)
 
 	return r
 }
@@ -39,7 +35,28 @@ type postSignupRequestModel struct {
 }
 
 // postSignup handles request for a new account creation.
-func (a *Api) postSignup(w http.ResponseWriter, r *http.Request) {
+func (a *Api) postSignupGiver(w http.ResponseWriter, r *http.Request) {
+	var m postSignupRequestModel
+	if err := json.NewDecoder(r.Body).Decode(&m); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	acc, err := a.AccountUseCases.LoggerCreateAccount(a.AccountUseCases.CreateAccount)(m.Login, m.Password)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+
+		fmt.Println(err)
+		return
+	}
+
+	location := fmt.Sprintf("/accounts/%s", acc.Id)
+	w.Header().Set("Location", location)
+	w.WriteHeader(http.StatusCreated)
+}
+
+// postSignup handles request for a new account creation.
+func (a *Api) postSignupTaker(w http.ResponseWriter, r *http.Request) {
 	var m postSignupRequestModel
 	if err := json.NewDecoder(r.Body).Decode(&m); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
