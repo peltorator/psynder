@@ -13,6 +13,7 @@ type AppConfig struct {
 	} `yaml:"tls"`
 	JWT struct {
 		KeyPath string `yaml:"key-path" env:"JWT_KEY_PATH"`
+		PublicKeyPath string `yaml:"public-key-path" env:"JWT_PUBLIC_KEY_PATH"`
 		TokenDuration time.Duration `yaml:"token-duration" env:"JWT_TOKEN_DURATION"`
 		CookieDuration time.Duration `yaml:"cookie-duration" env:"JWT_COOKIE_DURATION"`
 		Issuer string `yaml:"issuer" env:"JWT_ISSUER"`

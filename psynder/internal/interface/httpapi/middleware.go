@@ -1,31 +1,29 @@
 package httpapi
 
 import (
-	"context"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 )
 
-func (a *Api) authenticate(handler http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		bearHeader := r.Header.Get("Authorization")
-		strArr := strings.Split(bearHeader, " ")
-		if len(strArr) != 2 {
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-		token := strArr[1]
-		id, err := a.AccountUseCases.LoggerAuthenticate(a.AccountUseCases.Authenticate)(token)
-		if err != nil {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-		ctx := context.WithValue(r.Context(), "account_id", id)
-		handler(w, r.WithContext(ctx))
-	}
-}
+//func (a *Api) authenticate(handler http.HandlerFunc) http.HandlerFunc {
+//	return func(w http.ResponseWriter, r *http.Request) {
+//		bearHeader := r.Header.Get("Authorization")
+//		strArr := strings.Split(bearHeader, " ")
+//		if len(strArr) != 2 {
+//			w.WriteHeader(http.StatusBadRequest)
+//			return
+//		}
+//		token := strArr[1]
+//		id, err := a.AccountUseCases.LoggerAuthenticate(a.AccountUseCases.Authenticate)(token)
+//		if err != nil {
+//			w.WriteHeader(http.StatusUnauthorized)
+//			return
+//		}
+//		ctx := context.WithValue(r.Context(), "account_id", id)
+//		handler(w, r.WithContext(ctx))
+//	}
+//}
 
 type responseWriterObserver struct {
 	http.ResponseWriter

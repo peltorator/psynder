@@ -1,13 +1,15 @@
 package token
 
 import (
-	"github.com/dgrijalva/jwt-go"
-
 	"crypto/rsa"
-	"errors"
 	"fmt"
+	"github.com/golang-jwt/jwt"
+	"psynder/internal/domain/model"
+	"strconv"
 	"time"
 )
+
+// TODO: HANDLE ERRORS PROPERLY
 
 type JwtHandler struct {
 	publicKey  *rsa.PublicKey
@@ -16,7 +18,7 @@ type JwtHandler struct {
 	expire time.Duration
 }
 
-type Claims struct {
+type jwtClaims struct {
 	Id string
 	jwt.StandardClaims
 }
@@ -37,30 +39,39 @@ func NewJwtHandler(privateBytes, publicBytes []byte, keyExpiration time.Duration
 	}, nil
 }
 
-func (j JwtHandler) IssueToken(userId string) (string, error) {
-	claims := Claims{
-		Id: userId,
+func (j *JwtHandler) IssueToken(accountId model.AccountId) (AccessToken, error) {
+	claims := jwtClaims{
+		Id: accountId.String(),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(j.expire).Unix(),
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-	return token.SignedString(j.privateKey)
+	accessToken, err := token.SignedString(j.privateKey)
+	if err != nil {
+		return "", err
+	}
+	return AccessToken(accessToken), nil
 }
 
-func (j JwtHandler) UserIdByToken(tokenString string) (string, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+func (j *JwtHandler) AccountIdByToken(token AccessToken) (model.AccountId, error) {
+	var claims jwtClaims
+	_, err := jwt.ParseWithClaims(token.String(), &claims, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, fmt.Errorf("unexpected token signing method")
 		}
 		return j.publicKey, nil
 	})
 	if err != nil {
-		return "", err
+		return 0, err
 	}
-	claims, ok := token.Claims.(*Claims)
-	if !ok {
-		return "", errors.New("invalid token claims")
+	//claims, ok := token.Claims.(*jwtClaims)
+	//if !ok {
+	//	return "", errors.New("invalid token claims")
+	//}
+	id, err := strconv.ParseUint(claims.Id, 10, 64)
+	if err != nil {
+		return 0, err
 	}
-	return claims.Id, nil
+	return model.AccountId(id), nil
 }

@@ -7,9 +7,10 @@ tls:
   key-path: server.key
 
 jwt:
-  key-path: server.key
+  key-path: app.rsa
+  public-key-path: app.rsa.pub
   token-duration: 5m
-  cookie-duration: 2d
+  cookie-duration: 48h
   issuer: psynder
   url: https://localhost:443
 
