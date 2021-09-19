@@ -12,9 +12,10 @@ type Api struct {
 	JSONHandler JSONHandler
 }
 
-func New(a usecases.AccountUseCases) *Api {
+func New(accountUseCases usecases.AccountUseCases, jsonHandler JSONHandler) *Api {
 	return &Api{
-		AccountUseCases: a,
+		AccountUseCases: accountUseCases,
+		JSONHandler: jsonHandler,
 	}
 }
 
@@ -55,7 +56,7 @@ func (a *Api) postLogin(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	token, err := a.AccountUseCases.LoginToAccount(usecases.LoginToAccountOptions{
+	tok, err := a.AccountUseCases.LoginToAccount(usecases.LoginToAccountOptions{
 		Email:    m.Email,
 		Password: m.Password,
 	})
@@ -64,7 +65,7 @@ func (a *Api) postLogin(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	w.Header().Set("Content-Type", "application/jwt")
-	if _, err := w.Write([]byte(token)); err != nil {
+	if err := a.JSONHandler.WriteJson(w, postLoginResponseSuccess{Token: tok.String()}); err != nil {
 		return err
 	}
 	return nil

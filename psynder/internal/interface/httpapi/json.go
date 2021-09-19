@@ -40,6 +40,10 @@ func (j *jsonParseError) Error() string {
 
 type JSONHandlerImpl struct{}
 
+func NewJSONHandler() *JSONHandlerImpl {
+	return &JSONHandlerImpl{}
+}
+
 func (j *JSONHandlerImpl) ReadJson(r *http.Request, val interface{}) error {
 	if err := json.NewDecoder(r.Body).Decode(val); err != nil {
 		return newJSONParseError(err)

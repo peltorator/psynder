@@ -90,7 +90,7 @@ func (u *AccountUseCasesImpl) LoginToAccount(opts LoginToAccountOptions) (token.
 		return "", err
 	}
 	if err := bcrypt.CompareHashAndPassword(passwordHash, []byte(opts.Password)); err != nil {
-		return "", err
+		return "", newLoginError(errPasswordInvalid)
 	}
 	tok, err := u.TokenIssuer.IssueToken(id)
 	if err != nil {

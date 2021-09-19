@@ -5,7 +5,7 @@ import "time"
 type AppConfig struct {
 	Server struct {
 		Host string `yaml:"host" env:"SERVER_HOST"`
-		Port string `yaml:"server" env:"SERVER_PORT"`
+		Port string `yaml:"port" env:"SERVER_PORT"`
 	} `yaml:"server"`
 	TLS struct {
 		CertPath string `yaml:"cert-path" env:"TLS_CERT_PATH"`

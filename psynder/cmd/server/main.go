@@ -6,6 +6,7 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	"io/ioutil"
 	"net/http"
+	"psynder/internal/domain/repo"
 	"psynder/internal/interface/httpapi"
 	"psynder/internal/service/token"
 	"psynder/internal/usecases"
@@ -38,15 +39,20 @@ func main() {
 		panic(err)
 	}
 
-	a := httpapi.New(usecases.NewAccountUseCases(nil, tokenIssuer))
+	a := httpapi.New(
+		usecases.NewAccountUseCases(repo.NewInMemoryAccountRepo(), tokenIssuer),
+		httpapi.NewJSONHandler())
 
+	addr := fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port)
+	fmt.Printf("Starting on %v...\n", addr)
 	server := http.Server{
-		Addr:         fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port),
+		Addr:         addr,
 		ReadTimeout:  readTimeout,
 		WriteTimeout: writeTimeout,
 		Handler:      a.Router(),
 	}
 
+	//err = server.ListenAndServe()
 	err = server.ListenAndServeTLS(cfg.TLS.CertPath, cfg.TLS.KeyPath)
 	if err != nil {
 		panic(err)

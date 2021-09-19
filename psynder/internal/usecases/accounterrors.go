@@ -11,12 +11,14 @@ const (
 	errPasswordTooShort accountCreationErrorKind = iota
 	errPasswordTooLong
 	errPasswordInvalidChars
+	errEmailTaken
 )
 
-var errToDisplayedText = map[accountCreationErrorKind]string{
+var accountCreationToDisplayedText = map[accountCreationErrorKind]string{
 	errPasswordTooShort:     "Password is too short",
 	errPasswordTooLong:      "Password is too long",
 	errPasswordInvalidChars: "Password contains invalid characters",
+	errEmailTaken:           "A user with that email address already exists",
 }
 
 type accountCreationError struct {
@@ -29,14 +31,14 @@ func newAccountCreationError(kind accountCreationErrorKind) *accountCreationErro
 	}
 }
 
-// AccountCreationErrorResponse TODO: this should not be exported if possible
-type AccountCreationErrorResponse struct {
+// TODO: молодой человек у вас абстракция протекает...
+type accountCreationErrorResponse struct {
 	Error string `json:"error"`
 }
 
 func (e *accountCreationError) ResponseData() interface{} {
-	return AccountCreationErrorResponse{
-		Error: errToDisplayedText[e.Kind],
+	return accountCreationErrorResponse{
+		Error: accountCreationToDisplayedText[e.Kind],
 	}
 }
 
@@ -46,5 +48,41 @@ func (e *accountCreationError) StatusCode() int {
 
 func (e *accountCreationError) Error() string {
 	// TODO: more debug info here?
-	return fmt.Sprintf("failed to create an account: %s", errToDisplayedText[e.Kind])
+	return fmt.Sprintf("failed to create an account: %s", accountCreationToDisplayedText[e.Kind])
+}
+
+type loginErrorKind int
+
+const (
+	errPasswordInvalid loginErrorKind = iota
+)
+
+var loginErrorToDisplayedText = map[loginErrorKind]string{
+	errPasswordInvalid: "Incorrect password",
+}
+
+type loginError struct {
+	Kind loginErrorKind
+}
+
+func newLoginError(kind loginErrorKind) *loginError {
+	return &loginError{Kind: kind}
+}
+
+type LoginErrorResponse struct {
+	Error string `json:"error"`
+}
+
+func (e *loginError) ResponseData() interface{} {
+	return LoginErrorResponse{
+		Error: loginErrorToDisplayedText[e.Kind],
+	}
+}
+
+func (e *loginError) StatusCode() int {
+	return http.StatusForbidden
+}
+
+func (e *loginError) Error() string {
+	return fmt.Sprintf("login failed: %s", loginErrorToDisplayedText[e.Kind])
 }
