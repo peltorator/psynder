@@ -5,13 +5,18 @@ import (
 	"psynder/internal/domain/model"
 	"psynder/internal/domain/repo"
 	"psynder/internal/service/token"
-    "mail"
+    "net/mail"
+    "net/smtp"
+    "os"
 	"unicode"
 )
 
 const (
 	minPasswordLength = 6
 	maxPasswordLength = 50
+    smtpHost = "smtp.gmail.com"
+    smtpPort = "587"
+    psynderEmailAddress = "psynderapp@gmail.com"
 )
 
 type CreateAccountOptions struct {
@@ -52,6 +57,10 @@ func (u *AccountUseCasesImpl) CreateAccount(opts CreateAccountOptions) (model.Ac
 	if err != nil {
 		return 0, err
 	}
+    err = sendRegistrationEmail(opts.Email)
+    if err != nil {
+        return 0, err
+    }
 	accId, err := u.AccountRepo.CreateAccount(repo.CreateAccountOptions{
 		Email:        opts.Email,
 		PasswordHash: hashedPassword,
@@ -104,4 +113,11 @@ func validatePassword(password string) error {
 		return newAccountCreationError(errPasswordTooLong)
 	}
 	return nil
+}
+
+func sendRegistrationEmail(email string) error {
+    auth := smtp.PlainAuth("", psynderEmailAddress, os.Getenv("emailpassword"), smtpHost)
+    message := []byte("Thank you for registering on psynder")
+    err := smtp.SendMail(smtpHost + ":" + smtpPort, auth, psynderEmailAddress, []string{email}, message)
+    return err
 }

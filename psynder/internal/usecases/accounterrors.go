@@ -12,6 +12,7 @@ const (
 	errPasswordTooLong
 	errPasswordInvalidChars
 	errEmailTaken
+    errEmailIncorrect
 )
 
 var accountCreationToDisplayedText = map[accountCreationErrorKind]string{
