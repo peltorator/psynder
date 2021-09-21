@@ -19,6 +19,7 @@ var accountCreationToDisplayedText = map[accountCreationErrorKind]string{
 	errPasswordTooLong:      "Password is too long",
 	errPasswordInvalidChars: "Password contains invalid characters",
 	errEmailTaken:           "A user with that email address already exists",
+    errEmailIncorrect:       "The email you provided is not valid",
 }
 
 type accountCreationError struct {
