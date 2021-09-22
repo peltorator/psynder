@@ -33,7 +33,7 @@ class RegisterActivity : AppCompatActivity() {
         window.statusBarColor = resources.getColor(R.color.register_bk_color)
     }
 
-    fun onLoginClick(view: View?) {
+    fun onNavigateToLogin(view: View?) {
         startActivity(Intent(this, LoginActivity::class.java))
         overridePendingTransition(R.anim.slide_in_left, android.R.anim.slide_out_right)
     }
