@@ -22,6 +22,7 @@ import com.psinder.myapplication.network.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+// TODO: Hide keyboard at login form (after clocking login?)
 class LoginFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
