@@ -168,6 +168,6 @@
         android:layout_marginRight="11dp"
         android:layout_marginBottom="30dp"
         android:adjustViewBounds="false"
-        android:onClick="onRegisterClick"
+        android:onClick="onNavigateToLogin"
         android:src="@drawable/ic_back_img" />
 </RelativeLayout>

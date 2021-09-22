@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
     }
 
-    fun onRegisterClick(View: View?) {
+    fun onNavigateToRegister(View: View?) {
         startActivity(Intent(this, RegisterActivity::class.java))
         overridePendingTransition(R.anim.slide_in_right, R.anim.stay)
     }
