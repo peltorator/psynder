@@ -2,12 +2,12 @@ package usecases
 
 import (
 	"golang.org/x/crypto/bcrypt"
+	"net/mail"
+	"net/smtp"
+	"os"
 	"psynder/internal/domain/model"
 	"psynder/internal/domain/repo"
 	"psynder/internal/service/token"
-    "net/mail"
-    "net/smtp"
-    "os"
 	"unicode"
 )
 
@@ -57,10 +57,10 @@ func (u *AccountUseCasesImpl) CreateAccount(opts CreateAccountOptions) (model.Ac
 	if err != nil {
 		return 0, err
 	}
-    err = sendRegistrationEmail(opts.Email)
-    if err != nil {
-        return 0, err
-    }
+    //err = sendRegistrationEmail(opts.Email)
+    //if err != nil {
+    //    return 0, err
+    //}
 	accId, err := u.AccountRepo.CreateAccount(repo.CreateAccountOptions{
 		Email:        opts.Email,
 		PasswordHash: hashedPassword,
