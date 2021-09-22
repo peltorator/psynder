@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,8 +8,7 @@
     android:layout_gravity="center"
     android:background="@color/register_bk_color"
     android:focusableInTouchMode="true"
-    android:gravity="center"
-    tools:context=".RegisterActivity">
+    android:gravity="center">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -109,7 +109,6 @@
                     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                         android:id="@+id/cirRegisterButton"
                         style="@style/loginButton"
-                        android:onClick="onRegisterClick"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/loginViewsMargin"
                         android:text="Register"
@@ -121,7 +120,6 @@
                     <TextView
                         style="@style/parent"
                         android:layout_marginTop="@dimen/loginViewsMargin"
-                        android:onClick="onRegisterClick"
                         android:text="Already have an account?"
                         android:textAlignment="center"
                         android:textColor="#caa052"
@@ -161,6 +159,7 @@
         android:background="@drawable/ic_side_bg" />
 
     <ImageView
+        android:id="@+id/navigateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -168,6 +167,6 @@
         android:layout_marginRight="11dp"
         android:layout_marginBottom="30dp"
         android:adjustViewBounds="false"
-        android:onClick="onNavigateToLogin"
         android:src="@drawable/ic_back_img" />
 </RelativeLayout>
+</layout>
