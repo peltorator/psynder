@@ -13,6 +13,7 @@ const (
 	errPasswordInvalidChars
 	errEmailTaken
     errEmailIncorrect
+	errAlreadyExist
 )
 
 var accountCreationToDisplayedText = map[accountCreationErrorKind]string{
