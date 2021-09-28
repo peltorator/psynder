@@ -9,7 +9,7 @@ interface Api {
     @POST("login")
     suspend fun login(@Body loginData: LoginData): Token
 
-    @POST("register")
+    @POST("signup")
     suspend fun register(@Body registerData: RegisterData): RegistrationResponse
 }
 
