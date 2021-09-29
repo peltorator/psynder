@@ -8,11 +8,33 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.IOException
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
 
-private const val BASE_URL = "http://10.0.2.2:8080/"
+// works only with emulator, to run on local device:
+// https://stackoverflow.com/questions/4779963/how-can-i-access-my-localhost-from-my-android-device
+private const val BASE_URL = "https://10.0.2.2:8080/"
 
 private fun provideOkHttpClient(): OkHttpClient {
-    return OkHttpClient.Builder().build()
+    // TODO: this is not safe
+    val trustAllCerts = object : X509TrustManager {
+        override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {}
+
+        override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) {}
+
+        override fun getAcceptedIssuers(): Array<X509Certificate> {
+            return emptyArray()
+        }
+    }
+    val sslContext: SSLContext = SSLContext.getInstance("SSL").apply {
+        init(null, arrayOf(trustAllCerts), SecureRandom())
+    }
+    return OkHttpClient.Builder()
+        .sslSocketFactory(sslContext.socketFactory, trustAllCerts)
+        .hostnameVerifier { hostname, session -> true }
+        .build()
 }
 
 private fun provideMoshi(): Moshi {
