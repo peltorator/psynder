@@ -1,13 +1,15 @@
 package main
 
 import (
+	"database/sql"
 	"flag"
 	"fmt"
 	"github.com/ilyakaznacheev/cleanenv"
+	_ "github.com/lib/pq"
 	"io/ioutil"
 	"net/http"
-	"psynder/internal/domain/repo"
 	"psynder/internal/interface/httpapi"
+	"psynder/internal/interface/postgres/accountrepo"
 	"psynder/internal/service/token"
 	"psynder/internal/usecases"
 	"time"
@@ -39,8 +41,14 @@ func main() {
 		panic(err)
 	}
 
+	connStr := "user=postgres password=123 host=localhost dbname=postgres sslmode=disable"
+	conn, err := sql.Open("postgres", connStr)
+	if err != nil {
+		panic(err)
+	}
+
 	a := httpapi.New(
-		usecases.NewAccountUseCases(repo.NewInMemoryAccountRepo(), tokenIssuer),
+		usecases.NewAccountUseCases(accountrepo.New(conn), tokenIssuer),
 		httpapi.NewJSONHandler())
 
 	addr := fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port)
