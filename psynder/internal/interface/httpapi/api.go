@@ -32,7 +32,9 @@ func (a *Api) Router() http.Handler {
 func (a *Api) postSignup(w http.ResponseWriter, r *http.Request) error {
 	var m postSignupRequest
 	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
-		return err
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return nil
 	}
 
 	accId, err := a.AccountUseCases.CreateAccount(usecases.CreateAccountOptions{
@@ -40,7 +42,9 @@ func (a *Api) postSignup(w http.ResponseWriter, r *http.Request) error {
 		Password: m.Password,
 	})
 	if err != nil {
-		return err
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return nil
 	}
 
 	location := fmt.Sprintf("/accounts/%s", accId.String())
@@ -53,7 +57,8 @@ func (a *Api) postSignup(w http.ResponseWriter, r *http.Request) error {
 func (a *Api) postLogin(w http.ResponseWriter, r *http.Request) error {
 	var m postSignupRequest
 	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
-		return err
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 	}
 
 	tok, err := a.AccountUseCases.LoginToAccount(usecases.LoginToAccountOptions{
@@ -61,12 +66,15 @@ func (a *Api) postLogin(w http.ResponseWriter, r *http.Request) error {
 		Password: m.Password,
 	})
 	if err != nil {
-		return err
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return nil
 	}
 
 	w.Header().Set("Content-Type", "application/jwt")
 	if err := a.JSONHandler.WriteJson(w, postLoginResponseSuccess{Token: tok.String()}); err != nil {
-		return err
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 	}
 	return nil
 }
