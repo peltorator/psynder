@@ -2,6 +2,7 @@ package com.psinder.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,6 +45,8 @@ class LoginFragment: Fragment() {
             lifecycleScope.launch {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     val result = safeApiCall(Dispatchers.IO) {
+                        Log.d("Login", binding.editTextEmail.text.toString())
+                        Log.d("Login", binding.editTextPassword.text.toString())
                         provideApi().login(
                             LoginData(
                                 binding.editTextEmail.text.toString(),
@@ -60,7 +63,10 @@ class LoginFragment: Fragment() {
 
                     // TODO: Please fix this Ivan Pavlov 30.09
                     if (result is ResultWrapper.Success) {
-                        it.findNavController().navigate(R.id.action_loginFragment_to_profileFragment2)
+                        Log.d("Activity", "Start another activity")
+                        val intent = Intent(context, MainActivity::class.java)
+                        startActivity(intent)
+//                        it.findNavController().navigate(R.id.action_loginFragment_to_profileFragment2)
                     }
 
                     (it as CircularProgressButton).revertAnimation()
@@ -94,7 +100,10 @@ class LoginFragment: Fragment() {
 
                 // TODO: Please fix this Ivan Pavlov 30.09
                 if (result is ResultWrapper.Success) {
-                    binding.cirLoginButton.findNavController().navigate(R.id.action_loginFragment_to_profileFragment2)
+                    Log.d("Activity", "Start another activity")
+                    val intent = Intent(context, MainActivity::class.java)
+                    startActivity(intent)
+//                    binding.cirLoginButton.findNavController().navigate(R.id.action_loginFragment_to_profileFragment2)
                 }
 
                 binding.cirLoginButton.revertAnimation()
