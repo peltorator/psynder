@@ -21,19 +21,16 @@
             android:exported="true"
             android:label="@string/title_activity_login"
 
-            android:theme="@style/Theme.MyApplication.NoActionBar">
+            android:theme="@style/Theme.MyApplication.NoActionBar"/>
+        <activity
+            android:exported="true"
+            android:name=".MainActivity"
+            android:theme="@style/Theme.MyApplication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.MyApplication">
-
         </activity>
     </application>
 
