@@ -23,49 +23,16 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-//    private val mOnNavigationItemSelectedListener =
-//        BottomNavigationView.OnNavigationItemSelectedListener { item ->
-//            val fragmentManager: FragmentManager = supportFragmentManager
-//            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-//            when (item.itemId) {
-//                R.id -> {
-//                    transaction.replace(R.id.container, TaskFragment()).commit()
-//                    return@OnNavigationItemSelectedListener true
-//                }
-//                R.id.navigation_calendar -> {
-//                    transaction.replace(R.id.container, CalendarFragment()).commit()
-//                    return@OnNavigationItemSelectedListener true
-//                }
-//                R.id.navigation_app -> {
-//                    transaction.replace(R.id.container, AppFragment()).commit()
-//                    return@OnNavigationItemSelectedListener true
-//                }
-//            }
-//            false
-//        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//
         val navView: BottomNavigationView = binding.navView
-////
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController = navHostFragment.navController
-//        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-//            )
-//        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-         navView.setupWithNavController(navController)
-//        NavigationUI.setupActionBarWithNavController(this, navController)
+
+        navView.setupWithNavController(navController)
         binding.navView.setOnItemSelectedListener{
             val fragmentManager = supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
