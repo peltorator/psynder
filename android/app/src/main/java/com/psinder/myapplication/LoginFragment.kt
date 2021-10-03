@@ -60,7 +60,7 @@ class LoginFragment: Fragment() {
 
                     // TODO: Please fix this Ivan Pavlov 30.09
                     if (result is ResultWrapper.Success) {
-                        it.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                        it.findNavController().navigate(R.id.action_loginFragment_to_profileFragment2)
                     }
 
                     (it as CircularProgressButton).revertAnimation()
@@ -94,7 +94,7 @@ class LoginFragment: Fragment() {
 
                 // TODO: Please fix this Ivan Pavlov 30.09
                 if (result is ResultWrapper.Success) {
-                    binding.cirLoginButton.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                    binding.cirLoginButton.findNavController().navigate(R.id.action_loginFragment_to_profileFragment2)
                 }
 
                 binding.cirLoginButton.revertAnimation()

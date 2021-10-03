@@ -18,9 +18,9 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         val binding = DataBindingUtil.inflate<FragmentProfileBinding>(inflater,
             R.layout.fragment_profile,container,false)
-        binding.button.setOnClickListener {
-            it.findNavController().navigate(R.id.action_profileFragment_to_swipeFragment)
-        }
+//        binding.button.setOnClickListener {
+//            it.findNavController().navigate(R.id)
+//        }
         return binding.root
     }
 }

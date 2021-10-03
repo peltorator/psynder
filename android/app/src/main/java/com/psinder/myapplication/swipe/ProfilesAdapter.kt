@@ -32,7 +32,10 @@ class ProfilesAdapter : RecyclerView.Adapter<ProfilesAdapter.ProfileViewHolder>(
 
     fun setProfiles(profiles: List<Profile>) {
         this.profiles = profiles
-        notifyDataSetChanged()
+    }
+
+    fun getProfiles(): List<Profile> {
+        return this.profiles ?: emptyList()
     }
 
     inner class ProfileViewHolder(val binding: CardViewProfileBinding) :

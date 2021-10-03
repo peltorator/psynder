@@ -20,15 +20,12 @@
             android:name=".LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.MyApplication.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.MyApplication.NoActionBar" />
+
         <activity
-            android:name=".RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:exported="true"
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
