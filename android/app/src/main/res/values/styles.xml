@@ -31,9 +31,13 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="modifiedEditText" parent="parent">
+    <style name="editTextField" parent="parent">
+        <item name="android:background">@color/colorSecondary</item>
+    </style>
+
+    <style name="editText" parent="parent">
         <item name="android:textSize">@dimen/newsMoreTextSize</item>
-        <item name="android:backgroundTint">@color/colorSecondary</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 
     <style name="loginButton" parent="viewParent">
