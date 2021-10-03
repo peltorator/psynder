@@ -1,0 +1,27 @@
+version: '3.1'
+services:
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app.rsa:/app.rsa
+      - ./app.rsa.pub:/app.rsa.pub
+      - ./server.crt:/server.crt
+      - ./server.key:/server.key
+      - ./config-docker.yml:/config.yml
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: postgres
+    volumes:
+      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql

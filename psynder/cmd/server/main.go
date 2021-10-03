@@ -42,7 +42,9 @@ func main() {
 		panic(err)
 	}
 
-	connStr := "user=postgres password=123 host=localhost dbname=postgres sslmode=disable"
+	connStr := fmt.Sprintf(
+		"user=%s password=%s host=%s dbname=%s sslmode=disable",
+		cfg.Postgres.Username, cfg.Postgres.Password, cfg.Postgres.Host, cfg.Postgres.Dbname)
 	conn, err := sql.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
