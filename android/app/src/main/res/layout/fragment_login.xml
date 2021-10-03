@@ -49,7 +49,7 @@
                 style="@style/editTextField"
                 android:layout_marginTop="@dimen/loginViewsMargin">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextEmail"
                     style="@style/editText"
                     android:hint="@string/login_email_hint"
