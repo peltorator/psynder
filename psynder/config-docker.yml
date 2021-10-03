@@ -16,6 +16,6 @@ jwt:
 
 postgres:
   username: postgres
-  password: 123
+  password: 12345678
   host: localhost
   dbname: postgres
