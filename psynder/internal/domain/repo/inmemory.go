@@ -54,3 +54,43 @@ func (r *InMemoryAccountRepo) GetPasswordHashById(id model.AccountId) (model.Pas
 
 	return r.idToAccount[id].PasswordHash, nil
 }
+
+
+
+
+
+type Views struct {
+	accountId model.AccountId
+	psynaId model.PsynaId
+	liked bool
+}
+
+type InMemorySwipeRepo struct {
+	idToPsyna map[model.PsynaId]*model.Psyna
+	views []Views
+	mu *sync.RWMutex
+}
+
+func NewInMemorySwipeRepo() *InMemorySwipeRepo {
+	return &InMemorySwipeRepo{
+		idToPsyna: make(map[model.PsynaId]*model.Psyna),
+		views: []Views{},
+		mu:             &sync.RWMutex{},
+	}
+}
+
+func (r *InMemorySwipeRepo) LoadPsynas(opts LoadPsynasOptions) ([]model.Psyna, error) {
+	return [] model.Psyna{}, nil
+}
+
+func (r *InMemorySwipeRepo) SaveViews(id model.AccountId, psynas_id []model.PsynaId) error {
+	return nil
+}
+
+func (r *InMemorySwipeRepo) LikePsyna(opts LikePsynaOptions) error {
+	return nil
+}
+
+func (r *InMemorySwipeRepo) GetFavoritePsynas(id model.AccountId) ([]model.Psyna, error) {
+	return [] model.Psyna{}, nil
+}
