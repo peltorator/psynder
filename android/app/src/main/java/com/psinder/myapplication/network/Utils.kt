@@ -17,8 +17,6 @@ import javax.net.ssl.X509TrustManager
 // https://stackoverflow.com/questions/4779963/how-can-i-access-my-localhost-from-my-android-device
 private const val BASE_URL = "https://10.0.2.2:8080/"
 
-private const val BASE_URL = "http://10.0.2.2:8080/"
-
 private fun provideOkHttpClient(): OkHttpClient {
     // TODO: this is not safe
     val trustAllCerts = object : X509TrustManager {
