@@ -28,7 +28,7 @@
 
                 <TextView
                     style="@style/viewParent.headerText.NoMode"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:text="Here’s\nyour first\nstep with \nus! "
                     android:textColor="@color/darkTextColor" />
@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_login_hero" />
             </RelativeLayout>
 
@@ -56,12 +56,14 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputName"
-                        style="@style/parent"
+                        style="@style/editTextField"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="27dp"
                         android:layout_marginTop="@dimen/loginViewsMargin">
 
                         <EditText
                             android:id="@+id/editTextName"
-                            style="@style/modifiedEditText"
+                            style="@style/editText"
                             android:hint="Name"
                             android:inputType="textPersonName"
                             android:maxLines="1" />
@@ -69,25 +71,25 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputEmail"
-                        style="@style/parent"
+                        style="@style/editTextField"
                         android:layout_marginTop="@dimen/loginViewsMargin">
 
                         <EditText
                             android:id="@+id/editTextEmail"
-                            style="@style/modifiedEditText"
+                            style="@style/editText"
                             android:hint="@string/login_email_hint"
                             android:inputType="textEmailAddress"
-                            android:maxLines="1" />
+                            android:maxLines="1"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputMobile"
-                        style="@style/parent"
+                        style="@style/editTextField"
                         android:layout_marginTop="@dimen/loginViewsMargin">
 
                         <EditText
                             android:id="@+id/editTextMobile"
-                            style="@style/modifiedEditText"
+                            style="@style/editText"
                             android:hint="Mobile Number"
                             android:inputType="phone"
                             android:maxLines="1" />
@@ -95,16 +97,60 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputPassword"
-                        style="@style/parent"
+                        style="@style/editTextField"
                         android:layout_marginTop="@dimen/loginViewsMargin">
 
                         <EditText
                             android:id="@+id/editTextPassword"
-                            style="@style/modifiedEditText"
+                            style="@style/editText"
                             android:hint="@string/login_password_hint"
                             android:inputType="textPassword"
                             android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <RadioGroup
+                        android:id="@+id/userTypeButton"
+                        android:checkedButton="@id/lookingForDog"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/outline"
+                        android:orientation="horizontal">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <RadioButton
+                                android:id="@+id/lookingForOwner"
+                                android:layout_width="0dp"
+
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/lookingForDog"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/toggle_widget_background"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="@string/looking_for_owner"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"/>
+                            <RadioButton
+                                android:id="@+id/lookingForDog"
+                                android:layout_width="0dp"
+                                app:layout_constraintStart_toEndOf="@+id/lookingForOwner"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/toggle_widget_background"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="@string/looking_for_dog"
+                                android:textStyle="bold"
+                                android:textColor="@color/black" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </RadioGroup>
 
                     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                         android:id="@+id/cirRegisterButton"
@@ -145,7 +191,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:src="@drawable/ic_google_plus" />
             </LinearLayout>
         </LinearLayout>
@@ -154,7 +200,7 @@
         android:layout_width="11dp"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="20dp"
         android:background="@drawable/ic_side_bg" />
 
@@ -162,9 +208,9 @@
         android:id="@+id/navigateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="11dp"
+        android:layout_marginEnd="11dp"
         android:layout_marginBottom="30dp"
         android:adjustViewBounds="false"
         android:src="@drawable/ic_back_img" />
