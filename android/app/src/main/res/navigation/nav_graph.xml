@@ -28,5 +28,14 @@
         android:id="@+id/profileFragment"
         android:name="com.psinder.myapplication.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_swipeFragment"
+            app:destination="@id/swipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/swipeFragment"
+        android:name="com.psinder.myapplication.swipe.SwipeFragment"
+        android:label="fragment_swipe"
+        tools:layout="@layout/fragment_swipe" />
 </navigation>

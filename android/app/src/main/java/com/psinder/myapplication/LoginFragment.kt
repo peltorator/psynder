@@ -40,7 +40,32 @@ class LoginFragment: Fragment() {
         }
 
         binding.cirLoginButton.setOnClickListener {
-            onLoginClick(binding)
+            (it as CircularProgressButton).startAnimation()
+            lifecycleScope.launch {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    val result = safeApiCall(Dispatchers.IO) {
+                        provideApi().login(
+                            LoginData(
+                                binding.editTextEmail.text.toString(),
+                                binding.editTextPassword.text.toString()
+                            )
+                        )
+                    }
+                    val message = when(result) {
+                        is ResultWrapper.Success -> "token: " + result.value.token
+                        is ResultWrapper.NetworkError -> "network error"
+                        is ResultWrapper.GenericError -> "code:" + result.code // TODO: why error message is null???
+                    }
+                    Toast.makeText(this@LoginFragment.context, message, Toast.LENGTH_SHORT).show()
+
+                    // TODO: Please fix this Ivan Pavlov 30.09
+                    if (result is ResultWrapper.Success) {
+                        it.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                    }
+
+                    (it as CircularProgressButton).revertAnimation()
+                }
+            }
         }
 
         return binding.root
@@ -66,6 +91,12 @@ class LoginFragment: Fragment() {
                     is ResultWrapper.GenericError -> "code:" + result.code // TODO: why error message is null???
                 }
                 Toast.makeText(this@LoginFragment.context, message, Toast.LENGTH_SHORT).show()
+
+                // TODO: Please fix this Ivan Pavlov 30.09
+                if (result is ResultWrapper.Success) {
+                    binding.cirLoginButton.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                }
+
                 binding.cirLoginButton.revertAnimation()
             }
         }
