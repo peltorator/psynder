@@ -83,7 +83,7 @@ func (r *InMemorySwipeRepo) LoadPsynas(opts LoadPsynasOptions) ([]model.Psyna, e
 	return [] model.Psyna{}, nil
 }
 
-func (r *InMemorySwipeRepo) SaveViews(id model.AccountId, psynas_id []model.PsynaId) error {
+func (r *InMemorySwipeRepo) SaveLastView(id model.AccountId, psynas_id []model.PsynaId) error {
 	return nil
 }
 

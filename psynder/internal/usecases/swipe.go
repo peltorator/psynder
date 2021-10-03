@@ -29,10 +29,14 @@ func (u *SwipeUseCasesImpl) LoadPsynas(opts repo.LoadPsynasOptions) ([]model.Psy
 		return []model.Psyna{}, err
 	}
 	var psynasId []model.PsynaId
+	maxId := model.PsynaId(0)
 	for i := 0; i < len(psynas); i++ {
 		psynasId = append(psynasId, psynas[i].Id)
+		if psynas[i].Id > maxId {
+			maxId = psynas[i].Id
+		}
 	}
-	err = u.SwipeRepo.SaveViews(opts.AccountId, psynasId)
+	err = u.SwipeRepo.SaveLastView(opts.AccountId, maxId)
 	if err != nil {
 		return []model.Psyna{}, err
 	}
@@ -40,11 +44,11 @@ func (u *SwipeUseCasesImpl) LoadPsynas(opts repo.LoadPsynasOptions) ([]model.Psy
 }
 
 func (u *SwipeUseCasesImpl) LikePsyna(opts repo.LikePsynaOptions) error {
-	err := u.LikePsyna(opts)
+	err := u.SwipeRepo.LikePsyna(opts)
 	return err
 }
 
 func (u *SwipeUseCasesImpl) GetFavoritePsynas(id model.AccountId) ([]model.Psyna, error) {
-	psynas, err := u.GetFavoritePsynas(id)
+	psynas, err := u.SwipeRepo.GetFavoritePsynas(id)
 	return psynas, err
 }
