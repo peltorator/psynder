@@ -8,12 +8,12 @@ import (
 	_ "github.com/lib/pq"
 	"io/ioutil"
 	"net/http"
-	"psynder/internal/domain/repo"
 	"psynder/internal/interface/httpapi"
 	"psynder/internal/interface/postgres/accountrepo"
+	"psynder/internal/interface/postgres/swiperepo"
 	"psynder/internal/service/token"
 	"psynder/internal/usecases"
-	"time"
+	"time",
 )
 
 func main() {
@@ -50,7 +50,7 @@ func main() {
 
 	a := httpapi.New(
 		usecases.NewAccountUseCases(accountrepo.New(conn), tokenIssuer),
-		usecases.NewSwipeUseCases(repo.NewInMemorySwipeRepo()),
+		usecases.NewSwipeUseCases(swiperepo.New(conn)),
 		httpapi.NewJSONHandler())
 
 	addr := fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port)
