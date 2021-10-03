@@ -4,17 +4,21 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
+	"psynder/internal/domain/model"
+	"psynder/internal/domain/repo"
 	"psynder/internal/usecases"
 )
 
 type Api struct {
 	AccountUseCases usecases.AccountUseCases
+	SwipeUseCases usecases.SwipeUseCases
 	JSONHandler JSONHandler
 }
 
-func New(accountUseCases usecases.AccountUseCases, jsonHandler JSONHandler) *Api {
+func New(accountUseCases usecases.AccountUseCases, swipeUseCases usecases.SwipeUseCases, jsonHandler JSONHandler) *Api {
 	return &Api{
 		AccountUseCases: accountUseCases,
+		SwipeUseCases: swipeUseCases,
 		JSONHandler: jsonHandler,
 	}
 }
@@ -24,6 +28,10 @@ func (a *Api) Router() http.Handler {
 
 	r.HandleFunc("/signup", handleErrorResponses(a.postSignup)).Methods(http.MethodPost)
 	r.HandleFunc("/login", handleErrorResponses(a.postLogin)).Methods(http.MethodPost)
+
+	r.HandleFunc("/loadpsynas", handleErrorResponses(a.postLoadPsynas)).Methods(http.MethodPost)
+	r.HandleFunc("/likepsyna", handleErrorResponses(a.postLikePsyna)).Methods(http.MethodPost)
+	r.HandleFunc("/getfavoritepsynas", handleErrorResponses(a.postGetFavoritePsynas)).Methods(http.MethodPost)
 
 	return r
 }
@@ -76,5 +84,81 @@ func (a *Api) postLogin(w http.ResponseWriter, r *http.Request) error {
 		fmt.Println("Error: " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 	}
+	return nil
+}
+
+func (a *Api) postLoadPsynas(w http.ResponseWriter, r *http.Request) error {
+	var m postLoadPsynasRequest
+	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return nil
+	}
+
+	psynas, err := a.SwipeUseCases.LoadPsynas(repo.LoadPsynasOptions{
+		AccountId: model.AccountId(m.AccountId),
+		Count: int (m.Count),
+	})
+
+	if err != nil {
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return nil
+	}
+
+	if err := a.JSONHandler.WriteJson(w, postLoadPsynasResponseSuccess{psynas}); err != nil {
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+
+		return nil
+	}
+	w.WriteHeader(http.StatusOK)
+	return nil
+}
+
+func (a *Api) postLikePsyna(w http.ResponseWriter, r *http.Request) error {
+	var m postLikePsynaRequest
+	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return nil
+	}
+
+	err := a.SwipeUseCases.LikePsyna(repo.LikePsynaOptions{
+		PsynaId: model.PsynaId(m.PsynaId),
+		AccountId: model.AccountId(m.AccountId),
+	})
+
+	if err != nil {
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return nil
+	}
+
+	w.WriteHeader(http.StatusOK)
+	return nil
+}
+
+func (a *Api) postGetFavoritePsynas(w http.ResponseWriter, r *http.Request) error {
+	var m postGetFavoritePsynasRequest
+	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return nil
+	}
+
+	psynas, err := a.SwipeUseCases.GetFavoritePsynas(model.AccountId(m.AccountId))
+	if err != nil {
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return nil
+	}
+	if err := a.JSONHandler.WriteJson(w, postGetFavoritePsynasResponseSuccess{psynas}); err != nil {
+		fmt.Println("Error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+
+		return nil
+	}
+	w.WriteHeader(http.StatusOK)
 	return nil
 }
