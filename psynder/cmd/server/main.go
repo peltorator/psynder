@@ -13,7 +13,7 @@ import (
 	"psynder/internal/interface/postgres/swiperepo"
 	"psynder/internal/service/token"
 	"psynder/internal/usecases"
-	"time",
+	"time"
 )
 
 func main() {
