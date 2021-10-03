@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Psynder</string>
     <string name="login_email_hint">Email</string>
-    <string name="login_password_hint">Password</string>
+    <string name="login_password_hint">Пароль</string>
     <string name="title_activity_login">LoginActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

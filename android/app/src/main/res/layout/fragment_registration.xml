@@ -30,7 +30,7 @@
                     style="@style/viewParent.headerText.NoMode"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:text="Here’s\nyour first\nstep with \nus! "
+                    android:text="Первые \nшаги! "
                     android:textColor="@color/darkTextColor" />
 
                 <ImageView
@@ -62,7 +62,7 @@
                         <EditText
                             android:id="@+id/editTextName"
                             style="@style/editText"
-                            android:hint="Name"
+                            android:hint="Имя"
                             android:inputType="textPersonName"
                             android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -88,7 +88,7 @@
                         <EditText
                             android:id="@+id/editTextMobile"
                             style="@style/editText"
-                            android:hint="Mobile Number"
+                            android:hint="Номер телефона"
                             android:inputType="phone"
                             android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -149,7 +149,9 @@
                         style="@style/loginButton"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/loginViewsMargin"
-                        android:text="Register"
+                        android:text="Зарегестрироваться"
+                        android:gravity="center"
+                        android:textAlignment="center"
                         app:initialCornerAngle="27dp"
                         app:spinning_bar_color="#FFF"
                         app:spinning_bar_padding="6dp"
@@ -158,7 +160,7 @@
                     <TextView
                         style="@style/parent"
                         android:layout_marginTop="@dimen/loginViewsMargin"
-                        android:text="Already have an account?"
+                        android:text="Уже есть аккаунт?"
                         android:textAlignment="center"
                         android:textColor="#caa052"
                         android:textSize="17sp"

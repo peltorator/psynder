@@ -34,7 +34,7 @@
                     style="@style/viewParent.headerText.NoMode"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:text="Already \nhave an \nAccount?" />
+                    android:text="Уже \nесть \nаккаунт?" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
                 style="@style/viewParent"
                 android:layout_gravity="end"
                 android:layout_marginTop="10dp"
-                android:text="Forgot Password?"
+                android:text="Забыли пароль?"
                 android:textColor="@color/darkTextColor"
                 android:textSize="@dimen/newsMoreTextSize" />x
 
@@ -83,7 +83,7 @@
                 style="@style/loginButton"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/loginViewsMargin"
-                android:text="Login"
+                android:text="Войти"
                 app:initialCornerAngle="27dp"
                 app:spinning_bar_color="#FFF"
                 app:spinning_bar_padding="6dp"
@@ -93,7 +93,7 @@
                 android:id="@+id/navRegister"
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin"
-                android:text="New user? Register Now"
+                android:text="Впервые в Psynder?\nЗарегестрируйтесь сейчас"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="17sp"
