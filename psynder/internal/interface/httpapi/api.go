@@ -1,12 +1,19 @@
 package httpapi
 
 import (
+	"context"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"psynder/internal/domain/model"
 	"psynder/internal/domain/repo"
+	"psynder/internal/service/token"
 	"psynder/internal/usecases"
+	"regexp"
+)
+
+const (
+	CTX_ACCOUNT_ID_KEY = iota
 )
 
 type Api struct {
@@ -26,18 +33,21 @@ func New(accountUseCases usecases.AccountUseCases, swipeUseCases usecases.SwipeU
 func (a *Api) Router() http.Handler {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/signup", handleErrorResponses(a.postSignup)).Methods(http.MethodPost)
-	r.HandleFunc("/login", handleErrorResponses(a.postLogin)).Methods(http.MethodPost)
+	r.HandleFunc("/signup", handleErrorResponses(a.signup)).Methods(http.MethodPost)
+	r.HandleFunc("/login", handleErrorResponses(a.login)).Methods(http.MethodPost)
 
-	r.HandleFunc("/loadpsynas", handleErrorResponses(a.postLoadPsynas)).Methods(http.MethodPost)
-	r.HandleFunc("/likepsyna", handleErrorResponses(a.postLikePsyna)).Methods(http.MethodPost)
-	r.HandleFunc("/getfavoritepsynas", handleErrorResponses(a.postGetFavoritePsynas)).Methods(http.MethodPost)
+	ar := r.NewRoute().Subrouter()
+	ar.Use(a.authenticate)
+
+	ar.HandleFunc("/loadpsynas", handleErrorResponses(a.loadPsynas)).Methods(http.MethodPost)
+	ar.HandleFunc("/likepsyna", handleErrorResponses(a.likePsyna)).Methods(http.MethodPost)
+	ar.HandleFunc("/getfavoritepsynas", handleErrorResponses(a.getFavoritePsynas)).Methods(http.MethodGet)
 
 	return r
 }
 
-// postSignup handles request for a new account creation.
-func (a *Api) postSignup(w http.ResponseWriter, r *http.Request) error {
+// signup handles request for a new account creation.
+func (a *Api) signup(w http.ResponseWriter, r *http.Request) error {
 	var m postSignupRequest
 	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
 		fmt.Println("Error: " + err.Error())
@@ -61,8 +71,8 @@ func (a *Api) postSignup(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-// postLogin handles login request for existing user.
-func (a *Api) postLogin(w http.ResponseWriter, r *http.Request) error {
+// login handles login request for existing user.
+func (a *Api) login(w http.ResponseWriter, r *http.Request) error {
 	var m postSignupRequest
 	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
 		fmt.Println("Error: " + err.Error())
@@ -87,7 +97,7 @@ func (a *Api) postLogin(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func (a *Api) postLoadPsynas(w http.ResponseWriter, r *http.Request) error {
+func (a *Api) loadPsynas(w http.ResponseWriter, r *http.Request) error {
 	var m postLoadPsynasRequest
 	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
 		fmt.Println("Error: " + err.Error())
@@ -96,7 +106,7 @@ func (a *Api) postLoadPsynas(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	psynas, err := a.SwipeUseCases.LoadPsynas(repo.LoadPsynasOptions{
-		AccountId: model.AccountId(m.AccountId),
+		AccountId: r.Context().Value(CTX_ACCOUNT_ID_KEY).(model.AccountId),
 		Count: int (m.Count),
 	})
 
@@ -116,7 +126,7 @@ func (a *Api) postLoadPsynas(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func (a *Api) postLikePsyna(w http.ResponseWriter, r *http.Request) error {
+func (a *Api) likePsyna(w http.ResponseWriter, r *http.Request) error {
 	var m postLikePsynaRequest
 	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
 		fmt.Println("Error: " + err.Error())
@@ -126,7 +136,7 @@ func (a *Api) postLikePsyna(w http.ResponseWriter, r *http.Request) error {
 
 	err := a.SwipeUseCases.LikePsyna(repo.LikePsynaOptions{
 		PsynaId: model.PsynaId(m.PsynaId),
-		AccountId: model.AccountId(m.AccountId),
+		AccountId: r.Context().Value(CTX_ACCOUNT_ID_KEY).(model.AccountId),
 	})
 
 	if err != nil {
@@ -139,15 +149,8 @@ func (a *Api) postLikePsyna(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func (a *Api) postGetFavoritePsynas(w http.ResponseWriter, r *http.Request) error {
-	var m postGetFavoritePsynasRequest
-	if err := a.JSONHandler.ReadJson(r, &m); err != nil {
-		fmt.Println("Error: " + err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		return nil
-	}
-
-	psynas, err := a.SwipeUseCases.GetFavoritePsynas(model.AccountId(m.AccountId))
+func (a *Api) getFavoritePsynas(w http.ResponseWriter, r *http.Request) error {
+	psynas, err := a.SwipeUseCases.GetFavoritePsynas(r.Context().Value(CTX_ACCOUNT_ID_KEY).(model.AccountId))
 	if err != nil {
 		fmt.Println("Error: " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)
@@ -161,4 +164,26 @@ func (a *Api) postGetFavoritePsynas(w http.ResponseWriter, r *http.Request) erro
 	}
 	w.WriteHeader(http.StatusOK)
 	return nil
+}
+
+var bearerTokenRegexp = regexp.MustCompile("Bearer (.*)")
+
+func (a *Api) authenticate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		submatches := bearerTokenRegexp.FindStringSubmatch(authHeader)
+		if len(submatches) != 2 {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+		tok := token.AccessToken(submatches[1])
+		accId, err := a.AccountUseCases.AuthenticateWithToken(tok)
+		if err != nil {
+			//TODO: a che delat
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+		ctx := context.WithValue(r.Context(), CTX_ACCOUNT_ID_KEY, accId)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
 }

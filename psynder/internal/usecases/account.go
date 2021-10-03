@@ -32,6 +32,7 @@ type LoginToAccountOptions struct {
 type AccountUseCases interface {
 	CreateAccount(opts CreateAccountOptions) (model.AccountId, error)
 	LoginToAccount(opts LoginToAccountOptions) (token.AccessToken, error)
+	AuthenticateWithToken(token token.AccessToken) (model.AccountId, error)
 }
 
 type AccountUseCasesImpl struct {
@@ -88,6 +89,10 @@ func (u *AccountUseCasesImpl) LoginToAccount(opts LoginToAccountOptions) (token.
 		return "", err
 	}
 	return tok, err
+}
+
+func (u *AccountUseCasesImpl) AuthenticateWithToken(token token.AccessToken) (model.AccountId, error) {
+	return u.TokenIssuer.AccountIdByToken(token)
 }
 
 func validateEmail(email string) error {
