@@ -10,22 +10,28 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DiffUtil
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.google.android.material.navigation.NavigationView
+import com.psinder.myapplication.MainActivity
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentSwipeBinding
+import com.psinder.myapplication.network.LoadPsynasRequest
+import com.psinder.myapplication.network.ResultWrapper
+import com.psinder.myapplication.network.provideApi
+import com.psinder.myapplication.network.safeApiCall
 import com.yuyakaido.android.cardstackview.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
+import kotlinx.coroutines.Dispatchers
+import by.kirich1409.viewbindingdelegate.viewBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 // TODO: Use https://github.com/yuyakaido/CardStackView
 class SwipeFragment : Fragment(), CardStackListener {
 
@@ -35,13 +41,18 @@ class SwipeFragment : Fragment(), CardStackListener {
 //    private lateinit var binding: ViewDataBinding
 
 
+    val viewModel: SwipeViewModel by viewModels()
+    private lateinit var binding: FragmentSwipeBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val binding = DataBindingUtil.inflate<FragmentSwipeBinding>(inflater,
+
+        binding = DataBindingUtil.inflate<FragmentSwipeBinding>(inflater,
             R.layout.fragment_swipe,container,false)
+
         Fresco.initialize(context)
 
         layoutManager = CardStackLayoutManager(context, this).apply {
@@ -51,40 +62,40 @@ class SwipeFragment : Fragment(), CardStackListener {
 
         binding.stackView.layoutManager = layoutManager
         binding.stackView.adapter = adapter
-//
-//        SwipeAPI().getProfiles().enqueue(object : Callback<List<Profile>> {
-//            override fun onFailure(call: Call<List<Profile>>, t: Throwable) {
-//                adapter.setProfiles(listOf(Profile(
-//                    34,
-//                    100,
-//                    1,
-//                    "Alya",
-//                    "https://sun9-49.userapi.com/impg/phAQReMA5qa6Z67a19uwvb39PKdu6kL-MuetrA/mTJQrWPdv9s.jpg?size=1080x1027&quality=96&sign=764698d9ba05155df1d408c068264c29&type=album"
-//                ),
-//                Profile(
-//                    36,
-//                    4,
-//                    2,
-//                    "Sasha",
-//                    "https://sun9-85.userapi.com/impg/Q2se4IRckmyUSHghWQZfsR9DdaenD4GJn1lOyg/NMIQjWiAG_w.jpg?size=1440x2160&quality=95&sign=37db0e18d778d48ff42114f5e92058a9&type=album"
-//                )))
-//                Log.d("Swipe", "onFailure")
-//            }
-//
-//            override fun onResponse(call: Call<List<Profile>>, response: Response<List<Profile>>) {
-//                response.body()?.let {
-//                    adapter.setProfiles(it)
-//                    Log.d("Swipe", it.toString())
-//                }
-//            }
-//        })
 
         setupCardStackView(binding.stackView)
-        setupButton(binding.stackView, binding)
-        adapter.setProfiles(createProfiles())
+        setupButton(binding.stackView)
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.token.emit(
+                    (activity as MainActivity).token
+                )
+                viewModel.viewState.collect {
+                        viewState ->
+                    Log.d("ViewStateLog", viewState.toString())
+                    renderViewState(viewState)
+                }
+            }
+        }
+
         return binding.root
     }
 
+    private fun renderViewState(viewState: SwipeViewModel.ViewState) {
+        when (viewState) {
+            is SwipeViewModel.ViewState.Loading -> {
+                binding.stackView.isVisible = false
+                binding.progressBar.isVisible = true
+            }
+            is SwipeViewModel.ViewState.Data -> {
+                binding.stackView.isVisible = true
+                (binding.stackView.adapter as ProfilesAdapter).apply {
+                    setProfiles(viewState.userList)
+                }
+                binding.progressBar.isVisible = false
+            }
+        }
+    }
 
 //    override fun onBackPressed() {
 //        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -101,7 +112,7 @@ class SwipeFragment : Fragment(), CardStackListener {
     override fun onCardSwiped(direction: Direction) {
         Log.d("CardStackView", "onCardSwiped: p = ${manager.topPosition}, d = $direction")
         if (manager.topPosition == adapter.itemCount - 5) {
-            paginate()
+//            paginate()
         }
     }
 
@@ -154,7 +165,7 @@ class SwipeFragment : Fragment(), CardStackListener {
         initialize(cardStackView)
     }
 
-    private fun setupButton(cardStackView: CardStackView, binding: FragmentSwipeBinding) {
+    private fun setupButton(cardStackView: CardStackView) {
         val skip = binding.skipButton
         skip.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
