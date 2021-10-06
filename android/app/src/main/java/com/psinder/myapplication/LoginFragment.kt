@@ -56,7 +56,7 @@ class LoginFragment: Fragment() {
                         is ResultWrapper.NetworkError -> "network error"
                         is ResultWrapper.GenericError -> "code:" + result.code // TODO: why error message is null???
                     }
-                    Toast.makeText(this@LoginFragment.context, message, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@LoginFragment.context, message, Toast.LENGTH_SHORT).show()
 
 //                    if (result is ResultWrapper.Success) {
 //                        val psynas = safeApiCall(Dispatchers.IO) {

@@ -149,7 +149,7 @@
                         style="@style/loginButton"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/loginViewsMargin"
-                        android:text="Зарегестрироваться"
+                        android:text="Зарегистрироваться"
                         android:gravity="center"
                         android:textAlignment="center"
                         app:initialCornerAngle="27dp"

@@ -64,7 +64,7 @@ class RegistrationFragment: Fragment() {
                     is ResultWrapper.NetworkError -> "network error"
                     is ResultWrapper.GenericError -> "code:" + result.code // TODO: why error message is null???
                 }
-                Toast.makeText(this@RegistrationFragment.context, message, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@RegistrationFragment.context, message, Toast.LENGTH_SHORT).show()
                 binding.cirRegisterButton.revertAnimation()
             }
         }
