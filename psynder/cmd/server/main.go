@@ -42,7 +42,7 @@ func main() {
 		panic(err)
 	}
 
-	connStr := "user=postgres password=123 host=localhost dbname=postgres sslmode=disable"
+	connStr := "user=postgres password=12345678 host=db dbname=postgres sslmode=disable"
 	conn, err := sql.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
