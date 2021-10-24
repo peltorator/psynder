@@ -1,7 +1,8 @@
-package com.psinder.myapplication.swipe
+package com.psinder.myapplication.ui.swipe
 
 
 import androidx.recyclerview.widget.DiffUtil
+import com.psinder.myapplication.entity.Profile
 
 class ProfileDiffCallback(
     private val old: List<Profile>,

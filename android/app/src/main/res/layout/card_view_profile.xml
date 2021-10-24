@@ -6,7 +6,7 @@
 
         <variable
             name="profile"
-            type="com.psinder.myapplication.swipe.Profile" />
+            type="com.psinder.myapplication.entity.Profile" />
     </data>
 
 <!--    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"-->

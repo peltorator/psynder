@@ -1,24 +1,18 @@
-package com.psinder.myapplication.swipe
+package com.psinder.myapplication.ui.swipe
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.psinder.myapplication.MainActivity
+import com.psinder.myapplication.entity.Profile
 import com.psinder.myapplication.network.LoadPsynasRequest
 import com.psinder.myapplication.network.ResultWrapper
 import com.psinder.myapplication.network.safeApiCall
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 
 class SwipeViewModel: ViewModel() {
 

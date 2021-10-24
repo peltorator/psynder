@@ -1,4 +1,4 @@
-package com.psinder.myapplication
+package com.psinder.myapplication.ui.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -15,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+import com.psinder.myapplication.MainActivity
+import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentLoginBinding
 import com.psinder.myapplication.network.*
 import kotlinx.coroutines.Dispatchers

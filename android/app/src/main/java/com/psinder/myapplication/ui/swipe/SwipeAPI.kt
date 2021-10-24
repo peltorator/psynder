@@ -1,5 +1,6 @@
-package com.psinder.myapplication.swipe
+package com.psinder.myapplication.ui.swipe
 
+import com.psinder.myapplication.entity.Profile
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

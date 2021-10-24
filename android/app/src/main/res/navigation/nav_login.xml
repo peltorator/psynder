@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.psinder.myapplication.LoginFragment"
+        android:name="com.psinder.myapplication.ui.login.LoginFragment"
         android:label="LoginFragment" >
         <action
             android:id="@+id/action_loginFragment_to_registrationFragment"
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
-        android:name="com.psinder.myapplication.RegistrationFragment"
+        android:name="com.psinder.myapplication.ui.registration.RegistrationFragment"
         android:label="RegistrationFragment" >
         <action
             android:id="@+id/action_registrationFragment_to_loginFragment"
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.psinder.myapplication.ProfileFragment"
+        android:name="com.psinder.myapplication.ui.profile.ProfileFragment"
         android:label="ProfileFragment" />
     <fragment
         android:id="@+id/chatFragment"
@@ -36,6 +36,6 @@
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/swipeFragment"
-        android:name="com.psinder.myapplication.swipe.SwipeFragment"
+        android:name="com.psinder.myapplication.ui.swipe.SwipeFragment"
         android:label="SwipeFragment" />
 </navigation>

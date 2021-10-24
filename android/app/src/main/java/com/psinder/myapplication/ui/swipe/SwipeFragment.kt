@@ -1,4 +1,4 @@
-package com.psinder.myapplication.swipe
+package com.psinder.myapplication.ui.swipe
 
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +10,6 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -23,13 +22,8 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.psinder.myapplication.MainActivity
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentSwipeBinding
-import com.psinder.myapplication.network.LoadPsynasRequest
-import com.psinder.myapplication.network.ResultWrapper
-import com.psinder.myapplication.network.provideApi
-import com.psinder.myapplication.network.safeApiCall
 import com.yuyakaido.android.cardstackview.*
-import kotlinx.coroutines.Dispatchers
-import by.kirich1409.viewbindingdelegate.viewBinding
+import com.psinder.myapplication.entity.Profile
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 // TODO: Use https://github.com/yuyakaido/CardStackView

@@ -1,4 +1,4 @@
-package com.psinder.myapplication.swipe
+package com.psinder.myapplication.ui.swipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.CardViewProfileBinding
+import com.psinder.myapplication.entity.Profile
 
 
 class ProfilesAdapter : RecyclerView.Adapter<ProfilesAdapter.ProfileViewHolder>() {

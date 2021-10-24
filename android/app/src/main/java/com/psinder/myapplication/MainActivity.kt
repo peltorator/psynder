@@ -3,24 +3,17 @@ package com.psinder.myapplication
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.psinder.myapplication.databinding.ActivityMainBinding
 
 
-import androidx.annotation.NonNull
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.psinder.myapplication.swipe.SwipeFragment
-import android.content.Intent
-
-
-
+import com.psinder.myapplication.ui.chat.ChatFragment
+import com.psinder.myapplication.ui.swipe.SwipeFragment
+import com.psinder.myapplication.ui.profile.ProfileFragment
 
 
 class MainActivity : AppCompatActivity() {

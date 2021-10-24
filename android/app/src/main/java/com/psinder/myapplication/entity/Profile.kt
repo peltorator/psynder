@@ -1,4 +1,4 @@
-package com.psinder.myapplication.swipe
+package com.psinder.myapplication.entity
 
 data class Profile(
     val age: Int,
