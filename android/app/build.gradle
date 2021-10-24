@@ -104,4 +104,7 @@ dependencies {
 
     // View binding helper.
     implementation "com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.4.4"
+
+    implementation 'com.android.support:appcompat-v7:31.0.1'
+    implementation 'com.android.support:design:31.0.1'
 }

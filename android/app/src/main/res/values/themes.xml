@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.MyApplication" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimary">#ffa000</item>
         <item name="colorPrimaryVariant">@color/themeColor</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
