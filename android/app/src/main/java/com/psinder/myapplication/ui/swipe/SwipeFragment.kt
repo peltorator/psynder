@@ -19,7 +19,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DiffUtil
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.psinder.myapplication.MainActivity
+import com.psinder.myapplication.ui.MainActivity
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentSwipeBinding
 import com.yuyakaido.android.cardstackview.*
@@ -62,7 +62,7 @@ class SwipeFragment : Fragment(), CardStackListener {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.token.emit(
-                    (activity as MainActivity).token
+                    "TOKEN" //(activity as MainActivity).token
                 )
                 viewModel.viewState.collect {
                         viewState ->

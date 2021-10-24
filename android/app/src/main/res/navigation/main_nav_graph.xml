@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/user_nav_graph">
+
+    <action
+        android:id="@+id/action_guestNavGraph"
+        app:destination="@+id/guest_nav_graph"
+        app:popUpTo="@+id/main_nav_graph"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/action_userNavGraph"
+        app:destination="@+id/user_nav_graph"
+        app:popUpTo="@+id/main_nav_graph"
+        app:popUpToInclusive="true" />
+
+    <include app:graph="@navigation/guest_nav_graph" />
+
+    <include app:graph="@navigation/user_nav_graph" />
+
+</navigation>

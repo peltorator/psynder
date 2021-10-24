@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-import com.psinder.myapplication.MainActivity
+import com.psinder.myapplication.ui.MainActivity
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentLoginBinding
 import com.psinder.myapplication.network.*
