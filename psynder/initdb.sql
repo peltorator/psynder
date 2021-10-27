@@ -8,6 +8,16 @@ create table accounts
     unique (email)
 );
 
+drop table if exists shelters cascade;
+create table shelters
+(
+    id             serial primary key,
+    email          varchar(255) not null,
+    password_hash  bytea not null,
+
+    unique (email)
+);
+
 drop table if exists psynas cascade;
 create table psynas
 (
