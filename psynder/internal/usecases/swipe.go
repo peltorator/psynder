@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"math"
 	"psynder/internal/domain/model"
 	"psynder/internal/domain/repo"
 )
@@ -29,18 +30,21 @@ func (u *SwipeUseCasesImpl) LoadPsynas(opts repo.LoadPsynasOptions) ([]model.Psy
 		return []model.Psyna{}, err
 	}
 	var psynasId []model.PsynaId
-	maxId := model.PsynaId(0)
+	maxId := model.PsynaId(math.MaxInt64)
 	for i := 0; i < len(psynas); i++ {
 		psynasId = append(psynasId, psynas[i].Id)
-		if psynas[i].Id > maxId {
+		if maxId == math.MaxInt64 || psynas[i].Id > maxId {
 			maxId = psynas[i].Id
 		}
 	}
-	err = u.SwipeRepo.SaveLastView(opts.AccountId, maxId)
-	if err != nil {
-		return []model.Psyna{}, err
+	if maxId != math.MaxInt64 {
+		err = u.SwipeRepo.SaveLastView(opts.AccountId, maxId)
+		if err != nil {
+			return []model.Psyna{}, err
+		}
+		return psynas, nil
 	}
-	return psynas, nil
+	return []model.Psyna{}, err
 }
 
 func (u *SwipeUseCasesImpl) LikePsyna(opts repo.LikePsynaOptions) error {
