@@ -29,13 +29,18 @@ func (p *Postgres) LoadPsynas(opts repo.LoadPsynasOptions) ([]model.Psyna, error
 		return []model.Psyna{}, nil
 	}
 	var psynas []model.Psyna
+	var count = 0
 	for rows.Next() {
+		count += 1
 		r := new(model.Psyna)
 		err = rows.Scan(&r.Id, &r.Name, &r.Description, &r.PhotoLink)
 		if err != nil {
 			return []model.Psyna{}, nil
 		}
 		psynas = append(psynas, *r)
+	}
+	if count == 0 {
+		return []model.Psyna{}, nil
 	}
 	return psynas, nil
 }
