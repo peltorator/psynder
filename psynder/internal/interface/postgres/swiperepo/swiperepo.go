@@ -1,74 +1,65 @@
 package swiperepo
 
 import (
-	"database/sql"
 	"errors"
+	"fmt"
 	"psynder/internal/domain/model"
 	"psynder/internal/domain/repo"
+	"psynder/internal/interface/postgres"
 )
 
-type Postgres struct {
-	conn *sql.DB
+type Psyna struct {
+	postgres.Model
+	Name        string
+	Description string
+	PhotoLink   string
 }
 
-func New(conn *sql.DB) *Postgres {
+type Like struct {
+	AccountId uint
+	PsynaId   uint
+}
+
+type Postgres struct {
+	conn *postgres.Connection
+}
+
+func New(conn *postgres.Connection) *Postgres {
 	return &Postgres{conn: conn}
 }
 
 const queryLoadPsynas = `
 	SELECT psynas.id, psynas.name, psynas.description, psynas.photoLink
 	FROM psynas
-	WHERE psynas.id > (select coalesce(max(lastView.psynaId), -1) FROM lastView WHERE lastView.accountId = $1)
 	ORDER BY psynas.id
 	LIMIT $2;
 `
 
 func (p *Postgres) LoadPsynas(opts repo.LoadPsynasOptions) ([]model.Psyna, error) {
-	rows, err := p.conn.Query(queryLoadPsynas, opts.AccountId, opts.Count)
-	if err != nil {
-		return []model.Psyna{}, nil
-	}
+	var ps []Psyna
+	//r := p.conn.Db.Limit(opts.Limit).Offset(opts.Offset).Find(&ps)
+	r := p.conn.Db.Table("psynas").Find(&ps)
+
 	var psynas []model.Psyna
-	var count = 0
-	for rows.Next() {
-		count += 1
-		r := new(model.Psyna)
-		err = rows.Scan(&r.Id, &r.Name, &r.Description, &r.PhotoLink)
-		if err != nil {
-			return []model.Psyna{}, nil
-		}
-		psynas = append(psynas, *r)
+	for _, psyna := range ps {
+		fmt.Printf("%v!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", psyna.ID)
+		psynas = append(psynas, model.Psyna{
+			model.PsynaId(psyna.ID),
+			psyna.Name,
+			psyna.Description,
+			psyna.PhotoLink})
 	}
-	if count == 0 {
-		return []model.Psyna{}, nil
-	}
-	return psynas, nil
+	return psynas, r.Error
 }
-
-const querySaveLastView = `
-	INSERT INTO lastView(accountId, psynaId)
-	VALUES ($1, $2)
-	ON CONFLICT (accountId) DO UPDATE SET psynaId=EXCLUDED.psynaId;
-`
-
-func (p *Postgres) SaveLastView(account_id model.AccountId, psyna_id model.PsynaId) error {
-	row := p.conn.QueryRow(querySaveLastView, account_id, psyna_id)
-	err := row.Err()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-const queryLikePsyna = `
-	INSERT INTO likes(accountId, psynaId)
-	VALUES ($1, $2)
-`
 
 func (p *Postgres) LikePsyna(opts repo.LikePsynaOptions) error {
-	row := p.conn.QueryRow(queryLikePsyna, opts.AccountId, opts.PsynaId)
-	err := row.Err()
-	if err != nil {
+	like := Like{
+		AccountId: uint(opts.AccountId),
+		PsynaId:   uint(opts.PsynaId),
+	}
+	r := p.conn.Db.Create(&like)
+	if r.Error != nil {
+		// TODO: ???
 		return errors.New("Account or psyna doesn't exist")
 	}
 	return nil
@@ -82,18 +73,31 @@ const queryGetFavoritePsynas = `
 `
 
 func (p *Postgres) GetFavoritePsynas(id model.AccountId) ([]model.Psyna, error) {
-	rows, err := p.conn.Query(queryGetFavoritePsynas, id)
-	if err != nil {
-		return []model.Psyna{}, err
-	}
+	//rows, err := p.conn.Query(queryGetFavoritePsynas, id)
+	//if err != nil {
+	//	return []model.Psyna{}, err
+	//}
+	//var psynas []model.Psyna
+	//for rows.Next() {
+	//	p := new(model.Psyna)
+	//	err = rows.Scan(&p.Id, &p.Name, &p.Description, &p.PhotoLink)
+	//	if err != nil {
+	//		return []model.Psyna{}, err
+	//	}
+	//	psynas = append(psynas, *p)
+	//}
+	//return psynas, nil
+	var ps []Psyna
+
+	r := p.conn.Db.Joins("likes").Find(&ps)
+	// TODO
 	var psynas []model.Psyna
-	for rows.Next() {
-		p := new(model.Psyna)
-		err = rows.Scan(&p.Id, &p.Name, &p.Description, &p.PhotoLink)
-		if err != nil {
-			return []model.Psyna{}, err
-		}
-		psynas = append(psynas, *p)
+	for _, psyna := range ps {
+		psynas = append(psynas, model.Psyna{
+			model.PsynaId(psyna.ID),
+			psyna.Name,
+			psyna.Description,
+			psyna.PhotoLink})
 	}
-	return psynas, nil
+	return psynas, r.Error
 }

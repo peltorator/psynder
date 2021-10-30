@@ -83,9 +83,9 @@ func (r *InMemorySwipeRepo) LoadPsynas(opts LoadPsynasOptions) ([]model.Psyna, e
 	return [] model.Psyna{}, nil
 }
 
-func (r *InMemorySwipeRepo) SaveLastView(id model.AccountId, psynas_id []model.PsynaId) error {
-	return nil
-}
+//func (r *InMemorySwipeRepo) SaveLastView(id model.AccountId, psynas_id []model.PsynaId) error {
+//	return nil
+//}
 
 func (r *InMemorySwipeRepo) LikePsyna(opts LikePsynaOptions) error {
 	return nil

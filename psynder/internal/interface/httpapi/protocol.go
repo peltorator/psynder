@@ -26,7 +26,8 @@ type postLoginResponseSuccess struct {
 
 // /loadpsynas
 type postLoadPsynasRequest struct {
-	Count     uint64 `json:"count"`
+	Limit     uint64 `json:"limit"`
+	Offset     uint64 `json:"offset"`
 }
 
 type postLoadPsynasResponseSuccess struct {

@@ -10,6 +10,7 @@ import (
 	"psynder/internal/interface/httpapi"
 	"psynder/internal/interface/postgres"
 	"psynder/internal/interface/postgres/accountrepo"
+	"psynder/internal/interface/postgres/swiperepo"
 	"psynder/internal/service/token"
 	"psynder/internal/usecases"
 	"time"
@@ -49,8 +50,8 @@ func main() {
 
 	a := httpapi.New(
 		usecases.NewAccountUseCases(accountrepo.New(conn), tokenIssuer),
-		nil,
-		//usecases.NewSwipeUseCases(swiperepo.New(conn)),
+		//nil,
+		usecases.NewSwipeUseCases(swiperepo.New(conn)),
 		httpapi.NewJSONHandler())
 
 	addr := fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port)

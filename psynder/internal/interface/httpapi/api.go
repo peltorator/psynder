@@ -107,7 +107,8 @@ func (a *Api) loadPsynas(w http.ResponseWriter, r *http.Request) error {
 
 	psynas, err := a.SwipeUseCases.LoadPsynas(repo.LoadPsynasOptions{
 		AccountId: r.Context().Value(CTX_ACCOUNT_ID_KEY).(model.AccountId),
-		Count: int (m.Count),
+		Limit: int (m.Limit),
+		Offset: int (m.Offset),
 	})
 
 	if err != nil {

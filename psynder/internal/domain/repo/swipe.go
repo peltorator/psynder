@@ -5,7 +5,8 @@ import (
 )
 
 type LoadPsynasOptions struct {
-	Count int
+	Offset int
+	Limit int
 	AccountId model.AccountId
 }
 
@@ -16,7 +17,7 @@ type LikePsynaOptions struct {
 
 type SwipeRepo interface {
 	LoadPsynas(opts LoadPsynasOptions) ([]model.Psyna, error)
-	SaveLastView(account_id model.AccountId, psyna_id model.PsynaId) error
+	//SaveLastView(account_id model.AccountId, psyna_id model.PsynaId) error
 	LikePsyna(opts LikePsynaOptions) error
 	GetFavoritePsynas(id model.AccountId) ([]model.Psyna, error)
 }
