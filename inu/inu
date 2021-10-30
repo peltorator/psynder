@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+
+import argparse
+import requests as req
+import urllib3
+import os
+from http.client import responses as http_status_codes
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+def show(r: req.Response):
+    print('Request:')
+    print(f'{r.request.method} {r.request.url}')
+    print(r.request.headers)
+    print(r.request.body)
+    print(f'Status: {r.status_code} {http_status_codes[r.status_code]}')
+    print(r.text)
+
+
+def url(args: argparse.Namespace, path: str):
+    return f'{args.protocol}://{args.host}:{args.port}{path}'
+
+
+def from_args(args: argparse.Namespace, *props: str):
+    return {prop: getattr(args, prop) for prop in props}
+
+
+def make_req_no_auth(args: argparse.Namespace, method: str, path: str, *props: str):
+    return req.request(method, url(args, path), verify=False, json=from_args(args, *props))
+
+
+def make_req(args: argparse.Namespace, method: str, path: str, *props: str):
+    return req.request(method, url(args, path), verify=False, json=from_args(args, *props),
+                       headers={'Authorization': f'Bearer {read_token()}'})
+
+
+def signup_action(args: argparse.Namespace):
+    r = make_req_no_auth(args, 'post', '/signup',
+                         'email', 'password', 'kind')
+    show(r)
+
+
+def login_action(args: argparse.Namespace):
+    r = make_req_no_auth(args, 'post', '/login',
+                         'email', 'password')
+    show(r)
+    if r.status_code != 200:
+        return
+    token = r.json()['token']
+    with open(get_token_file_path(), 'w') as token_file:
+        token_file.write(token)
+
+
+def loadpsynas_action(args: argparse.Namespace):
+    r = make_req(args, 'post', '/loadpsynas',
+                 'limit', 'offset')
+    show(r)
+
+
+def get_token_file_path():
+    return os.path.join('/', 'tmp', 'psynder-token.txt')
+
+
+def read_token():
+    with open(get_token_file_path(), 'r') as token_file:
+        token = token_file.read()
+    return token
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-P', '--protocol', '--proto', default='https', choices=['http', 'https'],
+                    help='protocol to use for requests')
+parser.add_argument('-p', '--port', default=8080,
+                    help='port of the server')
+parser.add_argument('-a', '--host', default='localhost',
+                    help='hostname (or an IP address) of the server')
+
+subparsers = parser.add_subparsers(dest='action', required=True)
+
+parser_signup = subparsers.add_parser('signup', help='make a new user account')
+parser_signup.set_defaults(action=signup_action)
+parser_signup.add_argument('email', help='account email')
+parser_signup.add_argument('password', help='account password')
+parser_signup.add_argument('kind', choices=['person', 'shelter'], help='account kind')
+
+parser_login = subparsers.add_parser('login', help='log into an account an get an access token')
+parser_login.set_defaults(action=login_action)
+parser_login.add_argument('email', help='account email')
+parser_login.add_argument('password', help='account password')
+
+parser_loadpsynas = subparsers.add_parser('loadpsynas', help='load some info about psynas')
+parser_loadpsynas.set_defaults(action=loadpsynas_action)
+parser_loadpsynas.add_argument('limit', type=int, default=10, nargs='?', help='number of psynas to load')
+parser_loadpsynas.add_argument('offset', type=int, default=0, nargs='?', help='index of the first psyna to load')
+
+
+def main():
+    args = parser.parse_args()
+    args.action(args)
+
+
+if __name__ == '__main__':
+    main()
