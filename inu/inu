@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+
+import argparse
+from typing import List
+
+import requests as req
+import urllib3
+import os
+from http.client import responses as http_status_codes
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+def show(r: req.Response):
+    print(f'{r.request.method} {r.request.url}')
+    for header, value in r.request.headers.items():
+        print(f'{header}: {value}')
+    print()
+    print(r.request.body)
+    print()
+    print(f'Status: {r.status_code} {http_status_codes[r.status_code]}')
+    for header, value in r.headers.items():
+        print(f'{header}: {value}')
+    print()
+    print(r.text)
+
+
+def url_from_args(args: argparse.Namespace, path: str):
+    return f'{args.protocol}://{args.host}:{args.port}{path}'
+
+
+def dict_from_args(args: argparse.Namespace, props: List[str]):
+    return {prop: getattr(args, prop) for prop in props}
+
+
+def make_req(args: argparse.Namespace, method: str, path: str, *,
+             url_props: List[str] = None, json_props: List[str] = None, auth: bool = True, **kwargs):
+    headers = {}
+    if 'headers' in kwargs:
+        headers = kwargs['headers']
+    if auth:
+        headers['Authorization'] = f'Bearer {read_token()}'
+    return req.request(method, url_from_args(args, path), verify=False,
+                       json=dict_from_args(args, json_props) if json_props is not None else None,
+                       params=dict_from_args(args, url_props) if url_props is not None else None,
+                       headers=headers)
+
+
+def signup_action(args: argparse.Namespace):
+    r = make_req(args, 'post', '/signup',
+                 json_props=['email', 'password', 'kind'], auth=False)
+    show(r)
+
+
+def login_action(args: argparse.Namespace):
+    r = make_req(args, 'post', '/login',
+                 json_props=['email', 'password'], auth=False)
+    show(r)
+    if r.status_code != 200:
+        return
+    token = r.json()['token']
+    with open(get_token_file_path(), 'w') as token_file:
+        token_file.write(token)
+
+
+def browse_psynas_action(args: argparse.Namespace):
+    r = make_req(args, 'get', '/browse-psynas',
+                 url_props=['limit', 'offset'])
+    show(r)
+
+
+def get_token_file_path():
+    return os.path.join('/', 'tmp', 'psynder-token.txt')
+
+
+def read_token():
+    with open(get_token_file_path(), 'r') as token_file:
+        token = token_file.read()
+    return token
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-P', '--protocol', '--proto', default='https', choices=['http', 'https'],
+                    help='protocol to use for requests')
+parser.add_argument('-p', '--port', default=443,
+                    help='port of the server')
+parser.add_argument('-a', '--host', default='localhost',
+                    help='hostname (or an IP address) of the server')
+
+subparsers = parser.add_subparsers(dest='action', required=True)
+
+parser_signup = subparsers.add_parser('signup', help='make a new user account')
+parser_signup.set_defaults(action=signup_action)
+parser_signup.add_argument('email', help='account email')
+parser_signup.add_argument('password', help='account password')
+parser_signup.add_argument('kind', choices=['person', 'shelter'], help='account kind')
+
+parser_login = subparsers.add_parser('login', help='log into an account an get an access token')
+parser_login.set_defaults(action=login_action)
+parser_login.add_argument('email', help='account email')
+parser_login.add_argument('password', help='account password')
+
+parser_browse_psynas = subparsers.add_parser('browse-psynas', help='load some info about psynas')
+parser_browse_psynas.set_defaults(action=browse_psynas_action)
+parser_browse_psynas.add_argument('limit', type=int, default=10, nargs='?', help='number of psynas to load')
+parser_browse_psynas.add_argument('offset', type=int, default=0, nargs='?', help='index of the first psyna to load')
+
+
+def main():
+    args = parser.parse_args()
+    args.action(args)
+
+
+if __name__ == '__main__':
+    main()

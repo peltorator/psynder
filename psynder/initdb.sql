@@ -1,9 +1,13 @@
+drop type if exists account_kind;
+create type account_kind as enum('person', 'shelter');
+
 drop table if exists accounts cascade;
 create table accounts
 (
     id             serial primary key,
     email          varchar(255) not null,
     password_hash  bytea not null,
+    kind           account_kind,
 
     unique (email)
 );
@@ -36,15 +40,6 @@ create table likes
     foreign key (account_id) REFERENCES accounts(id),
     foreign key (psyna_id) REFERENCES psynas(id)
 
-);
-
-drop table if exists lastView cascade;
-create table lastView
-(
-    account_id int not null primary key,
-    psyna_id   int not null,
-
-    foreign key (account_id) REFERENCES accounts(id)
 );
 
 insert into psynas(name, description, photo_link) values ('Биба', 'Описание1', 'https://sun9-10.userapi.com/c830408/v830408596/1e3417/lWKS4Fju4T0.jpg') ;

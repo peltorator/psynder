@@ -13,7 +13,3 @@ jwt:
   cookie-duration: 48h
   issuer: psynder
   url: https://localhost:443
-
-oauth:
-  vk:
-    client-id: 7948171

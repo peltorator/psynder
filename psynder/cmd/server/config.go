@@ -3,11 +3,13 @@ package main
 import "time"
 
 type AppConfig struct {
+	DevMode bool `yaml:"dev-mode" env:"DEV_MODE"`
 	Server struct {
 		Host string `yaml:"host" env:"SERVER_HOST"`
 		Port string `yaml:"port" env:"SERVER_PORT"`
 	} `yaml:"server"`
 	TLS struct {
+		Enable bool `yaml:"enable" env:"TLS_ENABLE"`
 		CertPath string `yaml:"cert-path" env:"TLS_CERT_PATH"`
 		KeyPath string `yaml:"key-path" env:"TLS_KEY_PATH"`
 	} `yaml:"tls"`
@@ -19,4 +21,10 @@ type AppConfig struct {
 		Issuer string `yaml:"issuer" env:"JWT_ISSUER"`
 		URL string `yaml:"url" env:"JWT_URL"`
 	} `yaml:"jwt"`
+	Postgres struct {
+		Username string `yaml:"username" env:"POSTGRES_USERNAME"`
+		Password string `yaml:"password" env:"POSTGRES_PASSWORD"`
+		Host string `yaml:"host" env:"POSTGRES_HOST"`
+		Dbname string `yaml:"dbname" env:"POSTGRES_DBNAME"`
+	} `yaml:"postgres"`
 }
