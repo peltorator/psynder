@@ -16,8 +16,8 @@ type LikePsynaOptions struct {
 }
 
 type SwipeRepo interface {
-	LoadPsynas(opts LoadPsynasOptions) ([]model.Psyna, error)
+	LoadPsynasFromRepo(opts LoadPsynasOptions) ([]model.Psyna, error)
 	//SaveLastView(account_id model.AccountId, psyna_id model.PsynaId) error
-	LikePsyna(opts LikePsynaOptions) error
-	GetFavoritePsynas(id model.AccountId) ([]model.Psyna, error)
+	StoreLikeToRepo(opts LikePsynaOptions) error
+	LoadFavoritePsynasFromRepo(id model.AccountId) ([]model.Psyna, error)
 }

@@ -21,7 +21,7 @@ func New(conn *postgres.Connection) *Postgres {
 	return &Postgres{conn: conn}
 }
 
-func (p *Postgres) CreateAccount(opts repo.CreateAccountOptions) (model.AccountId, error) {
+func (p *Postgres) StoreAccountToRepo(opts repo.CreateAccountOptions) (model.AccountId, error) {
 	acc := Account{
 		Email:        opts.Email,
 		PasswordHash: opts.PasswordHash,
@@ -34,13 +34,13 @@ func (p *Postgres) CreateAccount(opts repo.CreateAccountOptions) (model.AccountI
 	return model.AccountId(acc.ID), nil
 }
 
-func (p *Postgres) GetIdByEmail(email string) (model.AccountId, error) {
+func (p *Postgres) LoadIdByEmailFromRepo(email string) (model.AccountId, error) {
 	var acc Account
 	r := p.conn.Db.First(&acc, "email = ?", email)
 	return model.AccountId(acc.ID), r.Error
 }
 
-func (p *Postgres) GetPasswordHashById(id model.AccountId) (model.PasswordHash, error) {
+func (p *Postgres) LoadPasswordHashByIdFromRepo(id model.AccountId) (model.PasswordHash, error) {
 	var acc Account
 	r := p.conn.Db.First(&acc, id)
 	// TODO

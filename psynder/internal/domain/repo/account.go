@@ -10,9 +10,9 @@ type CreateAccountOptions struct {
 }
 
 type AccountRepo interface {
-	CreateAccount(opts CreateAccountOptions) (model.AccountId, error)
-	GetIdByEmail(email string) (model.AccountId, error)
-	GetPasswordHashById(id model.AccountId) (model.PasswordHash, error)
+	StoreAccountToRepo(opts CreateAccountOptions) (model.AccountId, error)
+	LoadIdByEmailFromRepo(email string) (model.AccountId, error)
+	LoadPasswordHashByIdFromRepo(id model.AccountId) (model.PasswordHash, error)
 	//GetAccountById(id string) (model.Account, error)
 	//GetAccountByEmail(email string) (model.Account, error)
 }

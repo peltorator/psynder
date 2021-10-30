@@ -2,7 +2,6 @@ package swiperepo
 
 import (
 	"errors"
-	"fmt"
 	"psynder/internal/domain/model"
 	"psynder/internal/domain/repo"
 	"psynder/internal/interface/postgres"
@@ -28,31 +27,21 @@ func New(conn *postgres.Connection) *Postgres {
 	return &Postgres{conn: conn}
 }
 
-const queryLoadPsynas = `
-	SELECT psynas.id, psynas.name, psynas.description, psynas.photoLink
-	FROM psynas
-	ORDER BY psynas.id
-	LIMIT $2;
-`
-
-func (p *Postgres) LoadPsynas(opts repo.LoadPsynasOptions) ([]model.Psyna, error) {
+func (p *Postgres) LoadPsynasFromRepo(opts repo.LoadPsynasOptions) ([]model.Psyna, error) {
 	var ps []Psyna
-	//r := p.conn.Db.Limit(opts.Limit).Offset(opts.Offset).Find(&ps)
-	r := p.conn.Db.Table("psynas").Find(&ps)
-
+	r := p.conn.Db.Limit(opts.Limit).Offset(opts.Offset).Find(&ps)
 	var psynas []model.Psyna
 	for _, psyna := range ps {
-		fmt.Printf("%v!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", psyna.ID)
 		psynas = append(psynas, model.Psyna{
-			model.PsynaId(psyna.ID),
-			psyna.Name,
-			psyna.Description,
-			psyna.PhotoLink})
+			Id:          model.PsynaId(psyna.ID),
+			Name:        psyna.Name,
+			Description: psyna.Description,
+			PhotoLink:   psyna.PhotoLink})
 	}
 	return psynas, r.Error
 }
 
-func (p *Postgres) LikePsyna(opts repo.LikePsynaOptions) error {
+func (p *Postgres) StoreLikeToRepo(opts repo.LikePsynaOptions) error {
 	like := Like{
 		AccountId: uint(opts.AccountId),
 		PsynaId:   uint(opts.PsynaId),
@@ -72,7 +61,7 @@ const queryGetFavoritePsynas = `
 	WHERE likes.accountId = $1;
 `
 
-func (p *Postgres) GetFavoritePsynas(id model.AccountId) ([]model.Psyna, error) {
+func (p *Postgres) LoadFavoritePsynasFromRepo(id model.AccountId) ([]model.Psyna, error) {
 	//rows, err := p.conn.Query(queryGetFavoritePsynas, id)
 	//if err != nil {
 	//	return []model.Psyna{}, err

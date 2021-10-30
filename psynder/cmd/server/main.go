@@ -50,7 +50,6 @@ func main() {
 
 	a := httpapi.New(
 		usecases.NewAccountUseCases(accountrepo.New(conn), tokenIssuer),
-		//nil,
 		usecases.NewSwipeUseCases(swiperepo.New(conn)),
 		httpapi.NewJSONHandler())
 

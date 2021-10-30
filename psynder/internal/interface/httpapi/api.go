@@ -18,15 +18,15 @@ const (
 
 type Api struct {
 	AccountUseCases usecases.AccountUseCases
-	SwipeUseCases usecases.SwipeUseCases
-	JSONHandler JSONHandler
+	SwipeUseCases   usecases.SwipeUseCases
+	JSONHandler     JSONHandler
 }
 
 func New(accountUseCases usecases.AccountUseCases, swipeUseCases usecases.SwipeUseCases, jsonHandler JSONHandler) *Api {
 	return &Api{
 		AccountUseCases: accountUseCases,
-		SwipeUseCases: swipeUseCases,
-		JSONHandler: jsonHandler,
+		SwipeUseCases:   swipeUseCases,
+		JSONHandler:     jsonHandler,
 	}
 }
 
@@ -105,10 +105,10 @@ func (a *Api) loadPsynas(w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 
-	psynas, err := a.SwipeUseCases.LoadPsynas(repo.LoadPsynasOptions{
+	psynas, err := a.SwipeUseCases.GetPsynas(repo.LoadPsynasOptions{
 		AccountId: r.Context().Value(CTX_ACCOUNT_ID_KEY).(model.AccountId),
-		Limit: int (m.Limit),
-		Offset: int (m.Offset),
+		Limit:     int(m.Limit),
+		Offset:    int(m.Offset),
 	})
 
 	if err != nil {
@@ -123,7 +123,6 @@ func (a *Api) loadPsynas(w http.ResponseWriter, r *http.Request) error {
 
 		return nil
 	}
-	w.WriteHeader(http.StatusOK)
 	return nil
 }
 
@@ -136,7 +135,7 @@ func (a *Api) likePsyna(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	err := a.SwipeUseCases.LikePsyna(repo.LikePsynaOptions{
-		PsynaId: model.PsynaId(m.PsynaId),
+		PsynaId:   model.PsynaId(m.PsynaId),
 		AccountId: r.Context().Value(CTX_ACCOUNT_ID_KEY).(model.AccountId),
 	})
 
@@ -146,7 +145,6 @@ func (a *Api) likePsyna(w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 
-	w.WriteHeader(http.StatusOK)
 	return nil
 }
 
@@ -163,7 +161,6 @@ func (a *Api) getFavoritePsynas(w http.ResponseWriter, r *http.Request) error {
 
 		return nil
 	}
-	w.WriteHeader(http.StatusOK)
 	return nil
 }
 

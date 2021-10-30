@@ -26,7 +26,7 @@ func NewInMemoryAccountRepo() *InMemoryAccountRepo {
 	}
 }
 
-func (r *InMemoryAccountRepo) CreateAccount(opts CreateAccountOptions) (model.AccountId, error) {
+func (r *InMemoryAccountRepo) StoreAccountToRepo(opts CreateAccountOptions) (model.AccountId, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -41,14 +41,14 @@ func (r *InMemoryAccountRepo) CreateAccount(opts CreateAccountOptions) (model.Ac
 	return acc.Id, nil
 }
 
-func (r *InMemoryAccountRepo) GetIdByEmail(email string) (model.AccountId, error) {
+func (r *InMemoryAccountRepo) LoadIdByEmailFromRepo(email string) (model.AccountId, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
 	return r.emailToAccount[email].Id, nil
 }
 
-func (r *InMemoryAccountRepo) GetPasswordHashById(id model.AccountId) (model.PasswordHash, error) {
+func (r *InMemoryAccountRepo) LoadPasswordHashByIdFromRepo(id model.AccountId) (model.PasswordHash, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -79,7 +79,7 @@ func NewInMemorySwipeRepo() *InMemorySwipeRepo {
 	}
 }
 
-func (r *InMemorySwipeRepo) LoadPsynas(opts LoadPsynasOptions) ([]model.Psyna, error) {
+func (r *InMemorySwipeRepo) LoadPsynasFromRepo(opts LoadPsynasOptions) ([]model.Psyna, error) {
 	return [] model.Psyna{}, nil
 }
 
@@ -87,10 +87,10 @@ func (r *InMemorySwipeRepo) LoadPsynas(opts LoadPsynasOptions) ([]model.Psyna, e
 //	return nil
 //}
 
-func (r *InMemorySwipeRepo) LikePsyna(opts LikePsynaOptions) error {
+func (r *InMemorySwipeRepo) StoreLikeToRepo(opts LikePsynaOptions) error {
 	return nil
 }
 
-func (r *InMemorySwipeRepo) GetFavoritePsynas(id model.AccountId) ([]model.Psyna, error) {
+func (r *InMemorySwipeRepo) LoadFavoritePsynasFromRepo(id model.AccountId) ([]model.Psyna, error) {
 	return [] model.Psyna{}, nil
 }

@@ -8,7 +8,7 @@ import (
 
 
 type SwipeUseCases interface {
-	LoadPsynas(opts repo.LoadPsynasOptions) ([]model.Psyna, error)
+	GetPsynas(opts repo.LoadPsynasOptions) ([]model.Psyna, error)
 	LikePsyna(opts repo.LikePsynaOptions) error
 	GetFavoritePsynas(id model.AccountId) ([]model.Psyna, error)
 }
@@ -23,24 +23,17 @@ func NewSwipeUseCases(swipeRepo repo.SwipeRepo) *SwipeUseCasesImpl {
 	}
 }
 
-func (u *SwipeUseCasesImpl) LoadPsynas(opts repo.LoadPsynasOptions) ([]model.Psyna, error) {
-	psynas, err := u.SwipeRepo.LoadPsynas(opts)
-	if err != nil {
-		return []model.Psyna{}, err
-	}
-	var psynasId []model.PsynaId
-	for i := 0; i < len(psynas); i++ {
-		psynasId = append(psynasId, psynas[i].Id)
-	}
-	return []model.Psyna{}, err
+func (u *SwipeUseCasesImpl) GetPsynas(opts repo.LoadPsynasOptions) ([]model.Psyna, error) {
+	psynas, err := u.SwipeRepo.LoadPsynasFromRepo(opts)
+	return psynas, err
 }
 
 func (u *SwipeUseCasesImpl) LikePsyna(opts repo.LikePsynaOptions) error {
-	err := u.SwipeRepo.LikePsyna(opts)
+	err := u.SwipeRepo.StoreLikeToRepo(opts)
 	return err
 }
 
 func (u *SwipeUseCasesImpl) GetFavoritePsynas(id model.AccountId) ([]model.Psyna, error) {
-	psynas, err := u.SwipeRepo.GetFavoritePsynas(id)
+	psynas, err := u.SwipeRepo.LoadFavoritePsynasFromRepo(id)
 	return psynas, err
 }

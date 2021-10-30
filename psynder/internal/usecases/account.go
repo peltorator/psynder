@@ -62,7 +62,7 @@ func (u *AccountUseCasesImpl) CreateAccount(opts CreateAccountOptions) (model.Ac
     //if err != nil {
     //    return 0, err
     //}
-	accId, err := u.AccountRepo.CreateAccount(repo.CreateAccountOptions{
+	accId, err := u.AccountRepo.StoreAccountToRepo(repo.CreateAccountOptions{
 		Email:        opts.Email,
 		PasswordHash: hashedPassword,
 	})
@@ -73,11 +73,11 @@ func (u *AccountUseCasesImpl) CreateAccount(opts CreateAccountOptions) (model.Ac
 }
 
 func (u *AccountUseCasesImpl) LoginToAccount(opts LoginToAccountOptions) (token.AccessToken, error) {
-	id, err := u.AccountRepo.GetIdByEmail(opts.Email)
+	id, err := u.AccountRepo.LoadIdByEmailFromRepo(opts.Email)
 	if err != nil {
 		return "", err
 	}
-	passwordHash, err := u.AccountRepo.GetPasswordHashById(id)
+	passwordHash, err := u.AccountRepo.LoadPasswordHashByIdFromRepo(id)
 	if err != nil {
 		return "", err
 	}
