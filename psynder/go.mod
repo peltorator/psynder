@@ -26,6 +26,6 @@ require (
 	github.com/jinzhu/now v1.1.2 // indirect
 	github.com/joho/godotenv v1.3.0 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	gopkg.in/yaml.v2 v2.2.2 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 	olympos.io/encoding/edn v0.0.0-20200308123125-93e3b8dd0e24 // indirect
 )

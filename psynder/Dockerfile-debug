@@ -1,0 +1,15 @@
+# Build
+FROM golang:1.17.2-alpine3.14 as builder
+RUN apk add build-base
+ADD . /build
+WORKDIR /build
+RUN go get -d github.com/go-delve/delve/cmd/dlv
+RUN go install github.com/go-delve/delve/cmd/dlv
+RUN go build -gcflags "all=-N -l" -o server github.com/peltorator/psynder/cmd/server
+
+# Deploy
+FROM alpine:3.14
+EXPOSE 443 40000
+COPY --from=builder /go/bin/dlv /
+COPY --from=builder /build/server /
+ENTRYPOINT ["/dlv", "--listen=:40000", "--headless=true", "--api-version=2", "--accept-multiclient", "--log", "exec", "/server"]
