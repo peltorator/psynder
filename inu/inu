@@ -71,7 +71,7 @@ def read_token():
 parser = argparse.ArgumentParser()
 parser.add_argument('-P', '--protocol', '--proto', default='https', choices=['http', 'https'],
                     help='protocol to use for requests')
-parser.add_argument('-p', '--port', default=8080,
+parser.add_argument('-p', '--port', default=443,
                     help='port of the server')
 parser.add_argument('-a', '--host', default='localhost',
                     help='hostname (or an IP address) of the server')
