@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"github.com/ilyakaznacheev/cleanenv"
 	_ "github.com/lib/pq"
+	"github.com/peltorator/psynder/internal/interface/httpapi"
+	"github.com/peltorator/psynder/internal/interface/postgres"
+	"github.com/peltorator/psynder/internal/interface/postgres/accountrepo"
+	"github.com/peltorator/psynder/internal/interface/postgres/swiperepo"
+	"github.com/peltorator/psynder/internal/service/token"
+	"github.com/peltorator/psynder/internal/usecases"
 	"io/ioutil"
 	"net/http"
-	"psynder/internal/interface/httpapi"
-	"psynder/internal/interface/postgres"
-	"psynder/internal/interface/postgres/accountrepo"
-	"psynder/internal/interface/postgres/swiperepo"
-	"psynder/internal/service/token"
-	"psynder/internal/usecases"
 	"time"
 )
 
@@ -42,7 +42,8 @@ func main() {
 		panic(err)
 	}
 
-	connStr := "user=postgres password=12345678 host=db dbname=postgres sslmode=disable"
+	connStr := fmt.Sprintf("user=%s password=%s host=%s dbname=%s sslmode=disable",
+		cfg.Postgres.Username, cfg.Postgres.Password, cfg.Postgres.Host, cfg.Postgres.Dbname)
 	conn, err := postgres.New(connStr)
 	if err != nil {
 		panic(err)

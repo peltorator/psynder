@@ -4,7 +4,7 @@ import (
 	"crypto/rsa"
 	"fmt"
 	"github.com/golang-jwt/jwt"
-	"psynder/internal/domain/model"
+	"github.com/peltorator/psynder/internal/domain/model"
 	"strconv"
 	"time"
 )

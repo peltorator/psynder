@@ -1,6 +1,6 @@
 package httpapi
 
-import "psynder/internal/domain/model"
+import "github.com/peltorator/psynder/internal/domain/model"
 
 // /signup
 

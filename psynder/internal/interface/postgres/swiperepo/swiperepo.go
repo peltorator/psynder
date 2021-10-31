@@ -2,9 +2,9 @@ package swiperepo
 
 import (
 	"errors"
-	"psynder/internal/domain/model"
-	"psynder/internal/domain/repo"
-	"psynder/internal/interface/postgres"
+	"github.com/peltorator/psynder/internal/domain/model"
+	"github.com/peltorator/psynder/internal/domain/repo"
+	"github.com/peltorator/psynder/internal/interface/postgres"
 )
 
 type Psyna struct {

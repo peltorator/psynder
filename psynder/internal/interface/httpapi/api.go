@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
-	"psynder/internal/domain/model"
-	"psynder/internal/domain/repo"
-	"psynder/internal/service/token"
-	"psynder/internal/usecases"
+	"github.com/peltorator/psynder/internal/domain/model"
+	"github.com/peltorator/psynder/internal/domain/repo"
+	"github.com/peltorator/psynder/internal/service/token"
+	"github.com/peltorator/psynder/internal/usecases"
 	"regexp"
 )
 

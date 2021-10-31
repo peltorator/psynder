@@ -1,6 +1,6 @@
 package token
 
-import "psynder/internal/domain/model"
+import "github.com/peltorator/psynder/internal/domain/model"
 
 type AccessToken string
 

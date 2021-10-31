@@ -1,8 +1,8 @@
 package usecases
 
 import (
-	"psynder/internal/domain/model"
-	"psynder/internal/domain/repo"
+	"github.com/peltorator/psynder/internal/domain/model"
+	"github.com/peltorator/psynder/internal/domain/repo"
 )
 
 

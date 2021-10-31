@@ -5,9 +5,9 @@ import (
 	"net/mail"
 	"net/smtp"
 	"os"
-	"psynder/internal/domain/model"
-	"psynder/internal/domain/repo"
-	"psynder/internal/service/token"
+	"github.com/peltorator/psynder/internal/domain/model"
+	"github.com/peltorator/psynder/internal/domain/repo"
+	"github.com/peltorator/psynder/internal/service/token"
 	"unicode"
 )
 

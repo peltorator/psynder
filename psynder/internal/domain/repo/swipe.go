@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"psynder/internal/domain/model"
+	"github.com/peltorator/psynder/internal/domain/model"
 )
 
 type LoadPsynasOptions struct {

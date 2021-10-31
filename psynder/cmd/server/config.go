@@ -19,4 +19,10 @@ type AppConfig struct {
 		Issuer string `yaml:"issuer" env:"JWT_ISSUER"`
 		URL string `yaml:"url" env:"JWT_URL"`
 	} `yaml:"jwt"`
+	Postgres struct {
+		Username string `yaml:"username" env:"POSTGRES_USERNAME"`
+		Password string `yaml:"password" env:"POSTGRES_PASSWORD"`
+		Host string `yaml:"host" env:"POSTGRES_HOST"`
+		Dbname string `yaml:"dbname" env:"POSTGRES_DBNAME"`
+	} `yaml:"postgres"`
 }
