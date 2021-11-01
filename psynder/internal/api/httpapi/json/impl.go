@@ -27,6 +27,7 @@ func (j *jsonReadWriter) WriteJson(w http.ResponseWriter, val interface{}) error
 }
 
 func (j *jsonReadWriter) RespondWithJson(w http.ResponseWriter, statusCode int, val interface{}) error {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	if err := json.NewEncoder(w).Encode(val); err != nil {
 		return WriteError{Cause: err, ValueToWrite: val, ResponseStatusCode: statusCode}

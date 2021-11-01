@@ -196,7 +196,7 @@ func (a *httpApi) browsePsynas(w http.ResponseWriter, r *http.Request) error {
 		return err // TODO: handle this somehow?
 	}
 
-	if err := a.jsonRW.WriteJson(w, psynas); err != nil {
+	if err := a.jsonRW.RespondWithJson(w, http.StatusOK, psynas); err != nil {
 		return err // TODO: also set appropriate header
 	}
 
