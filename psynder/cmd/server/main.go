@@ -6,7 +6,7 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	_ "github.com/lib/pq"
 	"github.com/peltorator/psynder/internal/api/httpapi"
-	postgres2 "github.com/peltorator/psynder/internal/repo/postgres"
+	"github.com/peltorator/psynder/internal/repo/postgres"
 	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/swipeservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/tokenissuer"
@@ -44,7 +44,7 @@ func main() {
 
 	connStr := fmt.Sprintf("user=%s password=%s host=%s dbname=%s sslmode=disable",
 		cfg.Postgres.Username, cfg.Postgres.Password, cfg.Postgres.Host, cfg.Postgres.Dbname)
-	conn, err := postgres2.New(connStr)
+	conn, err := postgres.New(connStr)
 	if err != nil {
 		panic(err)
 	}
@@ -59,13 +59,17 @@ func main() {
 		panic(err)
 	}
 
-	accountRepo := postgres2.NewAccountRepo(conn)
-	psynaRepo := postgres2.NewPsynaRepo(conn)
+	accountRepo := postgres.NewAccountRepo(conn)
+	psynaRepo := postgres.NewPsynaRepo(conn)
+	likeRepo := postgres.NewLikeRepo(conn)
 
 	api := httpapi.New(httpapi.Args{
 		DevMode:      cfg.DevMode,
 		AuthService:  authservice.New(accountRepo, tokenIssuer),
-		SwipeService: swipeservice.New(psynaRepo),
+		SwipeService: swipeservice.New(swipeservice.Args{
+			Psynas: psynaRepo,
+			Likes:  likeRepo,
+		}),
 		Logger:       logger.Sugar(),
 	})
 

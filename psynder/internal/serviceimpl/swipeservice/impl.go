@@ -9,11 +9,18 @@ import (
 
 type swipeService struct {
 	psyRepo repo.Psynas
+	likeRepo repo.Likes
 }
 
-func New(psynasRepo repo.Psynas) *swipeService {
+type Args struct {
+	Psynas repo.Psynas
+	Likes repo.Likes
+}
+
+func New(args Args) *swipeService {
 	return &swipeService{
-		psyRepo: psynasRepo,
+		psyRepo: args.Psynas,
+		likeRepo: args.Likes,
 	}
 }
 
@@ -23,27 +30,37 @@ func (s *swipeService) BrowsePsynas(uid domain.AccountId, pg pagination.Info) ([
 		return nil, err
 	}
 
-	psynas := make([]swipe.Psyna, len(psynasStored))
-	for i, p := range psynasStored {
-		psynas[i] = swipe.Psyna{
-			Id:          p.Id,
-			Name:        p.Name,
-			Description: p.Description,
-			PhotoLink:   p.PhotoLink,
-		}
-	}
-	return psynas, nil
+	return psynasStoredToSwipe(psynasStored), nil
 }
 
 func (s *swipeService) GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]swipe.Psyna, error) {
-	panic("implement me")
+	psynasStored, err := s.likeRepo.GetLikedPsynas(uid, pg)
+	if err != nil {
+		return nil, err
+	}
+	return psynasStoredToSwipe(psynasStored), nil
 }
 
 func (s *swipeService) RatePsyna(uid domain.AccountId, args struct {
 	Pid      domain.PsynaId
 	Decision swipe.Decision
 }) error {
-	panic("implement me")
+	return s.likeRepo.RatePsyna(uid, args.Pid, args.Decision)
 }
 
+func psynaStoredToSwipe(p repo.Psyna) swipe.Psyna {
+	return swipe.Psyna{
+		Id:          p.Id,
+		Name:        p.Name,
+		Description: p.Description,
+		PhotoLink:   p.PhotoLink,
+	}
+}
 
+func psynasStoredToSwipe(ps []repo.Psyna) []swipe.Psyna {
+	psynas := make([]swipe.Psyna, len(ps))
+	for i, psynaStored := range ps {
+		psynas[i] = psynaStoredToSwipe(psynaStored)
+	}
+	return psynas
+}
