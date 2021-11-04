@@ -1,6 +1,8 @@
 package domain
 
 type ShelterInfo struct {
-	description string
-	// TODO
+	AccountId AccountId
+	city      string
+	address   string
+	phone     string
 }
