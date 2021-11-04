@@ -8,6 +8,7 @@ import (
 	"github.com/peltorator/psynder/internal/api/httpapi/json"
 	"github.com/peltorator/psynder/internal/domain"
 	"github.com/peltorator/psynder/internal/domain/auth"
+	"github.com/peltorator/psynder/internal/domain/shelter"
 	"github.com/peltorator/psynder/internal/domain/swipe"
 	"github.com/peltorator/psynder/internal/pagination"
 	"go.uber.org/zap"
@@ -32,6 +33,7 @@ type Args struct {
 	DevMode      bool
 	AuthService  auth.Service
 	SwipeService swipe.Service
+	ShelterService shelter.Service
 	Logger       *zap.SugaredLogger
 }
 
@@ -64,6 +66,8 @@ func (a *httpApi) Router() http.Handler {
 
 	ar.HandleFunc("/like-psyna", a.eh.HandleErrors(a.likePsyna)).Methods(http.MethodPost)
 	withPaginationQueries(ar.HandleFunc("/liked-psynas", a.eh.HandleErrors(a.getLikedPsynas))).Methods(http.MethodGet)
+
+	// TODO(antoha): add shelter http api
 
 	//ar.HandleFunc("/likepsyna", handleErrors(a.likePsyna)).Methods(http.MethodPost)
 	//ar.HandleFunc("/getfavoritepsynas", handleErrors(a.getFavoritePsynas)).Methods(http.MethodGet)

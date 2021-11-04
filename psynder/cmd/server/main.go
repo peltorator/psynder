@@ -8,6 +8,7 @@ import (
 	"github.com/peltorator/psynder/internal/api/httpapi"
 	"github.com/peltorator/psynder/internal/repo/postgres"
 	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
+	"github.com/peltorator/psynder/internal/serviceimpl/shelterservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/swipeservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/tokenissuer"
 	"go.uber.org/zap"
@@ -62,6 +63,7 @@ func main() {
 	accountRepo := postgres.NewAccountRepo(conn)
 	psynaRepo := postgres.NewPsynaRepo(conn)
 	likeRepo := postgres.NewLikeRepo(conn)
+	shelterRepo := postgres.NewShelterRepo(conn)
 
 	api := httpapi.New(httpapi.Args{
 		DevMode:      cfg.DevMode,
@@ -70,6 +72,7 @@ func main() {
 			Psynas: psynaRepo,
 			Likes:  likeRepo,
 		}),
+		ShelterService: shelterservice.New(shelterRepo),
 		Logger:       logger.Sugar(),
 	})
 
