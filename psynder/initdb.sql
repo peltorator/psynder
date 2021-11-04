@@ -1,5 +1,5 @@
-drop type if exists account_kind;
-create type account_kind as enum('person', 'shelter');
+drop type if exists account_kind cascade;
+create type account_kind as enum ('person', 'shelter');
 
 drop table if exists accounts cascade;
 create table accounts
@@ -12,14 +12,27 @@ create table accounts
     unique (email)
 );
 
-drop table if exists shelters cascade;
-create table shelters
+drop table if exists shelter_info cascade;
+create table shelter_info
 (
-    id            serial primary key,
-    email         varchar(255) not null,
-    password_hash bytea        not null,
+    account_id int primary key,
+    city       varchar(255),
+    address    varchar(255),
+    phone      varchar(20),
 
-    unique (email)
+    foreign key (account_id) REFERENCES accounts (id)
+);
+
+drop table if exists shelter_dogs cascade;
+create table shelter_dogs
+(
+    account_id int not null,
+    psyna_id   int not null,
+
+    constraint pk_shelter_dogs primary key (account_id, psyna_id),
+    foreign key (account_id) REFERENCES accounts (id),
+    foreign key (psyna_id) REFERENCES psynas (id)
+
 );
 
 drop table if exists psynas cascade;
