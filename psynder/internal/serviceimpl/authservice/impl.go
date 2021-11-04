@@ -3,8 +3,7 @@ package authservice
 import (
 	"github.com/peltorator/psynder/internal/domain"
 	"github.com/peltorator/psynder/internal/domain/auth"
-	"github.com/peltorator/psynder/internal/storage"
-	"github.com/peltorator/psynder/internal/storage/repo"
+	"github.com/peltorator/psynder/internal/repo"
 	"golang.org/x/crypto/bcrypt"
 	"net/mail"
 	"unicode"
@@ -42,8 +41,8 @@ func (a *authService) Signup(args auth.SignupArgs) (domain.AccountId, error) {
 		}
 	}
 
-	uid, err := a.accRepo.StoreNew(storage.AccountData{
-		LoginCredentials: storage.LoginCredentials{
+	uid, err := a.accRepo.StoreNew(repo.AccountData{
+		LoginCredentials: repo.LoginCredentials{
 			Email:        args.Email,
 			PasswordHash: passHash,
 		},

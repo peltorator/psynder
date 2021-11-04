@@ -1,4 +1,4 @@
-package storage
+package repo
 
 type LoginCredentials struct {
 	Email string

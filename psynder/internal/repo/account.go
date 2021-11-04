@@ -3,8 +3,18 @@ package repo
 import (
 	"fmt"
 	"github.com/peltorator/psynder/internal/domain"
-	"github.com/peltorator/psynder/internal/storage"
 )
+
+type AccountData struct {
+	LoginCredentials
+	Kind domain.AccountKind
+}
+
+type Account struct {
+	Id domain.AccountId
+	AccountData
+}
+
 
 type AccountStoreErrorKind int
 
@@ -39,6 +49,6 @@ func (e AccountLoadError) Error() string {
 }
 
 type Accounts interface {
-	StoreNew(data storage.AccountData) (domain.AccountId, error)
-	LoadByEmail(email string) (storage.Account, error)
+	StoreNew(data AccountData) (domain.AccountId, error)
+	LoadByEmail(email string) (Account, error)
 }

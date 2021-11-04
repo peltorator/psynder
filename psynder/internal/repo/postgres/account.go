@@ -2,14 +2,13 @@ package postgres
 
 import (
 	"github.com/peltorator/psynder/internal/domain"
-	"github.com/peltorator/psynder/internal/storage"
-	"github.com/peltorator/psynder/internal/storage/repo"
+	"github.com/peltorator/psynder/internal/repo"
 	"gorm.io/gorm"
 )
 
 type Account struct {
 	ID uint64
-	storage.LoginCredentials
+	repo.LoginCredentials
 	Kind string `sql:"type:account_kind"`
 }
 
@@ -31,7 +30,7 @@ func NewAccountRepo(conn *gorm.DB) *accountRepo {
 	}
 }
 
-func (r *accountRepo) StoreNew(data storage.AccountData) (domain.AccountId, error) {
+func (r *accountRepo) StoreNew(data repo.AccountData) (domain.AccountId, error) {
 	acc := Account{
 		LoginCredentials: data.LoginCredentials,
 		Kind:             data.Kind.String(),
@@ -47,15 +46,15 @@ func (r *accountRepo) StoreNew(data storage.AccountData) (domain.AccountId, erro
 	return accountIdFromDb(acc.ID), err
 }
 
-func (r *accountRepo) LoadByEmail(email string) (storage.Account, error) {
+func (r *accountRepo) LoadByEmail(email string) (repo.Account, error) {
 	var acc Account
 	if err := r.db.First(&acc, "email = ?", email).Error; err != nil {
-		return storage.Account{}, err
+		return repo.Account{}, err
 	}
 
-	return storage.Account{
+	return repo.Account{
 		Id: accountIdFromDb(acc.ID),
-		AccountData: storage.AccountData{
+		AccountData: repo.AccountData{
 			LoginCredentials: acc.LoginCredentials,
 			Kind:             domain.AccountKindFromString(acc.Kind),
 		},

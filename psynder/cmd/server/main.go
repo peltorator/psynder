@@ -6,10 +6,10 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	_ "github.com/lib/pq"
 	"github.com/peltorator/psynder/internal/api/httpapi"
+	postgres2 "github.com/peltorator/psynder/internal/repo/postgres"
 	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/swipeservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/tokenissuer"
-	"github.com/peltorator/psynder/internal/storage/repo/postgres"
 	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
@@ -44,7 +44,7 @@ func main() {
 
 	connStr := fmt.Sprintf("user=%s password=%s host=%s dbname=%s sslmode=disable",
 		cfg.Postgres.Username, cfg.Postgres.Password, cfg.Postgres.Host, cfg.Postgres.Dbname)
-	conn, err := postgres.New(connStr)
+	conn, err := postgres2.New(connStr)
 	if err != nil {
 		panic(err)
 	}
@@ -59,8 +59,8 @@ func main() {
 		panic(err)
 	}
 
-	accountRepo := postgres.NewAccountRepo(conn)
-	psynaRepo := postgres.NewPsynaRepo(conn)
+	accountRepo := postgres2.NewAccountRepo(conn)
+	psynaRepo := postgres2.NewPsynaRepo(conn)
 
 	api := httpapi.New(httpapi.Args{
 		DevMode:      cfg.DevMode,

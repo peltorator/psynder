@@ -4,7 +4,7 @@ import (
 	"github.com/peltorator/psynder/internal/domain"
 	"github.com/peltorator/psynder/internal/domain/swipe"
 	"github.com/peltorator/psynder/internal/pagination"
-	"github.com/peltorator/psynder/internal/storage/repo"
+	"github.com/peltorator/psynder/internal/repo"
 )
 
 type swipeService struct {

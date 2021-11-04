@@ -3,7 +3,7 @@ package postgres
 import (
 	"github.com/peltorator/psynder/internal/domain"
 	"github.com/peltorator/psynder/internal/pagination"
-	"github.com/peltorator/psynder/internal/storage"
+	"github.com/peltorator/psynder/internal/repo"
 	"gorm.io/gorm"
 )
 
@@ -33,7 +33,7 @@ func NewPsynaRepo(conn *gorm.DB) *psynaRepo {
 	}
 }
 
-func (p *psynaRepo) StoreNew(data storage.PsynaData) (domain.PsynaId, error) {
+func (p *psynaRepo) StoreNew(data repo.PsynaData) (domain.PsynaId, error) {
 	psyna := Psyna{
 		Name:        data.Name,
 		Description: data.Description,
@@ -43,17 +43,17 @@ func (p *psynaRepo) StoreNew(data storage.PsynaData) (domain.PsynaId, error) {
 	return psynaIdFromDb(psyna.ID), err
 }
 
-func (p *psynaRepo) LoadSlice(uid domain.AccountId, pg pagination.Info) ([]storage.Psyna, error) {
+func (p *psynaRepo) LoadSlice(uid domain.AccountId, pg pagination.Info) ([]repo.Psyna, error) {
 	var psynaRecords []Psyna
 	if err := p.db.Limit(pg.Limit).Offset(pg.Offset).Find(&psynaRecords).Error; err != nil {
 		return nil, err
 	}
 
-	psynas := make([]storage.Psyna, len(psynaRecords))
+	psynas := make([]repo.Psyna, len(psynaRecords))
 	for i, p := range psynaRecords {
-		psynas[i] = storage.Psyna{
-			Id:        psynaIdFromDb(p.ID),
-			PsynaData: storage.PsynaData{
+		psynas[i] = repo.Psyna{
+			Id: psynaIdFromDb(p.ID),
+			PsynaData: repo.PsynaData{
 				Name:        p.Name,
 				Description: p.Description,
 				PhotoLink:   p.PhotoLink,
