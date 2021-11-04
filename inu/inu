@@ -69,6 +69,18 @@ def browse_psynas_action(args: argparse.Namespace):
     show(r)
 
 
+def like_psynas_action(args: argparse.Namespace):
+    r = make_req(args, 'post', '/like-psyna',
+                 json_props=['psynaId'])
+    show(r)
+
+
+def get_liked_psynas_action(args: argparse.Namespace):
+    r = make_req(args, 'get', '/liked-psynas',
+                 url_props=['limit', 'offset'])
+    show(r)
+
+
 def get_token_file_path():
     return os.path.join('/', 'tmp', 'psynder-token.txt')
 
@@ -87,6 +99,12 @@ parser.add_argument('-p', '--port', default=443,
 parser.add_argument('-a', '--host', default='localhost',
                     help='hostname (or an IP address) of the server')
 
+
+def add_pagination_params(parser):
+    parser.add_argument('limit', type=int, default=10, nargs='?')
+    parser.add_argument('offset', type=int, default=0, nargs='?')
+
+
 subparsers = parser.add_subparsers(dest='action', required=True)
 
 parser_signup = subparsers.add_parser('signup', help='make a new user account')
@@ -102,8 +120,15 @@ parser_login.add_argument('password', help='account password')
 
 parser_browse_psynas = subparsers.add_parser('browse-psynas', help='load some info about psynas')
 parser_browse_psynas.set_defaults(action=browse_psynas_action)
-parser_browse_psynas.add_argument('limit', type=int, default=10, nargs='?', help='number of psynas to load')
-parser_browse_psynas.add_argument('offset', type=int, default=0, nargs='?', help='index of the first psyna to load')
+add_pagination_params(parser_browse_psynas)
+
+parser_like_psyna = subparsers.add_parser('like-psyna', help='like a psyna')
+parser_like_psyna.set_defaults(action=like_psynas_action)
+parser_like_psyna.add_argument('psynaId', type=int, help='id of the psyna')
+
+parser_get_liked_psynas = subparsers.add_parser('get-liked-psynas', help='get liked psynas')
+parser_get_liked_psynas.set_defaults(action=get_liked_psynas_action)
+add_pagination_params(parser_get_liked_psynas)
 
 
 def main():

@@ -62,6 +62,9 @@ func (a *httpApi) Router() http.Handler {
 	withPaginationQueries(ar.HandleFunc("/browse-psynas", a.eh.HandleErrors(a.browsePsynas))).Methods(http.MethodGet)
 	// TODO: handle no-params case correctly (error-handling)
 
+	ar.HandleFunc("/like-psyna", a.eh.HandleErrors(a.likePsyna)).Methods(http.MethodPost)
+	withPaginationQueries(ar.HandleFunc("/liked-psynas", a.eh.HandleErrors(a.getLikedPsynas))).Methods(http.MethodGet)
+
 	//ar.HandleFunc("/likepsyna", handleErrors(a.likePsyna)).Methods(http.MethodPost)
 	//ar.HandleFunc("/getfavoritepsynas", handleErrors(a.getFavoritePsynas)).Methods(http.MethodGet)
 
@@ -203,72 +206,39 @@ func (a *httpApi) browsePsynas(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-//func (a *httpApi) loadPsynas(w http.ResponseWriter, r *http.Request) error {
-//	var m postLoadPsynasRequest
-//	if err := a.jsonRW.ReadJson(r, &m); err != nil {
-//		fmt.Println("Error: " + err.Error())
-//		w.WriteHeader(http.StatusBadRequest)
-//		return nil
-//	}
-//
-//	psynas, err := a.SwipeUseCases.GetPsynas(repo.LoadPsynasOptions{
-//		AccountId: r.Context().Value(ctxUidKey).(model.AccountId),
-//		Limit:     int(m.Limit),
-//		Offset:    int(m.Offset),
-//	})
-//
-//	if err != nil {
-//		fmt.Println("Error: " + err.Error())
-//		w.WriteHeader(http.StatusBadRequest)
-//		return nil
-//	}
-//
-//	if err := a.jsonRW.WriteJson(w, postLoadPsynasResponseSuccess{psynas}); err != nil {
-//		fmt.Println("Error: " + err.Error())
-//		w.WriteHeader(http.StatusBadRequest)
-//
-//		return nil
-//	}
-//	return nil
-//}
+type likePsynaRequest struct {
+	PsynaId domain.PsynaId `json:"psynaId"`
+}
 
-//func (a *httpApi) likePsyna(w http.ResponseWriter, r *http.Request) error {
-//	var m postLikePsynaRequest
-//	if err := a.jsonRW.ReadJson(r, &m); err != nil {
-//		fmt.Println("Error: " + err.Error())
-//		w.WriteHeader(http.StatusBadRequest)
-//		return nil
-//	}
-//
-//	err := a.SwipeUseCases.LikePsyna(repo.LikePsynaOptions{
-//		PsynaId:   model.PsynaId(m.PsynaId),
-//		AccountId: r.Context().Value(ctxUidKey).(model.AccountId),
-//	})
-//
-//	if err != nil {
-//		fmt.Println("Error: " + err.Error())
-//		w.WriteHeader(http.StatusBadRequest)
-//		return nil
-//	}
-//
-//	return nil
-//}
-//
-//func (a *httpApi) getFavoritePsynas(w http.ResponseWriter, r *http.Request) error {
-//	psynas, err := a.SwipeUseCases.GetFavoritePsynas(r.Context().Value(ctxUidKey).(model.AccountId))
-//	if err != nil {
-//		fmt.Println("Error: " + err.Error())
-//		w.WriteHeader(http.StatusBadRequest)
-//		return nil
-//	}
-//	if err := a.jsonRW.WriteJson(w, postGetFavoritePsynasResponseSuccess{psynas}); err != nil {
-//		fmt.Println("Error: " + err.Error())
-//		w.WriteHeader(http.StatusBadRequest)
-//
-//		return nil
-//	}
-//	return nil
-//}
+func (a *httpApi) likePsyna(w http.ResponseWriter, r *http.Request) error {
+	acc := r.Context().Value(ctxUidKey).(domain.AccountId)
+
+	var m likePsynaRequest
+	if err := a.jsonRW.ReadJson(r, &m); err != nil {
+		return err
+	}
+
+	if err := a.swipeService.RatePsyna(acc, m.PsynaId, swipe.DecisionLike); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (a *httpApi) getLikedPsynas(w http.ResponseWriter, r *http.Request) error {
+	acc := r.Context().Value(ctxUidKey).(domain.AccountId)
+	pg, err := getPaginationInfo(r)
+	if err != nil {
+		return err
+	}
+
+	likedPsynas, err := a.swipeService.GetLikedPsynas(acc, pg)
+	if err != nil {
+		return err
+	}
+
+	return a.jsonRW.RespondWithJson(w, http.StatusOK, likedPsynas)
+}
 
 var bearerTokenRegexp = regexp.MustCompile("Bearer (.*)")
 

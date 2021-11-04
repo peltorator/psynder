@@ -55,8 +55,5 @@ func (e BrowseError) Error() string {
 type Service interface {
 	BrowsePsynas(uid domain.AccountId, pg pagination.Info) ([]Psyna, error)
 	GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]Psyna, error)
-	RatePsyna(uid domain.AccountId, args struct{
-		Pid domain.PsynaId
-		Decision Decision
-	}) error
+	RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision Decision) error
 }

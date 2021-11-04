@@ -39,7 +39,11 @@ func NewLikeRepo(conn *gorm.DB) *likeRepo {
 
 func (l *likeRepo) GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]repo.Psyna, error) {
 	var psynaRecords []Psyna
-	if err := l.db.Joins("ratings").Where("ratings.liked = ?", true).Find(&psynaRecords).Error; err != nil {
+	if err := l.db.Limit(pg.Limit).Offset(pg.Offset).
+		Joins("JOIN ratings ON id = ratings.psyna_id").
+		Where("ratings.account_id = ?", uid).
+		Where("ratings.liked = ?", true).
+		Find(&psynaRecords).Error; err != nil {
 		return nil, err
 	}
 
@@ -64,5 +68,8 @@ func (l *likeRepo) RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision 
 		Liked:     l.decisionToDb(decision),
 	}
 	// TODO: test whether we really want UpdateAll here
-	return l.db.Clauses(clause.OnConflict{UpdateAll: true}).Save(&like).Error
+	return l.db.Clauses(clause.OnConflict{
+		UpdateAll: true,
+		OnConstraint: "pk_ratings",
+	}).Create(&like).Error
 }

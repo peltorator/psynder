@@ -38,6 +38,7 @@ create table ratings
     psyna_id   int not null,
     liked      boolean,
 
+    constraint pk_ratings primary key (account_id, psyna_id),
     foreign key (account_id) REFERENCES accounts (id),
     foreign key (psyna_id) REFERENCES psynas (id)
 

@@ -41,11 +41,8 @@ func (s *swipeService) GetLikedPsynas(uid domain.AccountId, pg pagination.Info) 
 	return psynasStoredToSwipe(psynasStored), nil
 }
 
-func (s *swipeService) RatePsyna(uid domain.AccountId, args struct {
-	Pid      domain.PsynaId
-	Decision swipe.Decision
-}) error {
-	return s.likeRepo.RatePsyna(uid, args.Pid, args.Decision)
+func (s *swipeService) RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision swipe.Decision) error {
+	return s.likeRepo.RatePsyna(uid, pid, decision)
 }
 
 func psynaStoredToSwipe(p repo.Psyna) swipe.Psyna {
