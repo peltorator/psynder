@@ -26,6 +26,10 @@ func (s *shelterService) AddPsyna(uid domain.AccountId, p swipe.PsynaData) (doma
 	return s.shelterRepo.AddPsyna(uid, p)
 }
 
+func (s *shelterService) DeletePsyna(uid domain.AccountId, pid domain.PsynaId) error {
+	return s.shelterRepo.DeletePsyna(uid, pid)
+}
+
 func (s *shelterService) GetMyPsynas(uid domain.AccountId, pg pagination.Info) ([]swipe.Psyna, error) {
 	psynasStored, err := s.shelterRepo.LoadSlice(uid, pg)
 	if err != nil {

@@ -37,16 +37,7 @@ func NewLikeRepo(conn *gorm.DB) *likeRepo {
 	return &likeRepo{db: conn}
 }
 
-func (l *likeRepo) GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]repo.Psyna, error) {
-	var psynaRecords []Psyna
-	if err := l.db.Limit(pg.Limit).Offset(pg.Offset).
-		Joins("JOIN ratings ON id = ratings.psyna_id").
-		Where("ratings.account_id = ?", uid).
-		Where("ratings.liked = ?", true).
-		Find(&psynaRecords).Error; err != nil {
-		return nil, err
-	}
-
+func psynasFromDb(psynaRecords []Psyna) []repo.Psyna {
 	psynas := make([]repo.Psyna, len(psynaRecords))
 	for i, p := range psynaRecords {
 		psynas[i] = repo.Psyna{
@@ -58,7 +49,20 @@ func (l *likeRepo) GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]r
 			},
 		}
 	}
-	return psynas, nil
+	return psynas
+}
+
+func (l *likeRepo) GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]repo.Psyna, error) {
+	var psynaRecords []Psyna
+	if err := l.db.Limit(pg.Limit).Offset(pg.Offset).
+		Joins("JOIN ratings ON id = ratings.psyna_id").
+		Where("ratings.account_id = ?", uid).
+		Where("ratings.liked = ?", true).
+		Find(&psynaRecords).Error; err != nil {
+		return nil, err
+	}
+
+	return psynasFromDb(psynaRecords), nil
 }
 
 func (l *likeRepo) RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision swipe.Decision) error {

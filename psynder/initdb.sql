@@ -15,7 +15,7 @@ create table accounts
 drop table if exists shelter_info cascade;
 create table shelter_info
 (
-    account_id int primary key,
+    account_id serial primary key,
     city       varchar(255),
     address    varchar(255),
     phone      varchar(20),
@@ -42,7 +42,7 @@ create table psynas
     name        varchar(255) not null,
     description varchar(255) not null,
     photo_link  varchar(255) not null
-);
+) on delete cascade;
 
 drop table if exists ratings cascade;
 create table ratings

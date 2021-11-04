@@ -7,6 +7,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/ilyakaznacheev/cleanenv v1.2.5
 	github.com/lib/pq v1.10.3
+	github.com/pkg/errors v0.8.1
 	go.uber.org/zap v1.19.1
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	gorm.io/driver/postgres v1.2.1

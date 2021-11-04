@@ -9,5 +9,6 @@ import (
 type Shelters interface {
 	AddInfo(uid domain.AccountId, info domain.ShelterInfo) error
 	AddPsyna(uid domain.AccountId, p swipe.PsynaData) (domain.PsynaId, error)
+	DeletePsyna(uid domain.AccountId, pid domain.PsynaId) error
 	LoadSlice(uid domain.AccountId, pg pagination.Info) ([]Psyna, error)
 }

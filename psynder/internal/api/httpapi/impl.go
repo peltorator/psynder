@@ -30,11 +30,11 @@ type httpApi struct {
 }
 
 type Args struct {
-	DevMode      bool
-	AuthService  auth.Service
-	SwipeService swipe.Service
+	DevMode        bool
+	AuthService    auth.Service
+	SwipeService   swipe.Service
 	ShelterService shelter.Service
-	Logger       *zap.SugaredLogger
+	Logger         *zap.SugaredLogger
 }
 
 func New(args Args) *httpApi {
