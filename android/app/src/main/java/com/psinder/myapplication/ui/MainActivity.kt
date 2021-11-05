@@ -11,6 +11,8 @@ import androidx.navigation.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.ActivityMainBinding
+import com.psinder.myapplication.entity.AccountKind
+import com.psinder.myapplication.repository.AuthState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun subscribeToAuthorizationStatus() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.isAuthorizedFlow.collect {
+                viewModel.authStateFlow.collect {
                     showSuitableNavigationFlow(it)
                 }
             }
@@ -37,14 +39,18 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     // This method have to be idempotent. Do not override restored backstack.
-    private fun showSuitableNavigationFlow(isAuthorized: Boolean) {
+    private fun showSuitableNavigationFlow(authState: AuthState) {
         val navController = findNavController(R.id.mainActivityNavigationHost)
-        when (isAuthorized) {
+        when (authState.isAuthorized) {
             true -> {
                 if (navController.backQueue.any { it.destination.id == R.id.user_nav_graph}) {
                     return
                 }
-                navController.navigate(R.id.action_userNavGraph)
+                if (authState.kind == AccountKind.PERSON) {
+                    navController.navigate(R.id.action_userNavGraph)
+                } else {
+                    navController.navigate(R.id.action_shelterNavGraph)
+                }
             }
             false -> {
                 if (navController.backQueue.any { it.destination.id == R.id.guest_nav_graph}) {

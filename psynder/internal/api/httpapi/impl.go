@@ -162,6 +162,7 @@ type loginRequest struct {
 
 type loginResponseSuccess struct {
 	Token string `json:"token"`
+	Kind domain.AccountKind `json:"kind"`
 }
 
 func (a *httpApi) login(w http.ResponseWriter, r *http.Request) error {
@@ -171,7 +172,7 @@ func (a *httpApi) login(w http.ResponseWriter, r *http.Request) error {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	tok, err := a.authService.Login(auth.Credentials{
+	tok, kind, err := a.authService.Login(auth.Credentials{
 		Email:    req.Email,
 		Password: req.Password,
 	})
@@ -184,7 +185,7 @@ func (a *httpApi) login(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	w.Header().Set("Content-Type", "application/jwt")
-	if err := a.jsonRW.WriteJson(w, loginResponseSuccess{Token: tok.String()}); err != nil {
+	if err := a.jsonRW.WriteJson(w, loginResponseSuccess{Token: tok.String(), Kind: kind}); err != nil {
 		return err
 	}
 	return nil

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -44,7 +45,7 @@ class RegistrationFragment: Fragment() {
         // TODO: changeStatusBar Color for registration layout
     }
 
-    fun onRegisterClick(binding: FragmentRegistrationBinding) {
+    private fun onRegisterClick(binding: FragmentRegistrationBinding) {
         binding.cirRegisterButton.startAnimation()
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -61,12 +62,13 @@ class RegistrationFragment: Fragment() {
                         )
                     )
                 }
+
                 val message = when(result) {
-                    is ResultWrapper.Success -> "id: " + result.value.id + "\ntoken: " + result.value.token
+                    is ResultWrapper.Success -> "Вы успешно зарегистрировались!"
                     is ResultWrapper.NetworkError -> "network error"
-                    is ResultWrapper.GenericError -> "code:" + result.code // TODO: why error message is null???
+                    is ResultWrapper.GenericError ->  result.error.toString()
                 }
-//                Toast.makeText(this@RegistrationFragment.context, message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@RegistrationFragment.context, message, Toast.LENGTH_SHORT).show()
                 binding.cirRegisterButton.revertAnimation()
             }
         }

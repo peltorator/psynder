@@ -69,12 +69,12 @@ func (a *authService) Signup(args auth.SignupArgs) (domain.AccountId, error) {
 	return uid, nil
 }
 
-func (a *authService) Login(cred auth.Credentials) (auth.Token, error) {
+func (a *authService) Login(cred auth.Credentials) (auth.Token, domain.AccountKind, error) {
 	acc, err := a.accRepo.LoadByEmail(cred.Email)
 	if err != nil {
 		errLoad, ok := err.(repo.AccountLoadError)
 		if !ok {
-			return "", err
+			return "", domain.AccountKindUndefined, err
 		}
 
 		var kind auth.LoginErrorKind
@@ -83,20 +83,20 @@ func (a *authService) Login(cred auth.Credentials) (auth.Token, error) {
 			kind = auth.LoginErrorNoMatchingAccount
 		}
 
-		return "", auth.LoginError{
+		return "", domain.AccountKindUndefined, auth.LoginError{
 			Cause: errLoad,
 			Kind:  kind,
 		}
 	}
 
 	if err := bcrypt.CompareHashAndPassword(acc.PasswordHash, []byte(cred.Password)); err != nil {
-		return "", auth.LoginError{
+		return "", domain.AccountKindUndefined, auth.LoginError{
 			Cause: err,
 			Kind:  auth.LoginErrorNoMatchingAccount,
 		}
 	}
-
-	return a.tokIssuer.IssueToken(acc.Id)
+	token, err := a.tokIssuer.IssueToken(acc.Id)
+	return token, acc.Kind, err
 }
 
 func (a *authService) AuthByToken(tok auth.Token) (domain.AccountId, error) {

@@ -65,7 +65,7 @@ type SignupArgs struct {
 
 type Service interface {
 	Signup(args SignupArgs) (domain.AccountId, error)
-	Login(cred Credentials) (Token, error)
+	Login(cred Credentials) (Token, domain.AccountKind, error)
 	AuthByToken(tok Token) (domain.AccountId, error)
 }
 

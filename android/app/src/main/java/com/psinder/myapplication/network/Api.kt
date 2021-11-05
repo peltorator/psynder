@@ -1,15 +1,16 @@
 package com.psinder.myapplication.network
 
+import com.psinder.myapplication.entity.AccountKind
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import retrofit2.http.*
 
 interface Api {
     @POST("login")
-    suspend fun login(@Body loginData: LoginData): Token
+    suspend fun login(@Body loginData: LoginData): LoginResponse
 
     @POST("signup")
-    suspend fun register(@Body registerData: RegisterData): RegistrationResponse
+    suspend fun register(@Body registerData: RegisterData)
 
     @GET("browse-psynas?limit=10&offset=0")
     suspend fun loadpsynas(@Header("Authorization") bearerToken: String
@@ -52,12 +53,14 @@ data class Psyna(
 )
 
 @JsonClass(generateAdapter = true)
-data class Token(
-    @Json(name = "token") val token: String
+data class LoginResponse(
+    @Json(name = "token") val token: String,
+    @Json(name = "kind") val kind: String
 )
 
 @JsonClass(generateAdapter = true)
 data class ErrorResponse(
+    @Json(name = "errorDisplayText") val errorDisplayText: String,
     @Json(name = "errorDescription") val errorDescription: String,
     @Json(name = "errorDebugInfo") val errorDebugInfo: String
 )
