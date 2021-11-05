@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psinder.myapplication.entity.Profile
+import com.psinder.myapplication.network.LikeRequest
 import com.psinder.myapplication.network.LoadPsynasRequest
 import com.psinder.myapplication.network.ResultWrapper
 import com.psinder.myapplication.network.safeApiCall
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SwipeViewModel: ViewModel() {
 
@@ -70,6 +72,23 @@ class SwipeViewModel: ViewModel() {
            }
     }
 
+
+    fun likePsyna(psynaId: Int) {
+        Log.d(LOG_TAG, "Like $psynaId")
+        viewModelScope.launch {
+            safeApiCall(Dispatchers.IO) {
+                com.psinder.myapplication.network.provideApi().like(
+                    bearerToken = "Bearer ${token.value}",
+                    LikeRequest(psynaId)
+                )
+            }
+        }
+    }
+
+    fun dislikePsyna(psynaId: Int) {
+        Log.d(LOG_TAG, "Dislike $psynaId")
+
+    }
 
     sealed class ViewState {
         object Loading : ViewState()

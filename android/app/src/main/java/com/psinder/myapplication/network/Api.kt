@@ -16,12 +16,20 @@ interface Api {
 //                           @Query("limit") limit: String,
 //                           @Query("offset") offset: String,
                             ): List<Psyna>
+
+    @POST("like-psyna")
+    suspend fun like(@Header("Authorization") bearerToken: String, @Body likeData: LikeRequest)
 }
 
 //@JsonClass(generateAdapter = true)
 //data class LoadPsynasResponse(
 //    @Json(name = "psynas") val psynas: List<Psyna>
 //)
+
+@JsonClass(generateAdapter = true)
+data class LikeRequest(
+    @Json(name="psynaId") val psynaId: Int
+)
 
 @JsonClass(generateAdapter = true)
 data class LoadPsynasRequest(

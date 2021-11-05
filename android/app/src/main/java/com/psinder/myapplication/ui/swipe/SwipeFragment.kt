@@ -106,9 +106,19 @@ class SwipeFragment : Fragment(), CardStackListener {
 
     override fun onCardSwiped(direction: Direction) {
         Log.d("CardStackView", "onCardSwiped: p = ${manager.topPosition}, d = $direction")
+        val psynaId = adapter.getProfiles().get(manager.topPosition - 1).id
         if (manager.topPosition == adapter.itemCount - 5) {
 //            paginate()
         }
+        if (direction == Direction.Left) {
+            // Dislike
+            viewModel.dislikePsyna(psynaId)
+        }
+        if (direction == Direction.Right) {
+            // Like
+            viewModel.likePsyna(psynaId)
+        }
+
     }
 
     override fun onCardRewound() {
