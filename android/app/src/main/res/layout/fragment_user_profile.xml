@@ -42,14 +42,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_and_age">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:gravity="top|start"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:backgroundTint="@color/colorSecondary"
             android:hint="Описание"
             android:inputType="textMultiLine"
-            android:maxLines="1"
             android:textSize="@dimen/newsMoreTextSize" />
     </com.google.android.material.textfield.TextInputLayout>
 

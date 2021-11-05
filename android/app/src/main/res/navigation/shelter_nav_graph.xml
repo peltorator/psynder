@@ -9,5 +9,9 @@
         android:id="@+id/shelterMainFragment"
         android:name="com.psinder.myapplication.ui.main.ShelterMainFragment"
         android:label="ShelterMainFragment" />
+    <fragment
+        android:id="@+id/editDogFragment"
+        android:name="com.psinder.myapplication.ui.editdog.EditDogFragment"
+        android:label="EditDogFragment" />
 
 </navigation>

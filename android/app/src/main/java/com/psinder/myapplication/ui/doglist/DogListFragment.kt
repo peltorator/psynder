@@ -9,19 +9,17 @@ import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
+import androidx.navigation.navGraphViewModels
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentDogListBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class DogListFragment : Fragment(R.layout.fragment_dog_list) {
-    private lateinit var viewModel: DogListViewModel
+    val viewModel: DogListViewModel
+            by navGraphViewModels(R.id.shelter_nav_graph)
     private val viewBinding by viewBinding(FragmentDogListBinding::bind)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[DogListViewModel::class.java]
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,6 +31,9 @@ class DogListFragment : Fragment(R.layout.fragment_dog_list) {
                     renderViewState(viewState)
                 }
             }
+        }
+        viewBinding.floatingActionButton.setOnClickListener {
+            view.findNavController().navigate(R.id.action_dogListFragment_to_editDogFragment2)
         }
     }
 

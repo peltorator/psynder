@@ -49,7 +49,6 @@
             android:backgroundTint="@color/colorSecondary"
             android:hint="Описание"
             android:inputType="textMultiLine"
-            android:maxLines="1"
             android:textSize="@dimen/newsMoreTextSize" />
     </com.google.android.material.textfield.TextInputLayout>
 

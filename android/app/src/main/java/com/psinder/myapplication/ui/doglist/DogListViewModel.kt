@@ -92,6 +92,25 @@ class DogListViewModel : ViewModel() {
         }
     }
 
+    fun addPsyna(dog: Psyna) {
+        Log.d(LOG_TAG, "i am inside add psynas")
+        viewModelScope.launch {
+            if (_viewState.value is ViewState.Data) {
+                Log.d(LOG_TAG, "Start updating psynas")
+
+                _viewState.emit(
+                    ViewState.Data(
+                        (_viewState.value as ViewState.Data).psynaList + listOf(dog)
+                    )
+                )
+
+                Log.d(LOG_TAG, "Psynas updated")
+            } else {
+                TODO("Not implemented")
+            }
+        }
+    }
+
     sealed class ViewState {
         object Loading : ViewState()
         data class Data(val psynaList: List<Psyna>) : ViewState()
