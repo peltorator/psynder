@@ -2,9 +2,7 @@ package com.psinder.myapplication.network
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface Api {
     @POST("login")
@@ -13,15 +11,17 @@ interface Api {
     @POST("signup")
     suspend fun register(@Body registerData: RegisterData): RegistrationResponse
 
-    @POST("loadpsynas")
-    suspend fun loadpsynas(@Header("Authorization") bearerToken: String,
-                           @Body psynasData: LoadPsynasRequest): LoadPsynasResponse
+    @GET("browse-psynas?limit=10&offset=0")
+    suspend fun loadpsynas(@Header("Authorization") bearerToken: String
+//                           @Query("limit") limit: String,
+//                           @Query("offset") offset: String,
+                            ): List<Psyna>
 }
 
-@JsonClass(generateAdapter = true)
-data class LoadPsynasResponse(
-    @Json(name = "psynas") val psynas: List<Psyna>
-)
+//@JsonClass(generateAdapter = true)
+//data class LoadPsynasResponse(
+//    @Json(name = "psynas") val psynas: List<Psyna>
+//)
 
 @JsonClass(generateAdapter = true)
 data class LoadPsynasRequest(
@@ -40,7 +40,7 @@ data class Psyna(
     @Json(name = "id") val id: Int,
     @Json(name = "name") val name: String,
     @Json(name = "description") val description: String,
-    @Json(name = "photo_link") val photoLink: String
+    @Json(name = "photoLink") val photoLink: String
 )
 
 @JsonClass(generateAdapter = true)

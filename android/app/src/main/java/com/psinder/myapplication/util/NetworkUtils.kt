@@ -1,5 +1,6 @@
 package com.psinder.myapplication.network
 
+import android.util.Log
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -12,6 +13,13 @@ import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
+
+import okhttp3.logging.HttpLoggingInterceptor
+
+import android.R.string.no
+
+
+
 
 // works only with emulator, to run on local device:
 // https://stackoverflow.com/questions/4779963/how-can-i-access-my-localhost-from-my-android-device
@@ -31,10 +39,15 @@ private fun provideOkHttpClient(): OkHttpClient {
     val sslContext: SSLContext = SSLContext.getInstance("SSL").apply {
         init(null, arrayOf(trustAllCerts), SecureRandom())
     }
-    return OkHttpClient.Builder()
+    val client = OkHttpClient.Builder()
         .sslSocketFactory(sslContext.socketFactory, trustAllCerts)
         .hostnameVerifier { hostname, session -> true }
-        .build()
+
+    val logging = HttpLoggingInterceptor()
+    logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+    client.addInterceptor(logging) // <-- this is the important line!
+
+    return client.build()
 }
 
 private fun provideMoshi(): Moshi {
@@ -63,6 +76,7 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher, apiCall: suspend ()
                     ResultWrapper.GenericError(code, errorResponse)
                 }
                 else -> {
+                    Log.d("MyNetworkError", throwable.message.toString())
                     ResultWrapper.GenericError(null, null)
                 }
             }

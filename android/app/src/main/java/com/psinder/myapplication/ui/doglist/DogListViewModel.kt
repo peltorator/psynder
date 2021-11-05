@@ -72,14 +72,13 @@ class DogListViewModel : ViewModel() {
     private suspend fun loadPsynas(token: String): List<Psyna> {
         val psynas = safeApiCall(Dispatchers.IO) {
             provideApi().loadpsynas(
-                bearerToken = "Bearer $token",
-                psynasData = LoadPsynasRequest(count = 100)
+                bearerToken = "Bearer $token"
             )
         }
 
         return when (psynas) {
             is ResultWrapper.Success -> {
-                psynas.value.psynas
+                psynas.value
             }
             is ResultWrapper.NetworkError -> {
                 Log.d("Psynas", "net error")

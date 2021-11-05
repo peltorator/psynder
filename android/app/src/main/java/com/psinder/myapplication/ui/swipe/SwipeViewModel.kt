@@ -43,14 +43,13 @@ class SwipeViewModel: ViewModel() {
     private suspend fun loadPsynas(token : String): List<Profile> {
             val psynas = safeApiCall(Dispatchers.IO) {
                 com.psinder.myapplication.network.provideApi().loadpsynas(
-                    bearerToken = "Bearer $token",
-                    psynasData = LoadPsynasRequest(count = 100)
+                    bearerToken = "Bearer $token"
                 )
             }
 
            when (psynas) {
                 is ResultWrapper.Success -> {
-                    return psynas.value.psynas.map {
+                    return psynas.value.map {
                             Profile(
                                 age = 5,
                                 distance = 100,

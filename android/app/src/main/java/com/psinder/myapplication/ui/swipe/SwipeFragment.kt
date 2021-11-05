@@ -24,6 +24,7 @@ import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentSwipeBinding
 import com.yuyakaido.android.cardstackview.*
 import com.psinder.myapplication.entity.Profile
+import com.psinder.myapplication.repository.AuthRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 // TODO: Use https://github.com/yuyakaido/CardStackView
@@ -62,7 +63,7 @@ class SwipeFragment : Fragment(), CardStackListener {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.token.emit(
-                    "TOKEN" //(activity as MainActivity).token
+                    AuthRepository.token
                 )
                 viewModel.viewState.collect {
                         viewState ->
