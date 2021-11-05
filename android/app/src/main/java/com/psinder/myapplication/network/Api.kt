@@ -48,8 +48,10 @@ data class Token(
     @Json(name = "token") val token: String
 )
 
+@JsonClass(generateAdapter = true)
 data class ErrorResponse(
-    @Json(name = "error") val error: String
+    @Json(name = "errorDescription") val errorDescription: String,
+    @Json(name = "errorDebugInfo") val errorDebugInfo: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -63,6 +65,7 @@ data class RegisterData(
     // @Json(name = "name") val name: String, TODO: add when api is ready
     @Json(name = "email") val email: String,
     @Json(name = "password") val password: String,
+    @Json(name = "kind") val kind: String,
     // @Json(name = "mobile number") val mobileNumber: String
 )
 

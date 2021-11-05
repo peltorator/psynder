@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentRegistrationBinding
+import com.psinder.myapplication.entity.AccountKind
 import com.psinder.myapplication.network.RegisterData
 import com.psinder.myapplication.network.ResultWrapper
 import com.psinder.myapplication.network.provideApi
@@ -51,7 +52,12 @@ class RegistrationFragment: Fragment() {
                     provideApi().register(
                         RegisterData(
                             binding.editTextEmail.text.toString(),
-                            binding.editTextPassword.text.toString()
+                            binding.editTextPassword.text.toString(),
+                            when(binding.userTypeButton.checkedRadioButtonId) {
+                                R.id.lookingForDog -> AccountKind.PERSON
+                                R.id.lookingForOwner -> AccountKind.SHELTER
+                                else -> AccountKind.UNDEFINED
+                            }.identifier
                         )
                     )
                 }
