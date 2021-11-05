@@ -23,6 +23,15 @@ create table shelter_info
     foreign key (account_id) REFERENCES accounts (id)
 );
 
+drop table if exists psynas cascade;
+create table psynas
+(
+    id          serial primary key,
+    name        varchar(255) not null,
+    description varchar(255) not null,
+    photo_link  varchar(255) not null
+);
+
 drop table if exists shelter_dogs cascade;
 create table shelter_dogs
 (
@@ -34,15 +43,6 @@ create table shelter_dogs
     foreign key (psyna_id) REFERENCES psynas (id)
 
 );
-
-drop table if exists psynas cascade;
-create table psynas
-(
-    id          serial primary key,
-    name        varchar(255) not null,
-    description varchar(255) not null,
-    photo_link  varchar(255) not null
-) on delete cascade;
 
 drop table if exists ratings cascade;
 create table ratings
