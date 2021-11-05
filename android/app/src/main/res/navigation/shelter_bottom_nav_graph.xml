@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shelter_nav_graph"
+    app:startDestination="@id/shelterProfileFragment">
+
+    <fragment
+        android:id="@+id/shelterProfileFragment"
+        android:name="com.psinder.myapplication.ui.profile.ShelterProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/dogListFragment"
+        android:name="com.psinder.myapplication.ui.doglist.DogListFragment"
+        android:label="DogListFragment" />
+</navigation>

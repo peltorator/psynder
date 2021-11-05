@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/userMainFragment"
-        android:name="com.psinder.myapplication.ui.usermain.UserMainFragment"
+        android:name="com.psinder.myapplication.ui.main.UserMainFragment"
         android:label="UserMainFragment" />
 
 </navigation>

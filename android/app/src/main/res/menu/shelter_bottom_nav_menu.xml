@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/shelterProfileFragment"
+        android:icon="@drawable/outline_account_circle_24"
+        android:title="@string/title_profile" />
+
+    <item
+        android:id="@+id/dogListFragment"
+        android:icon="@drawable/ic_frog_animals_svgrepo_com"
+        android:title="My dogs" />
+
+
+
+</menu>

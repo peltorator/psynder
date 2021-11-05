@@ -12,7 +12,7 @@
         android:title="@string/title_chat" />
 
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/userProfileFragment"
         android:icon="@drawable/outline_account_circle_24"
         android:title="@string/title_profile" />
 
