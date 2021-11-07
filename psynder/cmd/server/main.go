@@ -1,18 +1,19 @@
 package main
 
 import (
-	"database/sql"
 	"flag"
 	"fmt"
 	"github.com/ilyakaznacheev/cleanenv"
 	_ "github.com/lib/pq"
+	"github.com/peltorator/psynder/internal/api/httpapi"
+	"github.com/peltorator/psynder/internal/repo/postgres"
+	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
+	"github.com/peltorator/psynder/internal/serviceimpl/shelterservice"
+	"github.com/peltorator/psynder/internal/serviceimpl/swipeservice"
+	"github.com/peltorator/psynder/internal/serviceimpl/tokenissuer"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
-	"psynder/internal/interface/httpapi"
-	"psynder/internal/interface/postgres/accountrepo"
-	"psynder/internal/interface/postgres/swiperepo"
-	"psynder/internal/service/token"
-	"psynder/internal/usecases"
 	"time"
 )
 
@@ -37,21 +38,43 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	tokenIssuer, err := token.NewJwtHandler(privateBytes, publicBytes, cfg.JWT.TokenDuration)
+	tokenIssuer, err := tokenissuer.NewJWT(privateBytes, publicBytes, cfg.JWT.TokenDuration)
 	if err != nil {
 		panic(err)
 	}
 
-	connStr := "user=postgres password=12345678 host=db dbname=postgres sslmode=disable"
-	conn, err := sql.Open("postgres", connStr)
+	connStr := fmt.Sprintf("user=%s password=%s host=%s dbname=%s sslmode=disable",
+		cfg.Postgres.Username, cfg.Postgres.Password, cfg.Postgres.Host, cfg.Postgres.Dbname)
+	conn, err := postgres.New(connStr)
 	if err != nil {
 		panic(err)
 	}
 
-	a := httpapi.New(
-		usecases.NewAccountUseCases(accountrepo.New(conn), tokenIssuer),
-		usecases.NewSwipeUseCases(swiperepo.New(conn)),
-		httpapi.NewJSONHandler())
+	var logger *zap.Logger
+	if cfg.DevMode {
+		logger, err = zap.NewDevelopment()
+	} else {
+		logger, err = zap.NewProduction()
+	}
+	if err != nil {
+		panic(err)
+	}
+
+	accountRepo := postgres.NewAccountRepo(conn)
+	psynaRepo := postgres.NewPsynaRepo(conn)
+	likeRepo := postgres.NewLikeRepo(conn)
+	shelterRepo := postgres.NewShelterRepo(conn)
+
+	api := httpapi.New(httpapi.Args{
+		DevMode:      cfg.DevMode,
+		AuthService:  authservice.New(accountRepo, tokenIssuer),
+		SwipeService: swipeservice.New(swipeservice.Args{
+			Psynas: psynaRepo,
+			Likes:  likeRepo,
+		}),
+		ShelterService: shelterservice.New(shelterRepo),
+		Logger:       logger.Sugar(),
+	})
 
 	addr := fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port)
 	fmt.Printf("Starting on %v...\n", addr)
@@ -59,11 +82,14 @@ func main() {
 		Addr:         addr,
 		ReadTimeout:  readTimeout,
 		WriteTimeout: writeTimeout,
-		Handler:      a.Router(),
+		Handler:      api.Router(),
 	}
 
-	//err = server.ListenAndServe()
-	err = server.ListenAndServeTLS(cfg.TLS.CertPath, cfg.TLS.KeyPath)
+	if cfg.TLS.Enable {
+		err = server.ListenAndServeTLS(cfg.TLS.CertPath, cfg.TLS.KeyPath)
+	} else {
+		err = server.ListenAndServe()
+	}
 	if err != nil {
 		panic(err)
 	}

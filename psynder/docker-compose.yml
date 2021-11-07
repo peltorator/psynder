@@ -1,27 +1,17 @@
 version: '3.1'
 services:
-
   server:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     depends_on:
       - db
-    restart: always
     ports:
-      - 8080:8080
+      - "443:443"
     volumes:
-      - ./app.rsa:/app.rsa
-      - ./app.rsa.pub:/app.rsa.pub
-      - ./server.crt:/server.crt
-      - ./server.key:/server.key
+      - ./keys:/keys
       - ./config-docker.yml:/config.yml
-
   db:
-    image: postgres
+    image: postgres:14.0-alpine3.14
     environment:
-      # POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 12345678
-      # POSTGRES_DB: postgres
     volumes:
       - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql

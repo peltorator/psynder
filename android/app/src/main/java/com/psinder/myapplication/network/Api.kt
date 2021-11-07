@@ -1,26 +1,35 @@
 package com.psinder.myapplication.network
 
+import com.psinder.myapplication.entity.AccountKind
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface Api {
     @POST("login")
-    suspend fun login(@Body loginData: LoginData): Token
+    suspend fun login(@Body loginData: LoginData): LoginResponse
 
     @POST("signup")
-    suspend fun register(@Body registerData: RegisterData): RegistrationResponse
+    suspend fun register(@Body registerData: RegisterData)
 
-    @POST("loadpsynas")
-    suspend fun loadpsynas(@Header("Authorization") bearerToken: String,
-                           @Body psynasData: LoadPsynasRequest): LoadPsynasResponse
+    @GET("browse-psynas?limit=10&offset=0")
+    suspend fun loadpsynas(@Header("Authorization") bearerToken: String
+//                           @Query("limit") limit: String,
+//                           @Query("offset") offset: String,
+                            ): List<Psyna>
+
+    @POST("like-psyna")
+    suspend fun like(@Header("Authorization") bearerToken: String, @Body likeData: LikeRequest)
 }
 
+//@JsonClass(generateAdapter = true)
+//data class LoadPsynasResponse(
+//    @Json(name = "psynas") val psynas: List<Psyna>
+//)
+
 @JsonClass(generateAdapter = true)
-data class LoadPsynasResponse(
-    @Json(name = "psynas") val psynas: List<Psyna>
+data class LikeRequest(
+    @Json(name="psynaId") val psynaId: Int
 )
 
 @JsonClass(generateAdapter = true)
@@ -40,16 +49,20 @@ data class Psyna(
     @Json(name = "id") val id: Int,
     @Json(name = "name") val name: String,
     @Json(name = "description") val description: String,
-    @Json(name = "photo_link") val photoLink: String
+    @Json(name = "photoLink") val photoLink: String
 )
 
 @JsonClass(generateAdapter = true)
-data class Token(
-    @Json(name = "token") val token: String
+data class LoginResponse(
+    @Json(name = "token") val token: String,
+    @Json(name = "kind") val kind: String
 )
 
+@JsonClass(generateAdapter = true)
 data class ErrorResponse(
-    @Json(name = "error") val error: String
+    @Json(name = "errorDisplayText") val errorDisplayText: String,
+    @Json(name = "errorDescription") val errorDescription: String,
+    @Json(name = "errorDebugInfo") val errorDebugInfo: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -63,6 +76,7 @@ data class RegisterData(
     // @Json(name = "name") val name: String, TODO: add when api is ready
     @Json(name = "email") val email: String,
     @Json(name = "password") val password: String,
+    @Json(name = "kind") val kind: String,
     // @Json(name = "mobile number") val mobileNumber: String
 )
 

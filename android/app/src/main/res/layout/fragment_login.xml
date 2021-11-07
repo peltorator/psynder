@@ -10,7 +10,7 @@
     android:focusableInTouchMode="true"
     android:gravity="center"
     android:background="#fadead"
-    tools:context=".LoginActivity">
+    tools:context=".ui.LoginActivity">
 
     <ScrollView
         android:layout_width="match_parent"
