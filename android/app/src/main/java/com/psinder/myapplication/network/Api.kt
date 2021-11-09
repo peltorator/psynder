@@ -20,6 +20,9 @@ interface Api {
 
     @POST("like-psyna")
     suspend fun like(@Header("Authorization") bearerToken: String, @Body likeData: LikeRequest)
+
+    @GET("liked-psynas?limit=100&offset=0")
+    suspend fun liked(@Header("Authorization") bearerToken: String): List<Psyna>
 }
 
 //@JsonClass(generateAdapter = true)
