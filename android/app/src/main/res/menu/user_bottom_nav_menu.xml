@@ -7,9 +7,9 @@
         android:title="@string/title_swipe" />
 
     <item
-        android:id="@+id/chatFragment"
+        android:id="@+id/likedFragment"
         android:icon="@drawable/ic_speech_bubble"
-        android:title="@string/title_chat" />
+        android:title="@string/title_liked" />
 
     <item
         android:id="@+id/userProfileFragment"
