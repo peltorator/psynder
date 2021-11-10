@@ -45,6 +45,14 @@ func (s *swipeService) RatePsyna(uid domain.AccountId, pid domain.PsynaId, decis
 	return s.likeRepo.RatePsyna(uid, pid, decision)
 }
 
+func (s *swipeService) GetPsynaInfo(pid domain.PsynaId) (swipe.Shelter, error) {
+	shelterStored, err := s.likeRepo.GetPsynaInfo(pid)
+	if err != nil {
+		return swipe.Shelter{}, err
+	}
+	return shelterStoredToSwipe(shelterStored), nil
+}
+
 func psynaStoredToSwipe(p repo.Psyna) swipe.Psyna {
 	return swipe.Psyna{
 		Id: p.Id,
@@ -52,6 +60,17 @@ func psynaStoredToSwipe(p repo.Psyna) swipe.Psyna {
 			Name:        p.Name,
 			Description: p.Description,
 			PhotoLink:   p.PhotoLink,
+		},
+	}
+}
+
+func shelterStoredToSwipe(p repo.Shelter) swipe.Shelter {
+	return swipe.Shelter{
+		Id: p.Id,
+		ShelterData: swipe.ShelterData{
+			City:        p.City,
+			Address: p.Address,
+			Phone:   p.Phone,
 		},
 	}
 }

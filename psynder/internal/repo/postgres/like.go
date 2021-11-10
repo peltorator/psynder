@@ -77,3 +77,28 @@ func (l *likeRepo) RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision 
 		OnConstraint: "pk_ratings",
 	}).Create(&like).Error
 }
+
+func shelterFromDb(shelterRecord ShelterInfo) repo.Shelter {
+	var shelter = repo.Shelter {
+		Id: shelterIdFromDb(shelterRecord.AccountId),
+		ShelterData: repo.ShelterData{
+			City: shelterRecord.City,
+			Address: shelterRecord.Address,
+			Phone: shelterRecord.Phone,
+		},
+	}
+
+	return shelter
+}
+
+func (l *likeRepo) GetPsynaInfo(pid domain.PsynaId) (repo.Shelter, error) {
+	var shelterRecord ShelterInfo
+	if err := l.db.Table("shelter_info").
+		Joins("JOIN shelter_dogs ON shelter_info.account_id = shelter_dogs.account_id").
+		Where("shelter_dogs.psyna_id = ?", pid).
+		Find(&shelterRecord).Error; err != nil {
+		return repo.Shelter{}, err
+	}
+
+	return shelterFromDb(shelterRecord), nil
+}

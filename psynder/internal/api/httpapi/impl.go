@@ -69,6 +69,8 @@ func (a *httpApi) Router() http.Handler {
 
 	// TODO(antoha): add shelter http api
 
+	r.HandleFunc("/psyna-info", a.eh.HandleErrors(a.psynaInfo)).Methods(http.MethodPost)
+
 	//ar.HandleFunc("/likepsyna", handleErrors(a.likePsyna)).Methods(http.MethodPost)
 	//ar.HandleFunc("/getfavoritepsynas", handleErrors(a.getFavoritePsynas)).Methods(http.MethodGet)
 
@@ -215,6 +217,10 @@ type likePsynaRequest struct {
 	PsynaId domain.PsynaId `json:"psynaId"`
 }
 
+type psynaInfoRequest struct {
+	PsynaId domain.PsynaId `json:"psynaId"`
+}
+
 func (a *httpApi) likePsyna(w http.ResponseWriter, r *http.Request) error {
 	acc := r.Context().Value(ctxUidKey).(domain.AccountId)
 
@@ -244,6 +250,23 @@ func (a *httpApi) getLikedPsynas(w http.ResponseWriter, r *http.Request) error {
 
 	return a.jsonRW.RespondWithJson(w, http.StatusOK, likedPsynas)
 }
+
+func (a *httpApi) psynaInfo(w http.ResponseWriter, r *http.Request) error {
+	var m psynaInfoRequest
+	err := a.jsonRW.ReadJson(r, &m)
+	if err != nil {
+		return err
+	}
+
+	shelterInformation, err := a.swipeService.GetPsynaInfo(m.PsynaId)
+
+	if err != nil {
+		return err
+	}
+
+	return a.jsonRW.RespondWithJson(w, http.StatusOK, shelterInformation)
+}
+
 
 var bearerTokenRegexp = regexp.MustCompile("Bearer (.*)")
 

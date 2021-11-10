@@ -26,6 +26,11 @@ type ShelterInfo struct {
 	Phone     string
 }
 
+func shelterIdFromDb(pid uint64) domain.AccountId {
+	return domain.AccountId(pid)
+}
+
+
 func (p *shelterRepo) AddInfo(uid domain.AccountId, info domain.ShelterInfo) error {
 	shelterInfo := ShelterInfo{
 		AccountId: accountIdToDb(info.AccountId),
