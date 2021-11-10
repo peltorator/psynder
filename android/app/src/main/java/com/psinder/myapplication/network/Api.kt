@@ -12,7 +12,7 @@ interface Api {
     @POST("signup")
     suspend fun register(@Body registerData: RegisterData)
 
-    @GET("browse-psynas?limit=10&offset=0")
+    @GET("browse-psynas?limit=50&offset=0")
     suspend fun loadpsynas(@Header("Authorization") bearerToken: String
 //                           @Query("limit") limit: String,
 //                           @Query("offset") offset: String,
