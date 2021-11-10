@@ -15,4 +15,5 @@ type Like struct {
 type Likes interface {
 	GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]Psyna, error)
 	RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision swipe.Decision) error
+	GetPsynaInfo(pid domain.PsynaId) (Shelter, error)
 }
