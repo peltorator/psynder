@@ -57,6 +57,15 @@ create table ratings
 
 );
 
+-- insert into accounts(email, password_hash, kind) values ('shelterTest@gmail.com', '123Shelter', 'shelter');
+--
+-- insert into shelter_info values (1, 'Saint Petersburg', 'Nevsky Prospect 14', '+79111234567');
+--
+-- insert into psynas(name, description, photo_link)
+-- values ('Рон', 'Описание2', 'https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg');
+--
+-- insert into shelter_dogs values (1, 1);
+
 insert into psynas(name, description, photo_link)
 values ('Биба', 'Описание1', 'https://sun9-10.userapi.com/c830408/v830408596/1e3417/lWKS4Fju4T0.jpg');
 insert into psynas(name, description, photo_link)
@@ -78,8 +87,6 @@ values ('Хагрид', 'Описание2', 'https://pp.userapi.com/tlawq_1bKlf
 insert into psynas(name, description, photo_link)
 values ('Невил', 'Описание2',
         'https://im-01.forfun.com/fetch/w295-ch400-preview/2c/2c19d03f67629d4f1cc2234533b9a192.jpeg');
-insert into psynas(name, description, photo_link)
-values ('Рон', 'Описание2', 'https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg');
 insert into psynas(name, description, photo_link)
 values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
 insert into psynas(name, description, photo_link)
