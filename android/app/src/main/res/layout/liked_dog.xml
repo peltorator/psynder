@@ -7,40 +7,57 @@
     android:paddingVertical="8dp"
     android:paddingHorizontal="16dp">
 
-    <ImageView
-        tools:src="@tools:sample/avatars"
-        android:id="@+id/avatarImageView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        style="@style/TextAppearance.MaterialComponents.Headline6"
-        tools:text="First row"
-        android:layout_marginStart="8dp"
-        android:id="@+id/dogNameTextView"
-        app:layout_constraintBottom_toTopOf="@+id/dogDescription"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/avatarImageView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/avatarImageView"
+            android:scaleType="fitStart"
+            tools:src="@tools:sample/avatars"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dogNameTextView"
+            android:textColor="@android:color/black"
+            android:textSize="21dp"
+            tools:text="First row"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/dogDescription"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/avatarImageView"/>
 
-    <TextView
-        style="@style/TextAppearance.MaterialComponents.Subtitle1"
-        android:id="@+id/dogDescription"
-        tools:text="Second row"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/dogNameTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/avatarImageView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dogDescription"
+
+            tools:text="Second row"
+            android:textSize="18dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/dogNameTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/avatarImageView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
