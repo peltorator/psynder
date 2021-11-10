@@ -9,22 +9,31 @@ openssl rsa -in app.rsa -pubout > app.rsa.pub
 ```
 
 ### Run server
+
+(Twice)
 ```
 docker-compose build --no-cache
 docker-compose up
 ```
+
+Or
+```
+docker-compose up --build
+```
+
 ### Request examples
 signup
 ```
-curl -v --insecure https://localhost:8080/signup -H 'Content-Type: application/json' -d '{"email":"rediska@yandex-team.ru", "password":"qwerty123"}'
+curl -v --insecure https://localhost:443/signup -H 'Content-Type: application/json' -d '{"email":"rediska@yandex-team.ru", "password":"qwerty123"}'
 ```
 login
 ```
-curl -v --insecure https://localhost:8080/login -H 'Content-Type: application/json' -d '{"email":"rediska@yandex-team.ru", "password":"qwerty123"}'
+curl -v --insecure https://localhost:443/login -H 'Content-Type: application/json' -d '{"email":"rediska@yandex-team.ru", "password":"qwerty123"}'
 ```
-loadpsynas
+psyna-info
 ```
-curl -v --insecure https://localhost:8080/loadpsynas -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"count":1}'
+curl -v --insecure https://localhost:443/psyna-info  -H 'Content-Type: application/json'  -d '{"psynId":'1'}'
+
 ```
 
 ### Deploy app to a physical device
