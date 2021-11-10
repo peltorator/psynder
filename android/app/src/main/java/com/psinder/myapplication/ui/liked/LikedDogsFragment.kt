@@ -14,6 +14,7 @@ import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentDogListBinding
 import com.psinder.myapplication.databinding.FragmentLikedBinding
 import com.psinder.myapplication.databinding.LikedDogBinding
+import com.psinder.myapplication.repository.AuthRepository
 import kotlinx.android.synthetic.main.fragment_liked.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,6 +29,9 @@ class LikedDogsFragment : Fragment(R.layout.fragment_liked) {
         setupRecyclerView()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.token.emit(
+                    AuthRepository.token
+                )
                 viewModel.viewState.collect {
                         viewState ->
                     renderViewState(viewState)
