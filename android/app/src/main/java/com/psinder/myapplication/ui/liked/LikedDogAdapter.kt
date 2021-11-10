@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.psinder.myapplication.R
 import com.psinder.myapplication.network.Psyna
+import com.psinder.myapplication.ui.doglist.DogAdapter
 
 // TODO: move to entity or API
 
