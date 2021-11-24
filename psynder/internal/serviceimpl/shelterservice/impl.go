@@ -37,3 +37,11 @@ func (s *shelterService) GetMyPsynas(uid domain.AccountId, pg pagination.Info) (
 	}
 	return swipeservice.PsynasStoredToSwipe(psynasStored), nil
 }
+
+func (s *shelterService) GetDogLikes(pid domain.PsynaId) (int64, error) {
+	r, err := s.shelterRepo.GetDogLikes(pid)
+	if err != nil {
+		return 0, err
+	}
+	return r, nil
+}
