@@ -57,14 +57,14 @@ create table ratings
 
 );
 
--- insert into accounts(email, password_hash, kind) values ('shelterTest@gmail.com', '123Shelter', 'shelter');
---
--- insert into shelter_info values (1, 'Saint Petersburg', 'Nevsky Prospect 14', '+79111234567');
---
--- insert into psynas(name, description, photo_link)
--- values ('Рон', 'Описание2', 'https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg');
---
--- insert into shelter_dogs values (1, 1);
+insert into accounts(email, password_hash, kind) values ('shelterTest@gmail.com', '123Shelter', 'shelter');
+
+insert into shelter_info values (1, 'Saint Petersburg', 'Nevsky Prospect 14', '+79111234567');
+
+insert into psynas(name, description, photo_link)
+values ('Рон', 'Описание2', 'https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg');
+
+insert into shelter_dogs values (1, 1);
 
 insert into psynas(name, description, photo_link)
 values ('Биба', 'Описание1', 'https://sun9-10.userapi.com/c830408/v830408596/1e3417/lWKS4Fju4T0.jpg');
