@@ -43,6 +43,7 @@ func New(args Args) *httpApi {
 	return &httpApi{
 		authService:  args.AuthService,
 		swipeService: args.SwipeService,
+		shelterService: args.ShelterService,
 		jsonRW:       jsonRW,
 		eh: httperror.NewHandler(httperror.HandlerArgs{
 			DevMode:        args.DevMode,

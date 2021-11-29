@@ -85,10 +85,11 @@ func (p *shelterRepo) LoadSlice(uid domain.AccountId, pg pagination.Info) ([]rep
 
 func (p *shelterRepo) GetPsynaLikes(pid domain.PsynaId) (int64, error) {
 	var r int64
-	results := p.db.Table("ratings").Where("psyna_id = ?", pid)
-	if results.Error != nil {
-		return 0, results.Error
+	var psynaRecords []Psyna
+	err := p.db.Table("ratings").Where( "psyna_id = ?", pid).Find(&psynaRecords).Error
+	if err != nil {
+		return 0, err
 	}
-	r = results.RowsAffected
+	r = int64(len(psynaRecords))
 	return r, nil
 }
