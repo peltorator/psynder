@@ -18,4 +18,5 @@
     <string name="title_chat">Chat</string>
     <string name="looking_for_owner">Ищу хозяина</string>
     <string name="looking_for_dog">Ищу собаку</string>
+    <string name="profile_logout">Выйти</string>
 </resources>

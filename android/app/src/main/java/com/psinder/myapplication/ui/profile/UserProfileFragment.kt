@@ -17,26 +17,13 @@ import com.psinder.myapplication.databinding.FragmentUserProfileBinding
 import com.psinder.myapplication.ui.login.LoginViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 
-class UserProfileFragment : Fragment() {
+class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 
     private val viewBinding by viewBinding(FragmentUserProfileBinding::bind)
     private val viewModel: UserProfileViewModel by viewModels()
 
     private val coroutineExceptionHanlder = CoroutineExceptionHandler { _, throwable ->
         Toast.makeText(this@UserProfileFragment.context, throwable.message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val binding = DataBindingUtil.inflate<FragmentUserProfileBinding>(inflater,
-            R.layout.fragment_user_profile,container,false)
-//        binding.button.setOnClickListener {
-//            it.findNavController().navigate(R.id)
-//        }
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
