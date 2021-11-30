@@ -7,22 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.UserProfileFragment">
 
-    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-        android:id="@+id/cirLogoutButton"
-        style="@style/loginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/profile_logout"
-        app:initialCornerAngle="27dp"
-        app:spinning_bar_color="#FFF"
-        app:spinning_bar_padding="6dp"
-        app:spinning_bar_width="4dp"
-        android:layout_marginBottom="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
     <ImageView
         android:id="@+id/avatarImage"
         android:layout_width="150dp"
