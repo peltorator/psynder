@@ -7,6 +7,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.UserProfileFragment">
 
+    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+        android:id="@+id/cirLogoutButton"
+        style="@style/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Выйти"
+        app:initialCornerAngle="27dp"
+        app:spinning_bar_color="#FFF"
+        app:spinning_bar_padding="6dp"
+        app:spinning_bar_width="4dp"
+        tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="583dp"
+        tools:ignore="MissingConstraints" />
+
     <ImageView
         android:id="@+id/avatarImage"
         android:layout_width="150dp"
