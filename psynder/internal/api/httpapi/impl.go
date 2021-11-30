@@ -73,6 +73,7 @@ func (a *httpApi) Router() http.Handler {
 
 	r.HandleFunc("/psyna-info", a.eh.HandleErrors(a.psynaInfo)).Methods(http.MethodPost)
 	r.HandleFunc("/get-psyna-likes", a.eh.HandleErrors(a.psynaLikes)).Methods(http.MethodPost)
+	r.HandleFunc("/get-all-info", a.eh.HandleErrors(a.allInfo)).Methods(http.MethodPost)
 
 	//ar.HandleFunc("/likepsyna", handleErrors(a.likePsyna)).Methods(http.MethodPost)
 	//ar.HandleFunc("/getfavoritepsynas", handleErrors(a.getFavoritePsynas)).Methods(http.MethodGet)
@@ -288,6 +289,17 @@ func (a *httpApi) psynaLikes(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return a.jsonRW.RespondWithJson(w, http.StatusOK, likes)
+}
+
+func (a *httpApi) allInfo(w http.ResponseWriter, r *http.Request) error {
+
+	info, err := a.swipeService.GetAllInfo()
+
+	if err != nil {
+		return err
+	}
+
+	return a.jsonRW.RespondWithJson(w, http.StatusOK, info)
 }
 
 

@@ -52,9 +52,16 @@ func (e BrowseError) Error() string {
 	return fmt.Sprintf("browse error with kind=%v caused by: %v", e.Kind, e.Cause)
 }
 
+type AllInfo struct {
+	Users int64 `json:"users"`
+	Shelters int64 `json:"shelters"`
+	Psynas int64 `json:"psynas"`
+}
+
 type Service interface {
 	BrowsePsynas(uid domain.AccountId, pg pagination.Info) ([]Psyna, error)
 	GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]Psyna, error)
 	RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision Decision) error
 	GetPsynaInfo(pid domain.PsynaId) (Shelter, error)
+	GetAllInfo() (AllInfo, error)
 }

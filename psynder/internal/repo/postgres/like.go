@@ -102,3 +102,30 @@ func (l *likeRepo) GetPsynaInfo(pid domain.PsynaId) (repo.Shelter, error) {
 
 	return shelterFromDb(shelterRecord), nil
 }
+
+func (l *likeRepo) GetAllInfo() (repo.AllInfo, error) {
+	var psynaRecords []Psyna
+	err1 := l.db.Table("psynas").
+		Find(&psynaRecords).Error
+	if err1 != nil {
+		return repo.AllInfo{}, err1
+	}
+
+	var users []Account
+	err2 := l.db.Table("accounts").Where("kind = ?", "person").Find(&users).Error
+	if err2 != nil {
+		return repo.AllInfo{}, err2
+	}
+
+	var shelters []Account
+	err3 := l.db.Table("accounts").Where("kind = ?", "shelter").Find(&shelters).Error
+	if err3 != nil {
+		return repo.AllInfo{}, err3
+	}
+
+	return repo.AllInfo{
+		Users:    int64(len(users)),
+		Shelters: int64(len(shelters)),
+		Psynas: int64(len(psynaRecords)),
+	}, nil
+}
