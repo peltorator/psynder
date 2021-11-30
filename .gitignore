@@ -13,8 +13,8 @@
 
 *.crt
 *.key
-*/app.rsa
-*/app.rsa.pub
+psynder/keys/app.rsa
+psynder/keys/app.rsa.pub
 
 # Dependency directories (remove the comment below to include it)
 # vendor/

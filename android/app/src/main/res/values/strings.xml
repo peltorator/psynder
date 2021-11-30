@@ -15,7 +15,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_swipe">Swipe</string>
     <string name="title_profile">Profile</string>
-    <string name="title_chat">Chat</string>
+    <string name="title_liked">Liked</string>
     <string name="looking_for_owner">Ищу хозяина</string>
     <string name="looking_for_dog">Ищу собаку</string>
     <string name="profile_logout">Выйти</string>

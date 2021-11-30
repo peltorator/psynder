@@ -28,7 +28,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ivan_olejnic"
+        android:src="@drawable/ivan_oleinik"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
