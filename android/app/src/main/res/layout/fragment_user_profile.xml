@@ -13,14 +13,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Выйти"
+        android:text="@string/profile_logout"
         app:initialCornerAngle="27dp"
         app:spinning_bar_color="#FFF"
         app:spinning_bar_padding="6dp"
         app:spinning_bar_width="4dp"
-        tools:layout_editor_absoluteX="114dp"
-        tools:layout_editor_absoluteY="583dp"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginBottom="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/avatarImage"
