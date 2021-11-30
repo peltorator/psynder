@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psinder.myapplication.network.*
+import com.psinder.myapplication.repository.AuthRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +35,12 @@ class LikedDogsViewModel : ViewModel() {
                 _viewState.emit(ViewState.Data(psynas))
             }
         }
+    }
+
+    suspend fun reloadLikes() {
+        val psynas = liked(AuthRepository.token)
+        Log.d(LOG_TAG, "End loading liked dogs")
+        _viewState.emit(ViewState.Data(psynas))
     }
 
     private suspend fun liked(token: String): List<Psyna> {
