@@ -1,6 +1,8 @@
 package data
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/peltorator/psynder/internal/domain"
 	"github.com/peltorator/psynder/internal/domain/auth"
@@ -10,6 +12,9 @@ import (
 	"github.com/peltorator/psynder/internal/serviceimpl/shelterservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/swipeservice"
 	"math/rand"
+	"net/http"
+	"regexp"
+	"strings"
 )
 
 
@@ -18,11 +23,29 @@ const dogsPerShelter = 20
 const passwordLength = 10
 const personsNumber = 100
 const likeProbability = 0.8
+const seed = 1337
+
+
+var breed = regexp.MustCompile("https://images\\.dog\\.ceo/breeds/([^/-]*)(?:-([^/]*))?/.*")
+func getBreedFromURL(url string) string {
+	res := ""
+	match := breed.FindStringSubmatch(url)
+	for i := len(match) - 1; i > 0; i-- {
+		res += strings.Title(match[i])
+		if i > 1 {
+			res += " "
+		}
+	}
+	return res
+}
 
 
 func GenerateData(a *authservice.AuthService,
 				  sw *swipeservice.SwipeService,
 				  sh *shelterservice.ShelterService) {
+
+	gofakeit.Seed(seed)
+
 	for i := 0; i < sheltersNumber; i++ {
 		id, err := a.Signup(auth.SignupArgs{
 			Credentials: auth.Credentials{
@@ -40,17 +63,34 @@ func GenerateData(a *authservice.AuthService,
 			AccountId: id,
 			City:      address.City,
 			Address:   address.Street,
-			Phone:     gofakeit.Phone(),
+			Phone:     gofakeit.PhoneFormatted(),
 		})
 		if err != nil {
 			return
 		}
 
+		r, err:= http.Get(fmt.Sprintf("https://dog.ceo/api/breeds/image/random/%v", dogsPerShelter))
+		if err != nil {
+			return
+		}
+
+		type dogsType struct {
+			Message []string `json:"message"`
+			Status string `json:"status"`
+		}
+
+		var dogs dogsType
+		err = json.NewDecoder(r.Body).Decode(&dogs)
+		if err != nil {
+			return
+		}
+
 		for j := 0; j < dogsPerShelter; j++ {
+			dogURL := dogs.Message[j]
 			_, err := sh.AddPsyna(id, swipe.PsynaData{
 				Name: gofakeit.PetName(),
-				Description: gofakeit.Dog(),
-				PhotoLink: gofakeit.ImageURL(640, 480),
+				Description: getBreedFromURL(dogURL),
+				PhotoLink: dogURL,
 			})
 			if err != nil {
 				return

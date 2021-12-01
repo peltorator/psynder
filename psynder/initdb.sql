@@ -57,109 +57,109 @@ create table ratings
 
 );
 
-insert into accounts(email, password_hash, kind) values ('shelterTest@gmail.com', '123Shelter', 'shelter');
-
-insert into shelter_infos values (1, 'Saint Petersburg', 'Nevsky Prospect 14', '+79111234567');
-
-insert into psynas(name, description, photo_link)
-values ('Рон', 'Описание2', 'https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg');
-
-insert into shelter_dogs values (1, 1);
-
-insert into psynas(name, description, photo_link)
-values ('Гарри', 'Поттер?', 'https://lh3.googleusercontent.com/proxy/3AOe2HRN5BZwbXVaa4waNtuiYvI0h20pyusC6RoA9thb3YO6eEN3sDuouvwhXahro3oClRwSMW1eKsGh884VlLJoipT6Hr6kEI6nwQ_M6OuJ-NoE3aDELAWS-E8yY_mQChPIu18Sklvigb9sbvD6dQ');
-insert into psynas(name, description, photo_link)
-values ('Гермиона', '---* (типа палочка)', 'https://www.rulez-t.info/uploads/posts/2013-04/1365414252_1365364110_33-dogs-that-cannot7.jpg');
-insert into psynas(name, description, photo_link)
-values ('Хагрид', 'съел Кобана(', 'https://sobaky.info/wp-content/uploads/2019/06/001-1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Невил', 'ка, а ложка',
-        'https://image2.thematicnews.com/uploads/images/00/00/39/2016/10/03/4a8c5e862b.jpg');
-insert into psynas(name, description, photo_link)
-values ('Биба', 'брат Бобы', 'https://sun9-10.userapi.com/c830408/v830408596/1e3417/lWKS4Fju4T0.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'боб Бибы', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Иван', 'абобус', 'https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg');
-insert into psynas(name, description, photo_link)
-values ('Кобан', 'чик бегает по полю (весело)', 'https://funik.ru/wp-content/uploads/2018/11/9b2d50675bd5ad956231-700x525.jpg');
-insert into psynas(name, description, photo_link)
-values ('Буба', 'нет блин, черва', 'https://www.fresher.ru/manager_content/images/sobaki-kotorye-prosto-ne-mogut/big/4.jpg');
-insert into psynas(name, description, photo_link)
-values ('Добби', 'свободен!', 'https://i.pinimg.com/236x/cf/77/53/cf7753e2bb8398d25868b23975908bf8.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into accounts(email, password_hash, kind) values ('shelterTest@gmail.com', '123Shelter', 'shelter');
+--
+-- insert into shelter_infos values (1, 'Saint Petersburg', 'Nevsky Prospect 14', '+79111234567');
+--
+-- insert into psynas(name, description, photo_link)
+-- values ('Рон', 'Описание2', 'https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg');
+--
+-- insert into shelter_dogs values (1, 1);
+--
+-- insert into psynas(name, description, photo_link)
+-- values ('Гарри', 'Поттер?', 'https://lh3.googleusercontent.com/proxy/3AOe2HRN5BZwbXVaa4waNtuiYvI0h20pyusC6RoA9thb3YO6eEN3sDuouvwhXahro3oClRwSMW1eKsGh884VlLJoipT6Hr6kEI6nwQ_M6OuJ-NoE3aDELAWS-E8yY_mQChPIu18Sklvigb9sbvD6dQ');
+-- insert into psynas(name, description, photo_link)
+-- values ('Гермиона', '---* (типа палочка)', 'https://www.rulez-t.info/uploads/posts/2013-04/1365414252_1365364110_33-dogs-that-cannot7.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Хагрид', 'съел Кобана(', 'https://sobaky.info/wp-content/uploads/2019/06/001-1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Невил', 'ка, а ложка',
+--         'https://image2.thematicnews.com/uploads/images/00/00/39/2016/10/03/4a8c5e862b.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Биба', 'брат Бобы', 'https://sun9-10.userapi.com/c830408/v830408596/1e3417/lWKS4Fju4T0.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'боб Бибы', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Иван', 'абобус', 'https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Кобан', 'чик бегает по полю (весело)', 'https://funik.ru/wp-content/uploads/2018/11/9b2d50675bd5ad956231-700x525.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Буба', 'нет блин, черва', 'https://www.fresher.ru/manager_content/images/sobaki-kotorye-prosto-ne-mogut/big/4.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Добби', 'свободен!', 'https://i.pinimg.com/236x/cf/77/53/cf7753e2bb8398d25868b23975908bf8.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
