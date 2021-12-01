@@ -6,6 +6,7 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	_ "github.com/lib/pq"
 	"github.com/peltorator/psynder/internal/api/httpapi"
+	"github.com/peltorator/psynder/internal/data"
 	"github.com/peltorator/psynder/internal/repo/postgres"
 	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/shelterservice"
@@ -65,16 +66,22 @@ func main() {
 	likeRepo := postgres.NewLikeRepo(conn)
 	shelterRepo := postgres.NewShelterRepo(conn)
 
+	authService := authservice.New(accountRepo, tokenIssuer)
+	swipeService := swipeservice.New(swipeservice.Args{
+		Psynas: psynaRepo,
+		Likes:  likeRepo,
+	})
+	shelterService := shelterservice.New(shelterRepo)
+
 	api := httpapi.New(httpapi.Args{
 		DevMode:      cfg.DevMode,
-		AuthService:  authservice.New(accountRepo, tokenIssuer),
-		SwipeService: swipeservice.New(swipeservice.Args{
-			Psynas: psynaRepo,
-			Likes:  likeRepo,
-		}),
-		ShelterService: shelterservice.New(shelterRepo),
+		AuthService:  authService,
+		SwipeService: swipeService,
+		ShelterService: shelterService,
 		Logger:       logger.Sugar(),
 	})
+
+	data.GenerateData(authService, swipeService, shelterService)
 
 	addr := fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port)
 	fmt.Printf("Starting on %v...\n", addr)

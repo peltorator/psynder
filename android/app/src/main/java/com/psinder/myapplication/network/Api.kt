@@ -55,6 +55,7 @@ data class LoadPsynasRequest(
 data class Psyna(
     @Json(name = "id") val id: Int,
     @Json(name = "name") val name: String,
+    @Json(name = "breed") val breed: String,
     @Json(name = "description") val description: String,
     @Json(name = "photoLink") val photoLink: String
 )

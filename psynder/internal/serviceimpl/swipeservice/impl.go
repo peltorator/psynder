@@ -7,7 +7,7 @@ import (
 	"github.com/peltorator/psynder/internal/repo"
 )
 
-type swipeService struct {
+type SwipeService struct {
 	psyRepo  repo.Psynas
 	likeRepo repo.Likes
 }
@@ -17,14 +17,14 @@ type Args struct {
 	Likes  repo.Likes
 }
 
-func New(args Args) *swipeService {
-	return &swipeService{
+func New(args Args) *SwipeService {
+	return &SwipeService{
 		psyRepo:  args.Psynas,
 		likeRepo: args.Likes,
 	}
 }
 
-func (s *swipeService) BrowsePsynas(uid domain.AccountId, pg pagination.Info, f domain.PsynaFilter) ([]swipe.Psyna, error) {
+func (s *SwipeService) BrowsePsynas(uid domain.AccountId, pg pagination.Info, f domain.PsynaFilter) ([]swipe.Psyna, error) {
 	psynasStored, err := s.psyRepo.LoadSlice(uid, pg, f)
 	if err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func (s *swipeService) BrowsePsynas(uid domain.AccountId, pg pagination.Info, f 
 	return PsynasStoredToSwipe(psynasStored), nil
 }
 
-func (s *swipeService) GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]swipe.Psyna, error) {
+func (s *SwipeService) GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]swipe.Psyna, error) {
 	psynasStored, err := s.likeRepo.GetLikedPsynas(uid, pg)
 	if err != nil {
 		return nil, err
@@ -41,11 +41,11 @@ func (s *swipeService) GetLikedPsynas(uid domain.AccountId, pg pagination.Info) 
 	return PsynasStoredToSwipe(psynasStored), nil
 }
 
-func (s *swipeService) RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision swipe.Decision) error {
+func (s *SwipeService) RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision swipe.Decision) error {
 	return s.likeRepo.RatePsyna(uid, pid, decision)
 }
 
-func (s *swipeService) GetPsynaInfo(pid domain.PsynaId) (swipe.Shelter, error) {
+func (s *SwipeService) GetPsynaInfo(pid domain.PsynaId) (swipe.Shelter, error) {
 	shelterStored, err := s.likeRepo.GetPsynaInfo(pid)
 	if err != nil {
 		return swipe.Shelter{}, err
@@ -53,7 +53,7 @@ func (s *swipeService) GetPsynaInfo(pid domain.PsynaId) (swipe.Shelter, error) {
 	return shelterStoredToSwipe(shelterStored), nil
 }
 
-func (s *swipeService) GetAllInfo() (swipe.AllInfo, error) {
+func (s *SwipeService) GetAllInfo() (swipe.AllInfo, error) {
 	allInfo, err := s.likeRepo.GetAllInfo()
 	if err != nil {
 		return swipe.AllInfo{}, err
