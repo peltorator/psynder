@@ -8,19 +8,20 @@
     tools:context=".ui.profile.UserProfileFragment">
 
     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-        android:id="@+id/cirLogoutButton"
+        android:id="@+id/cirSaveButton"
         style="@style/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Выйти"
+        android:text="Сохранить"
         app:initialCornerAngle="27dp"
         app:spinning_bar_color="#FFF"
         app:spinning_bar_padding="6dp"
         app:spinning_bar_width="4dp"
-        tools:layout_editor_absoluteX="114dp"
-        tools:layout_editor_absoluteY="583dp"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginBottom="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/avatarImage"
@@ -37,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Имя, 19"
+        android:text="Иван Олейник, 21"
         android:textSize="16dp"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
