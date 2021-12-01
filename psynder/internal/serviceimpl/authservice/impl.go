@@ -9,19 +9,19 @@ import (
 	"unicode"
 )
 
-type authService struct {
+type AuthService struct {
 	accRepo   repo.Accounts
 	tokIssuer auth.TokenIssuer
 }
 
-func New(accountRepo repo.Accounts, tokenIssuer auth.TokenIssuer) *authService {
-	return &authService{
+func New(accountRepo repo.Accounts, tokenIssuer auth.TokenIssuer) *AuthService {
+	return &AuthService{
 		accRepo:   accountRepo,
 		tokIssuer: tokenIssuer,
 	}
 }
 
-func (a *authService) Signup(args auth.SignupArgs) (domain.AccountId, error) {
+func (a *AuthService) Signup(args auth.SignupArgs) (domain.AccountId, error) {
 	const bcryptHashingCost = bcrypt.DefaultCost
 
 	if args.Kind == domain.AccountKindUndefined {
@@ -69,7 +69,7 @@ func (a *authService) Signup(args auth.SignupArgs) (domain.AccountId, error) {
 	return uid, nil
 }
 
-func (a *authService) Login(cred auth.Credentials) (auth.Token, domain.AccountKind, error) {
+func (a *AuthService) Login(cred auth.Credentials) (auth.Token, domain.AccountKind, error) {
 	acc, err := a.accRepo.LoadByEmail(cred.Email)
 	if err != nil {
 		errLoad, ok := err.(repo.AccountLoadError)
@@ -99,7 +99,7 @@ func (a *authService) Login(cred auth.Credentials) (auth.Token, domain.AccountKi
 	return token, acc.Kind, err
 }
 
-func (a *authService) AuthByToken(tok auth.Token) (domain.AccountId, error) {
+func (a *AuthService) AuthByToken(tok auth.Token) (domain.AccountId, error) {
 	uid, err := a.tokIssuer.AccountIdByToken(tok)
 	if err != nil {
 		return 0, auth.TokenError{
