@@ -76,7 +76,7 @@ func (a *httpApi) Router() http.Handler {
 	withPaginationQueries(ar.HandleFunc("/liked-psynas", a.eh.HandleErrors(a.getLikedPsynas))).Methods(http.MethodGet)
 
 	// Shelter API
-	ar.HandleFunc("/add-info", a.eh.HandleErrors(a.addInfo)).Methods(http.MethodPost)
+	ar.HandleFunc("/add-shelter-info", a.eh.HandleErrors(a.addShelterInfo)).Methods(http.MethodPost)
 	ar.HandleFunc("/add-psyna", a.eh.HandleErrors(a.addPsyna)).Methods(http.MethodPost)
 	ar.HandleFunc("/delete-psyna", a.eh.HandleErrors(a.deletePsyna)).Methods(http.MethodPost)
 	withPaginationQueries(ar.HandleFunc("/browse-my-psynas", a.eh.HandleErrors(a.myPsynas))).Methods(http.MethodPost)
@@ -270,14 +270,14 @@ func (a *httpApi) getLikedPsynas(w http.ResponseWriter, r *http.Request) error {
 	return a.jsonRW.RespondWithJson(w, http.StatusOK, likedPsynas)
 }
 
-type addInfoRequest struct {
+type addShelterInfoRequest struct {
 	City    string `json:"city"`
 	Address string `json:"address"`
 	Phone   string `json:"phone"`
 }
 
-func (a *httpApi) addInfo(w http.ResponseWriter, r *http.Request) error {
-	var m addInfoRequest
+func (a *httpApi) addShelterInfo(w http.ResponseWriter, r *http.Request) error {
+	var m addShelterInfoRequest
 	err := a.jsonRW.ReadJson(r, &m)
 	if err != nil {
 		return err
