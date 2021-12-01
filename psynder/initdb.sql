@@ -40,8 +40,9 @@ create table shelter_dogs
     psyna_id   int not null,
 
     constraint pk_shelter_dogs primary key (account_id, psyna_id),
-    foreign key (account_id) REFERENCES accounts (id) on delete cascade,
-    foreign key (psyna_id) REFERENCES psynas (id) on delete cascade
+    foreign key (account_id) REFERENCES accounts (id),
+    foreign key (psyna_id) REFERENCES psynas (id)
+
 );
 
 drop table if exists ratings cascade;
