@@ -28,41 +28,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catImageView" />
 
-    <TextView
-        android:id="@+id/infoUsersTextView"
-        style="@style/viewParent.simpleText"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/home_info_users"
-        android:textColor="@color/darkTextColor"
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/infoTextView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/infoSheltersTextView"
-        style="@style/viewParent.simpleText"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/home_info_shelters"
-        android:textColor="@color/darkTextColor"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/infoAllTextViews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/infoUsersTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/infoTextView">
 
-    <TextView
-        android:id="@+id/infoDogsTextView"
-        style="@style/viewParent.simpleText"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/home_info_dogs"
-        android:textColor="@color/darkTextColor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/infoSheltersTextView" />
+        <TextView
+            android:id="@+id/infoUsersTextView"
+            style="@style/viewParent.simpleText"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/home_info_users_template"
+            android:textColor="@color/darkTextColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/infoSheltersTextView"
+            style="@style/viewParent.simpleText"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/home_info_shelters_template"
+            android:textColor="@color/darkTextColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/infoUsersTextView" />
+
+        <TextView
+            android:id="@+id/infoDogsTextView"
+            style="@style/viewParent.simpleText"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/home_info_dogs_template"
+            android:textColor="@color/darkTextColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/infoSheltersTextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
         android:id="@+id/cirLogoutButton"
@@ -70,14 +92,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="48dp"
         android:text="@string/profile_logout"
         app:initialCornerAngle="27dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:spinning_bar_color="#FFF"
         app:spinning_bar_padding="6dp"
-        app:spinning_bar_width="4dp"
-        android:layout_marginBottom="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:spinning_bar_width="4dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

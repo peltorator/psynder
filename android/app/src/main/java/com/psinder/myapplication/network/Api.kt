@@ -12,11 +12,15 @@ interface Api {
     @POST("signup")
     suspend fun register(@Body registerData: RegisterData)
 
+    @POST("get-all-info")
+    suspend fun getInfo(@Header("Authorization") bearerToken: String): InfoResponse
+
     @GET("browse-psynas?limit=50&offset=0")
-    suspend fun loadpsynas(@Header("Authorization") bearerToken: String
+    suspend fun loadpsynas(
+        @Header("Authorization") bearerToken: String
 //                           @Query("limit") limit: String,
 //                           @Query("offset") offset: String,
-                            ): List<Psyna>
+    ): List<Psyna>
 
     @POST("like-psyna")
     suspend fun like(@Header("Authorization") bearerToken: String, @Body likeData: LikeRequest)
@@ -32,7 +36,7 @@ interface Api {
 
 @JsonClass(generateAdapter = true)
 data class LikeRequest(
-    @Json(name="psynaId") val psynaId: Int
+    @Json(name = "psynaId") val psynaId: Int
 )
 
 @JsonClass(generateAdapter = true)
@@ -59,6 +63,13 @@ data class Psyna(
 data class LoginResponse(
     @Json(name = "token") val token: String,
     @Json(name = "kind") val kind: String
+)
+
+@JsonClass(generateAdapter = true)
+data class InfoResponse(
+    @Json(name = "users") val users: Int,
+    @Json(name = "shelters") val shelters: Int,
+    @Json(name = "psynas") val dogs: Int
 )
 
 @JsonClass(generateAdapter = true)

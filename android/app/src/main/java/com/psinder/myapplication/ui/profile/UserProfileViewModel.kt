@@ -6,10 +6,4 @@ import com.psinder.myapplication.repository.AuthRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
-class UserProfileViewModel : ViewModel() {
-    fun signOut(coroutineExceptionHandler: CoroutineExceptionHandler) {
-        viewModelScope.launch(coroutineExceptionHandler) {
-            AuthRepository.logout()
-        }
-    }
-}
+class UserProfileViewModel : ViewModel()
