@@ -66,17 +66,20 @@ func (a *httpApi) Router() http.Handler {
 	withPaginationQueries(ar.HandleFunc("/browse-psynas", a.eh.HandleErrors(a.browsePsynas))).Methods(http.MethodGet)
 	// TODO: handle no-params case correctly (error-handling)
 
-	ar.HandleFunc("/like-psyna", a.eh.HandleErrors(a.likePsyna)).Methods(http.MethodPost)
-	withPaginationQueries(ar.HandleFunc("/liked-psynas", a.eh.HandleErrors(a.getLikedPsynas))).Methods(http.MethodGet)
-
-	// TODO(antoha): add shelter http api
-
+	// Common API
 	r.HandleFunc("/psyna-info", a.eh.HandleErrors(a.psynaInfo)).Methods(http.MethodPost)
 	r.HandleFunc("/get-psyna-likes", a.eh.HandleErrors(a.psynaLikes)).Methods(http.MethodPost)
 	r.HandleFunc("/get-all-info", a.eh.HandleErrors(a.allInfo)).Methods(http.MethodPost)
 
-	//ar.HandleFunc("/likepsyna", handleErrors(a.likePsyna)).Methods(http.MethodPost)
-	//ar.HandleFunc("/getfavoritepsynas", handleErrors(a.getFavoritePsynas)).Methods(http.MethodGet)
+	// Person API
+	ar.HandleFunc("/like-psyna", a.eh.HandleErrors(a.likePsyna)).Methods(http.MethodPost)
+	withPaginationQueries(ar.HandleFunc("/liked-psynas", a.eh.HandleErrors(a.getLikedPsynas))).Methods(http.MethodGet)
+
+	// Shelter API
+	ar.HandleFunc("/add-info", a.eh.HandleErrors(a.addInfo)).Methods(http.MethodPost)
+	ar.HandleFunc("/add-psyna", a.eh.HandleErrors(a.addPsyna)).Methods(http.MethodPost)
+	ar.HandleFunc("/delete-psyna", a.eh.HandleErrors(a.deletePsyna)).Methods(http.MethodPost)
+	withPaginationQueries(ar.HandleFunc("/browse-my-psynas", a.eh.HandleErrors(a.myPsynas))).Methods(http.MethodPost)
 
 	return r
 }
@@ -237,14 +240,6 @@ type likePsynaRequest struct {
 	PsynaId domain.PsynaId `json:"psynaId"`
 }
 
-type psynaInfoRequest struct {
-	PsynaId domain.PsynaId `json:"psynaId"`
-}
-
-type psynaLikesRequest struct {
-	PsynaId domain.PsynaId `json:"psynaId"`
-}
-
 func (a *httpApi) likePsyna(w http.ResponseWriter, r *http.Request) error {
 	acc := r.Context().Value(ctxUidKey).(domain.AccountId)
 
@@ -275,6 +270,91 @@ func (a *httpApi) getLikedPsynas(w http.ResponseWriter, r *http.Request) error {
 	return a.jsonRW.RespondWithJson(w, http.StatusOK, likedPsynas)
 }
 
+type addInfoRequest struct {
+	City    string `json:"city"`
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
+}
+
+func (a *httpApi) addInfo(w http.ResponseWriter, r *http.Request) error {
+	var m addInfoRequest
+	err := a.jsonRW.ReadJson(r, &m)
+	if err != nil {
+		return err
+	}
+	acc := r.Context().Value(ctxUidKey).(domain.AccountId)
+
+	err = a.shelterService.AddInfo(acc, domain.ShelterInfo{
+		AccountId: acc,
+		City:      m.City,
+		Address:   m.Address,
+		Phone:     m.Phone,
+	})
+	return err
+}
+
+type addPsynaRequest struct {
+	Name        string  `json:"name"`
+	Breed       *string `json:"breed,omitempty"`
+	Description string  `json:"description"`
+	PhotoLink   string  `json:"photo_link"`
+}
+
+func (a *httpApi) addPsyna(w http.ResponseWriter, r *http.Request) error {
+	var m addPsynaRequest
+	err := a.jsonRW.ReadJson(r, &m)
+	if err != nil {
+		return err
+	}
+	acc := r.Context().Value(ctxUidKey).(domain.AccountId)
+
+	pid, err := a.shelterService.AddPsyna(acc, swipe.PsynaData{
+		Name:        m.Name,
+		Breed:       m.Breed,
+		Description: m.Description,
+		PhotoLink:   m.PhotoLink,
+	})
+	if err != nil {
+		return err
+	}
+	return a.jsonRW.RespondWithJson(w, http.StatusOK, pid)
+}
+
+type deletePsynaRequest struct {
+	Id uint64 `json:"id"`
+}
+
+func (a *httpApi) deletePsyna(w http.ResponseWriter, r *http.Request) error {
+	var m deletePsynaRequest
+	err := a.jsonRW.ReadJson(r, &m)
+	if err != nil {
+		return err
+	}
+	acc := r.Context().Value(ctxUidKey).(domain.AccountId)
+
+	return a.shelterService.DeletePsyna(acc, domain.PsynaId(m.Id))
+}
+
+func (a *httpApi) myPsynas(w http.ResponseWriter, r *http.Request) error {
+	acc := r.Context().Value(ctxUidKey).(domain.AccountId)
+
+	pg, err := getPaginationInfo(r)
+	if err != nil {
+		return err
+	}
+
+	psynas, err := a.shelterService.GetMyPsynas(acc, pg)
+	if err != nil {
+		return err
+	}
+
+	return a.jsonRW.RespondWithJson(w, http.StatusOK, psynas)
+}
+
+type psynaInfoRequest struct {
+	PsynaId domain.PsynaId `json:"psynaId"`
+}
+
 func (a *httpApi) psynaInfo(w http.ResponseWriter, r *http.Request) error {
 	var m psynaInfoRequest
 	err := a.jsonRW.ReadJson(r, &m)
@@ -289,6 +369,10 @@ func (a *httpApi) psynaInfo(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return a.jsonRW.RespondWithJson(w, http.StatusOK, shelterInformation)
+}
+
+type psynaLikesRequest struct {
+	PsynaId domain.PsynaId `json:"psynaId"`
 }
 
 func (a *httpApi) psynaLikes(w http.ResponseWriter, r *http.Request) error {
