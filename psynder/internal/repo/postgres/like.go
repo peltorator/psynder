@@ -44,6 +44,7 @@ func psynasFromDb(psynaRecords []Psyna) []repo.Psyna {
 			Id: psynaIdFromDb(p.ID),
 			PsynaData: repo.PsynaData{
 				Name:        p.Name,
+				Breed:       p.Breed,
 				Description: p.Description,
 				PhotoLink:   p.PhotoLink,
 			},
@@ -73,18 +74,18 @@ func (l *likeRepo) RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision 
 	}
 	// TODO: test whether we really want UpdateAll here
 	return l.db.Clauses(clause.OnConflict{
-		UpdateAll: true,
+		UpdateAll:    true,
 		OnConstraint: "pk_ratings",
 	}).Create(&like).Error
 }
 
 func shelterFromDb(shelterRecord ShelterInfo) repo.Shelter {
-	var shelter = repo.Shelter {
+	var shelter = repo.Shelter{
 		Id: shelterIdFromDb(shelterRecord.AccountId),
 		ShelterData: repo.ShelterData{
-			City: shelterRecord.City,
+			City:    shelterRecord.City,
 			Address: shelterRecord.Address,
-			Phone: shelterRecord.Phone,
+			Phone:   shelterRecord.Phone,
 		},
 	}
 
@@ -126,6 +127,6 @@ func (l *likeRepo) GetAllInfo() (repo.AllInfo, error) {
 	return repo.AllInfo{
 		Users:    int64(len(users)),
 		Shelters: int64(len(shelters)),
-		Psynas: int64(len(psynaRecords)),
+		Psynas:   int64(len(psynaRecords)),
 	}, nil
 }

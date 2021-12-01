@@ -22,12 +22,12 @@ const (
 )
 
 type httpApi struct {
-	authService  auth.Service
-	swipeService swipe.Service
+	authService    auth.Service
+	swipeService   swipe.Service
 	shelterService shelter.Service
-	jsonRW       json.ReadWriter
-	eh           httperror.Handler
-	logger       *zap.SugaredLogger
+	jsonRW         json.ReadWriter
+	eh             httperror.Handler
+	logger         *zap.SugaredLogger
 }
 
 type Args struct {
@@ -41,10 +41,10 @@ type Args struct {
 func New(args Args) *httpApi {
 	jsonRW := json.NewReadWriter()
 	return &httpApi{
-		authService:  args.AuthService,
-		swipeService: args.SwipeService,
+		authService:    args.AuthService,
+		swipeService:   args.SwipeService,
 		shelterService: args.ShelterService,
-		jsonRW:       jsonRW,
+		jsonRW:         jsonRW,
 		eh: httperror.NewHandler(httperror.HandlerArgs{
 			DevMode:        args.DevMode,
 			JsonReadWriter: jsonRW,
@@ -167,8 +167,8 @@ type loginRequest struct {
 }
 
 type loginResponseSuccess struct {
-	Token string `json:"token"`
-	Kind domain.AccountKind `json:"kind"`
+	Token string             `json:"token"`
+	Kind  domain.AccountKind `json:"kind"`
 }
 
 func (a *httpApi) login(w http.ResponseWriter, r *http.Request) error {
@@ -197,7 +197,19 @@ func (a *httpApi) login(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+type browsePsynasRequest struct {
+	Breed       *string           `json:"breed,omitempty"`
+	ShelterCity *string           `json:"shelter_city,omitempty"`
+	Shelter     *domain.AccountId `json:"shelter,omitempty"`
+}
+
 func (a *httpApi) browsePsynas(w http.ResponseWriter, r *http.Request) error {
+	var m browsePsynasRequest
+	err := a.jsonRW.ReadJson(r, &m)
+	if err != nil {
+		return err
+	}
+
 	uid := r.Context().Value(ctxUidKey).(domain.AccountId)
 
 	pg, err := getPaginationInfo(r)
@@ -205,7 +217,11 @@ func (a *httpApi) browsePsynas(w http.ResponseWriter, r *http.Request) error {
 		return err // TODO: handle this!
 	}
 
-	psynas, err := a.swipeService.BrowsePsynas(uid, pg)
+	psynas, err := a.swipeService.BrowsePsynas(uid, pg, domain.PsynaFilter{
+		Breed:       m.Breed,
+		Shelter:     m.Shelter,
+		ShelterCity: m.ShelterCity,
+	})
 	if err != nil {
 		return err // TODO: handle this somehow?
 	}
@@ -301,7 +317,6 @@ func (a *httpApi) allInfo(w http.ResponseWriter, r *http.Request) error {
 
 	return a.jsonRW.RespondWithJson(w, http.StatusOK, info)
 }
-
 
 var bearerTokenRegexp = regexp.MustCompile("Bearer (.*)")
 

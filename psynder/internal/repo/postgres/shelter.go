@@ -30,7 +30,6 @@ func shelterIdFromDb(pid uint64) domain.AccountId {
 	return domain.AccountId(pid)
 }
 
-
 func (p *shelterRepo) AddInfo(uid domain.AccountId, info domain.ShelterInfo) error {
 	shelterInfo := ShelterInfo{
 		AccountId: accountIdToDb(info.AccountId),
@@ -45,6 +44,7 @@ func (p *shelterRepo) AddInfo(uid domain.AccountId, info domain.ShelterInfo) err
 func (p *shelterRepo) AddPsyna(uid domain.AccountId, pd swipe.PsynaData) (domain.PsynaId, error) {
 	psyna := Psyna{
 		Name:        pd.Name,
+		Breed:       pd.Breed,
 		Description: pd.Description,
 		PhotoLink:   pd.PhotoLink,
 	}
