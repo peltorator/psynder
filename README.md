@@ -30,9 +30,28 @@ login
 ```
 curl -v --insecure https://localhost:443/login -H 'Content-Type: application/json' -d '{"email":"rediska@yandex-team.ru", "password":"qwerty123"}'
 ```
-psyna-info
+psyna info
 ```
 curl -v --insecure https://localhost:443/psyna-info  -H 'Content-Type: application/json'  -d '{"psynId":'1'}'
+
+```
+
+all info
+```
+curl -v --insecure https://localhost:443/get-all-info -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d ''
+
+```
+
+
+like psyna
+```
+curl -v --insecure https://localhost:443/like-psyna -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"psynaId":1}'
+
+```
+
+psyna likes
+```
+curl -v --insecure https://localhost:443/get-psyna-likes -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"psynaId":'1'}'
 
 ```
 

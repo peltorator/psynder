@@ -53,6 +53,18 @@ func (s *swipeService) GetPsynaInfo(pid domain.PsynaId) (swipe.Shelter, error) {
 	return shelterStoredToSwipe(shelterStored), nil
 }
 
+func (s *swipeService) GetAllInfo() (swipe.AllInfo, error) {
+	allInfo, err := s.likeRepo.GetAllInfo()
+	if err != nil {
+		return swipe.AllInfo{}, err
+	}
+	return swipe.AllInfo{
+		Users: allInfo.Users,
+		Psynas: allInfo.Psynas,
+		Shelters: allInfo.Shelters,
+	}, nil
+}
+
 func psynaStoredToSwipe(p repo.Psyna) swipe.Psyna {
 	return swipe.Psyna{
 		Id: p.Id,

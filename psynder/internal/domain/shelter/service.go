@@ -11,4 +11,5 @@ type Service interface {
 	AddPsyna(uid domain.AccountId, p swipe.PsynaData) (domain.PsynaId, error)
 	DeletePsyna(uid domain.AccountId, pid domain.PsynaId) error
 	GetMyPsynas(uid domain.AccountId, pg pagination.Info) ([]swipe.Psyna, error)
+	GetPsynaLikes(pid domain.PsynaId) (int64, error)
 }

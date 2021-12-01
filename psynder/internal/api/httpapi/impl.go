@@ -24,6 +24,7 @@ const (
 type httpApi struct {
 	authService  auth.Service
 	swipeService swipe.Service
+	shelterService shelter.Service
 	jsonRW       json.ReadWriter
 	eh           httperror.Handler
 	logger       *zap.SugaredLogger
@@ -42,6 +43,7 @@ func New(args Args) *httpApi {
 	return &httpApi{
 		authService:  args.AuthService,
 		swipeService: args.SwipeService,
+		shelterService: args.ShelterService,
 		jsonRW:       jsonRW,
 		eh: httperror.NewHandler(httperror.HandlerArgs{
 			DevMode:        args.DevMode,
@@ -70,6 +72,8 @@ func (a *httpApi) Router() http.Handler {
 	// TODO(antoha): add shelter http api
 
 	r.HandleFunc("/psyna-info", a.eh.HandleErrors(a.psynaInfo)).Methods(http.MethodPost)
+	r.HandleFunc("/get-psyna-likes", a.eh.HandleErrors(a.psynaLikes)).Methods(http.MethodPost)
+	r.HandleFunc("/get-all-info", a.eh.HandleErrors(a.allInfo)).Methods(http.MethodPost)
 
 	//ar.HandleFunc("/likepsyna", handleErrors(a.likePsyna)).Methods(http.MethodPost)
 	//ar.HandleFunc("/getfavoritepsynas", handleErrors(a.getFavoritePsynas)).Methods(http.MethodGet)
@@ -221,6 +225,10 @@ type psynaInfoRequest struct {
 	PsynaId domain.PsynaId `json:"psynaId"`
 }
 
+type psynaLikesRequest struct {
+	PsynaId domain.PsynaId `json:"psynaId"`
+}
+
 func (a *httpApi) likePsyna(w http.ResponseWriter, r *http.Request) error {
 	acc := r.Context().Value(ctxUidKey).(domain.AccountId)
 
@@ -265,6 +273,33 @@ func (a *httpApi) psynaInfo(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return a.jsonRW.RespondWithJson(w, http.StatusOK, shelterInformation)
+}
+
+func (a *httpApi) psynaLikes(w http.ResponseWriter, r *http.Request) error {
+	var m psynaLikesRequest
+	err := a.jsonRW.ReadJson(r, &m)
+	if err != nil {
+		return err
+	}
+
+	likes, err := a.shelterService.GetPsynaLikes(m.PsynaId)
+
+	if err != nil {
+		return err
+	}
+
+	return a.jsonRW.RespondWithJson(w, http.StatusOK, likes)
+}
+
+func (a *httpApi) allInfo(w http.ResponseWriter, r *http.Request) error {
+
+	info, err := a.swipeService.GetAllInfo()
+
+	if err != nil {
+		return err
+	}
+
+	return a.jsonRW.RespondWithJson(w, http.StatusOK, info)
 }
 
 

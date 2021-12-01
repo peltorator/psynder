@@ -12,7 +12,7 @@ interface Api {
     @POST("signup")
     suspend fun register(@Body registerData: RegisterData)
 
-    @GET("browse-psynas?limit=10&offset=0")
+    @GET("browse-psynas?limit=50&offset=0")
     suspend fun loadpsynas(@Header("Authorization") bearerToken: String
 //                           @Query("limit") limit: String,
 //                           @Query("offset") offset: String,
@@ -20,6 +20,9 @@ interface Api {
 
     @POST("like-psyna")
     suspend fun like(@Header("Authorization") bearerToken: String, @Body likeData: LikeRequest)
+
+    @GET("liked-psynas?limit=100&offset=0")
+    suspend fun liked(@Header("Authorization") bearerToken: String): List<Psyna>
 }
 
 //@JsonClass(generateAdapter = true)

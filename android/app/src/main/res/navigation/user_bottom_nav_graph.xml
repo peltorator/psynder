@@ -2,16 +2,20 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/user_bottom_nav_graph"
-    app:startDestination="@id/swipeFragment">
+    app:startDestination="@id/homeFragment">
 
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.psinder.myapplication.ui.home.HomeFragment"
+        android:label="HomeFragment" />
     <fragment
         android:id="@+id/swipeFragment"
         android:name="com.psinder.myapplication.ui.swipe.SwipeFragment"
         android:label="SwipeFragment" />
     <fragment
-        android:id="@+id/chatFragment"
-        android:name="com.psinder.myapplication.ui.chat.ChatFragment"
-        android:label="ChatFragment" />
+        android:id="@+id/likedFragment"
+        android:name="com.psinder.myapplication.ui.liked.LikedDogsFragment"
+        android:label="LikedFragment" />
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.psinder.myapplication.ui.profile.UserProfileFragment"

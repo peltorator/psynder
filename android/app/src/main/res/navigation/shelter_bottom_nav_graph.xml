@@ -2,8 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/shelter_nav_graph"
-    app:startDestination="@id/shelterProfileFragment">
+    app:startDestination="@id/homeFragment">
 
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.psinder.myapplication.ui.home.HomeFragment"
+        android:label="HomeFragment" />
     <fragment
         android:id="@+id/shelterProfileFragment"
         android:name="com.psinder.myapplication.ui.profile.ShelterProfileFragment"
