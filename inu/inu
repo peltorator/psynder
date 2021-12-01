@@ -30,7 +30,7 @@ def url_from_args(args: argparse.Namespace, path: str):
 
 
 def dict_from_args(args: argparse.Namespace, props: List[str]):
-    return {prop: getattr(args, prop) for prop in props}
+    return {prop: getattr(args, prop) for prop in props if getattr(args, prop) is not None}
 
 
 def make_req(args: argparse.Namespace, method: str, path: str, *,
@@ -65,6 +65,7 @@ def login_action(args: argparse.Namespace):
 
 def browse_psynas_action(args: argparse.Namespace):
     r = make_req(args, 'get', '/browse-psynas',
+                 json_props=['breed', 'shelter_city', 'shelter_id'],
                  url_props=['limit', 'offset'])
     show(r)
 
@@ -121,6 +122,10 @@ parser_login.add_argument('password', help='account password')
 parser_browse_psynas = subparsers.add_parser('browse-psynas', help='load some info about psynas')
 parser_browse_psynas.set_defaults(action=browse_psynas_action)
 add_pagination_params(parser_browse_psynas)
+parser_browse_psynas.add_argument('--breed', help='specific psyna breed')
+parser_browse_psynas.add_argument('--shelter_city', help='specific shelter city')
+parser_browse_psynas.add_argument('--shelter_id', help='specific shelter id')
+parser_browse_psynas.add_argument('password', help='account password')
 
 parser_like_psyna = subparsers.add_parser('like-psyna', help='like a psyna')
 parser_like_psyna.set_defaults(action=like_psynas_action)

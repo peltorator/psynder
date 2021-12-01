@@ -28,6 +28,7 @@ create table psynas
 (
     id          serial primary key,
     name        varchar(255) not null,
+    breed       varchar(255),
     description varchar(255) not null,
     photo_link  varchar(255) not null
 );
@@ -157,9 +158,9 @@ insert into psynas(name, description, photo_link)
 values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
 insert into psynas(name, description, photo_link)
 values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
-insert into psynas(name, description, photo_link)
-values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+insert into psynas(name, description, breed, photo_link)
+values ('Боба', 'Описание2', 'suka', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+insert into psynas(name, description, breed, photo_link)
+values ('Боба', 'Описание2', 'suka', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+insert into psynas(name, description, breed, photo_link)
+values ('Боба', 'Описание2', 'suka', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');

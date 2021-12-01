@@ -6,9 +6,10 @@ import (
 )
 
 type PsynaData struct {
-	Name string
+	Name        string
+	Breed       *string
 	Description string
-	PhotoLink string
+	PhotoLink   string
 }
 
 type Psyna struct {
@@ -18,5 +19,5 @@ type Psyna struct {
 
 type Psynas interface {
 	StoreNew(data PsynaData) (domain.PsynaId, error)
-	LoadSlice(uid domain.AccountId, pg pagination.Info) ([]Psyna, error)
+	LoadSlice(uid domain.AccountId, pg pagination.Info, f domain.PsynaFilter) ([]Psyna, error)
 }
