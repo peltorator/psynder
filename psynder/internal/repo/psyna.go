@@ -7,7 +7,7 @@ import (
 
 type PsynaData struct {
 	Name        string
-	Breed       *string
+	Breed       string
 	Description string
 	PhotoLink   string
 }

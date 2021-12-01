@@ -205,10 +205,10 @@ type browsePsynasRequest struct {
 
 func (a *httpApi) browsePsynas(w http.ResponseWriter, r *http.Request) error {
 	var m browsePsynasRequest
-	err := a.jsonRW.ReadJson(r, &m)
-	if err != nil {
-		return err
-	}
+	//err := a.jsonRW.ReadJson(r, &m)
+	//if err != nil {
+	//	return err
+	//}
 
 	uid := r.Context().Value(ctxUidKey).(domain.AccountId)
 

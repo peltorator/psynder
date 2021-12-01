@@ -36,33 +36,39 @@ class DogListViewModel : ViewModel() {
             Psyna(
                 1,
                 "Биба",
+                "",
                 "Описание1",
                 "https://sun9-10.userapi.com/c830408/v830408596/1e3417/lWKS4Fju4T0.jpg"
             ),
             Psyna(
                 2,
                 "Боба",
+                "",
                 "Описание2",
                 "https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg"
             ),
             Psyna(
                 3,
                 "Иван",
+                "",
                 "Описание2",
                 "https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg"
             ),
             Psyna(
                 4, "Кобан",
+                "",
                 "Описание2",
                 "https://funik.ru/wp-content/uploads/2018/11/9b2d50675bd5ad956231-700x525.jpg"
             ),
             Psyna(
                 5, "Буба",
+                "",
                 "Описание2",
                 "https://www.fresher.ru/manager_content/images/sobaki-kotorye-prosto-ne-mogut/big/4.jpg"
             ),
             Psyna(
                 6, "Добби",
+                "",
                 "Описание2",
                 "https://i.pinimg.com/236x/cf/77/53/cf7753e2bb8398d25868b23975908bf8.jpg"
             )

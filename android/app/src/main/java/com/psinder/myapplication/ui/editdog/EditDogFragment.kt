@@ -31,6 +31,6 @@ class EditDogFragment : Fragment(R.layout.fragment_edit_dog) {
         val psynaName = viewBinding.dogNameEditText.editText?.text.toString() ?: "Ivan"
         val psynaDescription = viewBinding.description.editText?.text.toString() ?: "Olejnik"
         val psynaURL = "https://sun9-29.userapi.com/impg/a_X3O2c0SMxVUL3Aa9MDzEadE3ef0A3arZnfxA/aJ_vfjZ3DmA.jpg?size=512x512&quality=96&sign=2a2b521e2b6cf2bd6fdd7984bccc44a6&type=album"
-        return Psyna(239, psynaName, psynaDescription, psynaURL)
+        return Psyna(239, psynaName, "", psynaDescription, psynaURL)
     }
 }

@@ -10,7 +10,7 @@ import (
 type Psyna struct {
 	ID          uint64
 	Name        string
-	Breed       *string
+	Breed       string
 	Description string
 	PhotoLink   string
 }
