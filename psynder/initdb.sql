@@ -12,8 +12,8 @@ create table accounts
     unique (email)
 );
 
-drop table if exists shelter_info cascade;
-create table shelter_info
+drop table if exists shelter_infos cascade;
+create table shelter_infos
 (
     account_id serial primary key,
     city       varchar(255),
@@ -59,7 +59,7 @@ create table ratings
 
 insert into accounts(email, password_hash, kind) values ('shelterTest@gmail.com', '123Shelter', 'shelter');
 
-insert into shelter_info values (1, 'Saint Petersburg', 'Nevsky Prospect 14', '+79111234567');
+insert into shelter_infos values (1, 'Saint Petersburg', 'Nevsky Prospect 14', '+79111234567');
 
 insert into psynas(name, description, photo_link)
 values ('Рон', 'Описание2', 'https://thypix.com/wp-content/uploads/lustige-tiere-24.jpg');
