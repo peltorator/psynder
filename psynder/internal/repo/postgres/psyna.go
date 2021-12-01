@@ -47,18 +47,18 @@ func (p *psynaRepo) StoreNew(data repo.PsynaData) (domain.PsynaId, error) {
 func (p *psynaRepo) LoadSlice(uid domain.AccountId, pg pagination.Info, f domain.PsynaFilter) ([]repo.Psyna, error) {
 	var psynaRecords []Psyna
 	table := p.db.Table("psynas").Limit(pg.Limit).Offset(pg.Offset)
-	if f.SpecificBreed != nil {
-		table = table.Where("breed = ?", f.SpecificBreed)
+	if f.Breed != nil && *f.Breed != "" {
+		table = table.Where("breed = ?", *f.Breed)
 	}
-	if f.SpecificShelter != nil || f.SpecificShelterCity != nil {
+	if f.Shelter != nil || (f.ShelterCity != nil && *f.ShelterCity != "") {
 		table = table.
 			Joins("JOIN shelter_dogs ON psynas.id = shelter_dogs.psyna_id").
 			Joins("JOIN shelter_info ON shelter_info.account_id = shelter_dogs.account_id")
-		if f.SpecificShelter != nil {
-			table = table.Where("shelter_info.account_id = ?", f.SpecificShelter)
+		if f.Shelter != nil {
+			table = table.Where("shelter_info.account_id = ?", *f.Shelter)
 		}
-		if f.SpecificShelterCity != nil {
-			table = table.Where("shelter_info.city = ?", f.SpecificShelterCity)
+		if f.ShelterCity != nil && *f.ShelterCity != "" {
+			table = table.Where("shelter_info.city = ?", *f.ShelterCity)
 		}
 	}
 	if err := table.Find(&psynaRecords).Error; err != nil {

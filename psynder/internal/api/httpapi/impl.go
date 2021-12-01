@@ -198,9 +198,9 @@ func (a *httpApi) login(w http.ResponseWriter, r *http.Request) error {
 }
 
 type browsePsynasRequest struct {
-	SpecificBreed       *string           `json:"specific_breed,omitempty"`
-	SpecificShelterCity *string           `json:"specific_shelter_city,omitempty"`
-	SpecificShelter     *domain.AccountId `json:"specific_shelter,omitempty"`
+	Breed       *string           `json:"breed,omitempty"`
+	ShelterCity *string           `json:"shelter_city,omitempty"`
+	Shelter     *domain.AccountId `json:"shelter,omitempty"`
 }
 
 func (a *httpApi) browsePsynas(w http.ResponseWriter, r *http.Request) error {
@@ -209,6 +209,7 @@ func (a *httpApi) browsePsynas(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+
 	uid := r.Context().Value(ctxUidKey).(domain.AccountId)
 
 	pg, err := getPaginationInfo(r)
@@ -217,9 +218,9 @@ func (a *httpApi) browsePsynas(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	psynas, err := a.swipeService.BrowsePsynas(uid, pg, domain.PsynaFilter{
-		SpecificBreed:       m.SpecificBreed,
-		SpecificShelter:     m.SpecificShelter,
-		SpecificShelterCity: m.SpecificShelterCity,
+		Breed:       m.Breed,
+		Shelter:     m.Shelter,
+		ShelterCity: m.ShelterCity,
 	})
 	if err != nil {
 		return err // TODO: handle this somehow?
