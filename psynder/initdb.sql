@@ -59,7 +59,7 @@ create table ratings
 );
 
 -- insert into accounts(email, password_hash, kind) values ('shelterTest@gmail.com', '123Shelter', 'shelter');
-
+--
 -- insert into shelter_infos values (1, 'Saint Petersburg', 'Nevsky Prospect 14', '+79111234567');
 --
 -- insert into psynas(name, description, photo_link)
@@ -158,9 +158,9 @@ create table ratings
 -- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
 -- insert into psynas(name, description, photo_link)
 -- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
--- insert into psynas(name, description, breed, photo_link)
--- values ('Боба', 'Описание2', 'suka', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
--- insert into psynas(name, description, breed, photo_link)
--- values ('Боба', 'Описание2', 'suka', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
--- insert into psynas(name, description, breed, photo_link)
--- values ('Боба', 'Описание2', 'suka', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
+-- insert into psynas(name, description, photo_link)
+-- values ('Боба', 'Описание2', 'https://www.meme-arsenal.com/memes/c1b8a99053c58dbb02aec00361bb2db1.jpg');
