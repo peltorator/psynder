@@ -24,8 +24,8 @@ func New(args Args) *swipeService {
 	}
 }
 
-func (s *swipeService) BrowsePsynas(uid domain.AccountId, pg pagination.Info) ([]swipe.Psyna, error) {
-	psynasStored, err := s.psyRepo.LoadSlice(uid, pg)
+func (s *swipeService) BrowsePsynas(uid domain.AccountId, pg pagination.Info, f domain.PsynaFilter) ([]swipe.Psyna, error) {
+	psynasStored, err := s.psyRepo.LoadSlice(uid, pg, f)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +59,8 @@ func (s *swipeService) GetAllInfo() (swipe.AllInfo, error) {
 		return swipe.AllInfo{}, err
 	}
 	return swipe.AllInfo{
-		Users: allInfo.Users,
-		Psynas: allInfo.Psynas,
+		Users:    allInfo.Users,
+		Psynas:   allInfo.Psynas,
 		Shelters: allInfo.Shelters,
 	}, nil
 }
@@ -70,6 +70,7 @@ func psynaStoredToSwipe(p repo.Psyna) swipe.Psyna {
 		Id: p.Id,
 		PsynaData: swipe.PsynaData{
 			Name:        p.Name,
+			Breed:       p.Breed,
 			Description: p.Description,
 			PhotoLink:   p.PhotoLink,
 		},
@@ -80,7 +81,7 @@ func shelterStoredToSwipe(p repo.Shelter) swipe.Shelter {
 	return swipe.Shelter{
 		Id: p.Id,
 		ShelterData: swipe.ShelterData{
-			City:        p.City,
+			City:    p.City,
 			Address: p.Address,
 			Phone:   p.Phone,
 		},

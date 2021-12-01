@@ -59,7 +59,7 @@ type AllInfo struct {
 }
 
 type Service interface {
-	BrowsePsynas(uid domain.AccountId, pg pagination.Info) ([]Psyna, error)
+	BrowsePsynas(uid domain.AccountId, pg pagination.Info, f domain.PsynaFilter) ([]Psyna, error)
 	GetLikedPsynas(uid domain.AccountId, pg pagination.Info) ([]Psyna, error)
 	RatePsyna(uid domain.AccountId, pid domain.PsynaId, decision Decision) error
 	GetPsynaInfo(pid domain.PsynaId) (Shelter, error)

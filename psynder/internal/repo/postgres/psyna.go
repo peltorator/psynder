@@ -8,10 +8,11 @@ import (
 )
 
 type Psyna struct {
-	ID uint64
-	Name string
+	ID          uint64
+	Name        string
+	Breed       *string
 	Description string
-	PhotoLink string
+	PhotoLink   string
 }
 
 func psynaIdToDb(pid domain.PsynaId) uint64 {
@@ -21,7 +22,6 @@ func psynaIdToDb(pid domain.PsynaId) uint64 {
 func psynaIdFromDb(pid uint64) domain.PsynaId {
 	return domain.PsynaId(pid)
 }
-
 
 type psynaRepo struct {
 	db *gorm.DB
@@ -36,6 +36,7 @@ func NewPsynaRepo(conn *gorm.DB) *psynaRepo {
 func (p *psynaRepo) StoreNew(data repo.PsynaData) (domain.PsynaId, error) {
 	psyna := Psyna{
 		Name:        data.Name,
+		Breed:       data.Breed,
 		Description: data.Description,
 		PhotoLink:   data.PhotoLink,
 	}
@@ -43,9 +44,24 @@ func (p *psynaRepo) StoreNew(data repo.PsynaData) (domain.PsynaId, error) {
 	return psynaIdFromDb(psyna.ID), err
 }
 
-func (p *psynaRepo) LoadSlice(uid domain.AccountId, pg pagination.Info) ([]repo.Psyna, error) {
+func (p *psynaRepo) LoadSlice(uid domain.AccountId, pg pagination.Info, f domain.PsynaFilter) ([]repo.Psyna, error) {
 	var psynaRecords []Psyna
-	if err := p.db.Limit(pg.Limit).Offset(pg.Offset).Find(&psynaRecords).Error; err != nil {
+	table := p.db.Table("psynas").Limit(pg.Limit).Offset(pg.Offset)
+	if f.SpecificBreed != nil {
+		table = table.Where("breed = ?", f.SpecificBreed)
+	}
+	if f.SpecificShelter != nil || f.SpecificShelterCity != nil {
+		table = table.
+			Joins("JOIN shelter_dogs ON psynas.id = shelter_dogs.psyna_id").
+			Joins("JOIN shelter_info ON shelter_info.account_id = shelter_dogs.account_id")
+		if f.SpecificShelter != nil {
+			table = table.Where("shelter_info.account_id = ?", f.SpecificShelter)
+		}
+		if f.SpecificShelterCity != nil {
+			table = table.Where("shelter_info.city = ?", f.SpecificShelterCity)
+		}
+	}
+	if err := table.Find(&psynaRecords).Error; err != nil {
 		return nil, err
 	}
 
@@ -55,6 +71,7 @@ func (p *psynaRepo) LoadSlice(uid domain.AccountId, pg pagination.Info) ([]repo.
 			Id: psynaIdFromDb(p.ID),
 			PsynaData: repo.PsynaData{
 				Name:        p.Name,
+				Breed:       p.Breed,
 				Description: p.Description,
 				PhotoLink:   p.PhotoLink,
 			},
@@ -62,6 +79,3 @@ func (p *psynaRepo) LoadSlice(uid domain.AccountId, pg pagination.Info) ([]repo.
 	}
 	return psynas, nil
 }
-
-
-
