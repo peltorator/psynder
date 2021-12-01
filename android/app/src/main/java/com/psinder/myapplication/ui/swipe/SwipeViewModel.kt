@@ -57,7 +57,8 @@ class SwipeViewModel: ViewModel() {
                                 distance = 100,
                                 name = it.name,
                                 profile_pic = it.photoLink,
-                                id = it.id
+                                id = it.id,
+                                description = it.description
                             )
                     }
                 }

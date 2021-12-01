@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="@{profile.distance + ` Miles Away`}"
+                android:text="@{profile.description}"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"/>
 
