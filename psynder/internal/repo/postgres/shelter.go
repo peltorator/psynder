@@ -38,12 +38,7 @@ func (p *shelterRepo) AddInfo(uid domain.AccountId, info domain.ShelterInfo) err
 		Phone:     info.Phone,
 	}
 
-	return p.db.Table("shelter_info").Create(&shelterInfo).Error
-}
-
-type ShelterPsynas struct {
-	AccountId uint64
-	PsynaId   uint64
+	return p.db.Create(&shelterInfo).Error
 }
 
 func (p *shelterRepo) AddPsyna(uid domain.AccountId, pd swipe.PsynaData) (domain.PsynaId, error) {
@@ -54,16 +49,7 @@ func (p *shelterRepo) AddPsyna(uid domain.AccountId, pd swipe.PsynaData) (domain
 		PhotoLink:   pd.PhotoLink,
 	}
 	err := p.db.Create(&psyna).Error
-	if err != nil {
-		return domain.PsynaId(0), err
-	}
-	pid := psynaIdFromDb(psyna.ID)
-	shelter_psyna := ShelterPsynas{
-		AccountId: uint64(uid),
-		PsynaId:   uint64(pid),
-	}
-	err = p.db.Table("shelter_dogs").Create(&shelter_psyna).Error
-	return pid, err
+	return psynaIdFromDb(psyna.ID), err
 }
 
 type ShelterPsyna struct {
@@ -73,21 +59,13 @@ type ShelterPsyna struct {
 
 func (p *shelterRepo) DeletePsyna(uid domain.AccountId, pid domain.PsynaId) error {
 	var r []ShelterPsyna
-	if err := p.db.Table("shelter_dogs").Where("psyna_id = ?", pid).
+	if err := p.db.Where("psyna_id = ?", pid).
 		Where("account_id = ?", uid).
 		Find(&r).Error; err != nil {
 		return err
 	}
 	if len(r) == 0 {
 		return errors.Errorf("Can't delete another's psyna")
-	}
-	shelter_psyna := ShelterPsyna{
-		AccountId: uint64(uid),
-		PsynaId:   uint64(pid),
-	}
-	if err := p.db.Table("shelter_dogs").Where("psyna_id = ?", pid).
-		Where("account_id = ?", uid).Delete(&shelter_psyna).Error; err != nil {
-		return err
 	}
 	var psyna Psyna
 	p.db.First(&psyna, "id = ?", pid)
@@ -96,7 +74,7 @@ func (p *shelterRepo) DeletePsyna(uid domain.AccountId, pid domain.PsynaId) erro
 
 func (p *shelterRepo) LoadSlice(uid domain.AccountId, pg pagination.Info) ([]repo.Psyna, error) {
 	var psynaRecords []Psyna
-	if err := p.db.Table("psynas").Limit(pg.Limit).Offset(pg.Offset).
+	if err := p.db.Limit(pg.Limit).Offset(pg.Offset).
 		Joins("JOIN shelter_dogs ON id = shelter_dogs.psyna_id").
 		Where("shelter_dogs.account_id = ?", uid).
 		Find(&psynaRecords).Error; err != nil {

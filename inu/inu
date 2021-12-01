@@ -82,36 +82,6 @@ def get_liked_psynas_action(args: argparse.Namespace):
     show(r)
 
 
-def psyna_info_action(args: argparse.Namespace):
-    r = make_req(args, 'post', '/psyna-info',
-                 json_props=['psynaId'])
-    show(r)
-
-
-def add_shelter_info_action(args: argparse.Namespace):
-    r = make_req(args, 'post', '/add-shelter-info',
-                 json_props=['city', 'address', 'phone'])
-    show(r)
-
-
-def add_psyna_action(args: argparse.Namespace):
-    r = make_req(args, 'post', '/add-psyna',
-                 json_props=['name', 'breed', 'description', 'photo_link'])
-    show(r)
-
-
-def delete_psyna_action(args: argparse.Namespace):
-    r = make_req(args, 'post', '/delete-psyna',
-                 json_props=['id'])
-    show(r)
-
-
-def browse_my_psynas_action(args: argparse.Namespace):
-    r = make_req(args, 'post', '/browse-my-psynas',
-                 url_props=['limit', 'offset'])
-    show(r)
-
-
 def get_token_file_path():
     return os.path.join('/', 'tmp', 'psynder-token.txt')
 
@@ -164,31 +134,6 @@ parser_like_psyna.add_argument('psynaId', type=int, help='id of the psyna')
 parser_get_liked_psynas = subparsers.add_parser('get-liked-psynas', help='get liked psynas')
 parser_get_liked_psynas.set_defaults(action=get_liked_psynas_action)
 add_pagination_params(parser_get_liked_psynas)
-
-parser_psyna_info = subparsers.add_parser('psyna-info', help='get info about psyna')
-parser_psyna_info.set_defaults(action=psyna_info_action)
-parser_psyna_info.add_argument('psynaId', type=int, help='id of the psyna')
-
-parser_add_shelter_info = subparsers.add_parser('add-shelter-info', help='load some info about shelter')
-parser_add_shelter_info.set_defaults(action=add_shelter_info_action)
-parser_add_shelter_info.add_argument('city', type=str, help='shelter city')
-parser_add_shelter_info.add_argument('address', type=str, help='shelter address')
-parser_add_shelter_info.add_argument('phone', type=str, help='shelter phone')
-
-parser_add_psyna = subparsers.add_parser('add-psyna', help='load new psyna')
-parser_add_psyna.set_defaults(action=add_psyna_action)
-parser_add_psyna.add_argument('name', type=str, help='psyna name')
-parser_add_psyna.add_argument('--breed', type=str, help='psyna breed')
-parser_add_psyna.add_argument('description', type=str, help='psyna description')
-parser_add_psyna.add_argument('photo_link', type=str, help='psyna photo link')
-
-parser_delete_psyna = subparsers.add_parser('delete-psyna', help='delete psyna')
-parser_delete_psyna.set_defaults(action=delete_psyna_action)
-parser_delete_psyna.add_argument('id', type=int, help='id of psyna to delete')
-
-parser_browse_my_psynas = subparsers.add_parser('browse-my-psynas', help='browse my psynas')
-parser_browse_my_psynas.set_defaults(action=browse_my_psynas_action)
-add_pagination_params(parser_browse_my_psynas)
 
 
 def main():
