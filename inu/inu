@@ -123,8 +123,8 @@ parser_browse_psynas = subparsers.add_parser('browse-psynas', help='load some in
 parser_browse_psynas.set_defaults(action=browse_psynas_action)
 add_pagination_params(parser_browse_psynas)
 parser_browse_psynas.add_argument('--breed', help='specific psyna breed')
-parser_browse_psynas.add_argument('--shelter_city', help='specific psyna breed')
-parser_browse_psynas.add_argument('--shelter_id', help='specific psyna breed')
+parser_browse_psynas.add_argument('--shelter_city', help='specific shelter city')
+parser_browse_psynas.add_argument('--shelter_id', help='specific shelter id')
 parser_browse_psynas.add_argument('password', help='account password')
 
 parser_like_psyna = subparsers.add_parser('like-psyna', help='like a psyna')
