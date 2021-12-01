@@ -39,8 +39,11 @@ func getBreedFromURL(url string) string {
 }
 
 func GenerateData(a *authservice.AuthService,
-	sw *swipeservice.SwipeService,
-	sh *shelterservice.ShelterService) {
+				  sw *swipeservice.SwipeService,
+				  sh *shelterservice.ShelterService) {
+
+	gofakeit.Seed(seed)
+
 	for i := 0; i < sheltersNumber; i++ {
 		id, err := a.Signup(auth.SignupArgs{
 			Credentials: auth.Credentials{
