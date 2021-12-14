@@ -6,11 +6,9 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	_ "github.com/lib/pq"
 	"github.com/peltorator/psynder/internal/api/httpapi"
-	"github.com/peltorator/psynder/internal/data"
 	"github.com/peltorator/psynder/internal/repo/postgres"
 	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/shelterservice"
-	"github.com/peltorator/psynder/internal/serviceimpl/swipeservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/tokenissuer"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -62,23 +60,17 @@ func main() {
 	}
 
 	accountRepo := postgres.NewAccountRepo(conn)
-	psynaRepo := postgres.NewPsynaRepo(conn)
-	likeRepo := postgres.NewLikeRepo(conn)
+	shelterRepo := postgres.NewShelterRepo(conn)
 
 	authService := authservice.New(accountRepo, tokenIssuer)
-	swipeService := swipeservice.New(swipeservice.Args{
-		Psynas: psynaRepo,
-		Likes:  likeRepo,
-	})
+	shelterService := shelterservice.New(shelterRepo)
 
-	api := httpapi.New(httpapi.Args{
+	api := httpapi.NewShelters(httpapi.Args{
 		DevMode:      cfg.DevMode,
 		AuthService:  authService,
-		SwipeService: swipeService,
+		ShelterService: shelterService,
 		Logger:       logger.Sugar(),
 	})
-
-	data.GenerateData(authService, swipeService)
 
 	addr := fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port)
 	fmt.Printf("Starting on %v...\n", addr)

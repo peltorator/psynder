@@ -6,10 +6,8 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/peltorator/psynder/internal/domain"
 	"github.com/peltorator/psynder/internal/domain/auth"
-	"github.com/peltorator/psynder/internal/domain/swipe"
 	"github.com/peltorator/psynder/internal/pagination"
 	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
-	"github.com/peltorator/psynder/internal/serviceimpl/shelterservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/swipeservice"
 	"math/rand"
 	"net/http"
@@ -42,8 +40,7 @@ func getBreedFromURL(url string) string {
 
 
 func GenerateData(a *authservice.AuthService,
-				  sw *swipeservice.SwipeService,
-				  sh *shelterservice.ShelterService) {
+				  sw *swipeservice.SwipeService) {
 
 	gofakeit.Seed(seed)
 
@@ -54,17 +51,6 @@ func GenerateData(a *authservice.AuthService,
 				Password: gofakeit.Password(true, true, true, false, true, passwordLength),
 			},
 			Kind: domain.AccountKindShelter,
-		})
-		if err != nil {
-			return
-		}
-
-		address := gofakeit.Address()
-		err = sh.AddInfo(id, domain.ShelterInfo{
-			AccountId: id,
-			City:      address.City,
-			Address:   address.Street,
-			Phone:     gofakeit.PhoneFormatted(),
 		})
 		if err != nil {
 			return
@@ -86,19 +72,6 @@ func GenerateData(a *authservice.AuthService,
 			return
 		}
 
-		for j := 0; j < dogsPerShelter; j++ {
-			dogURL := dogs.Message[j]
-			breed := getBreedFromURL(dogURL)
-			_, err := sh.AddPsyna(id, swipe.PsynaData{
-				Name:        gofakeit.PetName(),
-				Breed:       breed,
-				Description: breed,
-				PhotoLink:   dogURL,
-			})
-			if err != nil {
-				return
-			}
-		}
 	}
 
 	for i := 0; i < personsNumber; i++ {
