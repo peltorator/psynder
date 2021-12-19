@@ -6,39 +6,20 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	_ "github.com/lib/pq"
 	"github.com/peltorator/psynder/internal/api/httpapi"
-	"github.com/peltorator/psynder/internal/data"
 	"github.com/peltorator/psynder/internal/repo/postgres"
 	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/swipeservice"
-	"github.com/peltorator/psynder/internal/serviceimpl/tokenissuer"
 	"go.uber.org/zap"
-	"io/ioutil"
 	"net/http"
-	"time"
 )
 
-func run() {
-	const readTimeout = 10 * time.Second
-	const writeTimeout = 10 * time.Second
+func getSwipeService() (*swipeservice.SwipeService, AppConfig) {
 
-	yamlConfigPath := "config.yml"
+	yamlConfigPath := "config-swipes.yml"
 	flag.Parse()
 
 	var cfg AppConfig
 	err := cleanenv.ReadConfig(yamlConfigPath, &cfg)
-	if err != nil {
-		panic(err)
-	}
-
-	privateBytes, err := ioutil.ReadFile(cfg.JWT.KeyPath)
-	if err != nil {
-		panic(err)
-	}
-	publicBytes, err := ioutil.ReadFile(cfg.JWT.PublicKeyPath)
-	if err != nil {
-		panic(err)
-	}
-	tokenIssuer, err := tokenissuer.NewJWT(privateBytes, publicBytes, cfg.JWT.TokenDuration)
 	if err != nil {
 		panic(err)
 	}
@@ -50,7 +31,20 @@ func run() {
 		panic(err)
 	}
 
+	psynaRepo := postgres.NewPsynaRepo(conn)
+	likeRepo := postgres.NewLikeRepo(conn)
+
+	swipeService := swipeservice.New(swipeservice.Args{
+		Psynas: psynaRepo,
+		Likes:  likeRepo,
+	})
+	return swipeService, cfg
+}
+
+func run_swipes(a *authservice.AuthService, sw *swipeservice.SwipeService, cfg AppConfig) {
+
 	var logger *zap.Logger
+	var err error
 	if cfg.DevMode {
 		logger, err = zap.NewDevelopment()
 	} else {
@@ -60,31 +54,19 @@ func run() {
 		panic(err)
 	}
 
-	accountRepo := postgres.NewAccountRepo(conn)
-	psynaRepo := postgres.NewPsynaRepo(conn)
-	likeRepo := postgres.NewLikeRepo(conn)
-
-	authService := authservice.New(accountRepo, tokenIssuer)
-	swipeService := swipeservice.New(swipeservice.Args{
-		Psynas: psynaRepo,
-		Likes:  likeRepo,
-	})
-
 	api := httpapi.New(httpapi.Args{
 		DevMode:      cfg.DevMode,
-		AuthService:  authService,
-		SwipeService: swipeService,
+		AuthService:  a,
+		SwipeService: sw,
 		Logger:       logger.Sugar(),
 	})
-
-	data.GenerateData(authService, swipeService)
 
 	addr := fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port)
 	fmt.Printf("Starting on %v...\n", addr)
 	server := http.Server{
 		Addr:         addr,
-		ReadTimeout:  readTimeout,
-		WriteTimeout: writeTimeout,
+		ReadTimeout:  ReadTimeout,
+		WriteTimeout: WriteTimeout,
 		Handler:      api.Router(),
 	}
 

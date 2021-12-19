@@ -1,7 +1,6 @@
 package httpapi
 
 import (
-	"context"
 	"github.com/gorilla/mux"
 	"github.com/peltorator/psynder/internal/api/httpapi/httperror"
 	"github.com/peltorator/psynder/internal/api/httpapi/json"
@@ -45,7 +44,7 @@ func (a *httpApiShelters) RouterShelters() http.Handler {
 	r := mux.NewRouter()
 
 	ar := r.NewRoute().Subrouter()
-	ar.Use(a.authenticate)
+	ar.Use(a.authService.Authenticate)
 
 	r.HandleFunc("/get-psyna-likes", a.eh.HandleErrors(a.psynaLikes)).Methods(http.MethodPost)
 
@@ -66,28 +65,4 @@ func (a *httpApiShelters) psynaLikes(w http.ResponseWriter, r *http.Request) err
 	}
 
 	return a.jsonRW.RespondWithJson(w, http.StatusOK, likes)
-}
-
-func (a *httpApiShelters) authenticate(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
-		submatches := bearerTokenRegexp.FindStringSubmatch(authHeader)
-		if len(submatches) != 2 {
-			w.WriteHeader(http.StatusForbidden)
-			return
-		}
-		tok := submatches[1]
-		uid, err := a.authService.AuthByToken(auth.NewTokenFromString(tok))
-		if err != nil {
-			if errToken, ok := err.(auth.TokenError); ok && errToken.Kind == auth.TokenErrorInvalidToken {
-				w.Header().Set("WWW-Authenticate", `Bearer error="invalid_token"`)
-				w.WriteHeader(http.StatusUnauthorized)
-			} else {
-				a.logger.DPanicf("Unknown auth by token error: %v", err)
-			}
-			return
-		}
-		ctx := context.WithValue(r.Context(), ctxUidKey, uid)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
 }

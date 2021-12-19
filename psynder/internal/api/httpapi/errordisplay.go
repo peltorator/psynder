@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (a *httpApi) displaySignupError(err auth.SignupError) (int, string) {
+func (a *httpApiAccounts) displaySignupError(err auth.SignupError) (int, string) {
 	switch err.Kind {
 	case auth.SignupErrorEmailTaken:
 		return http.StatusConflict, "There already exists an account with this email"
@@ -25,7 +25,7 @@ func (a *httpApi) displaySignupError(err auth.SignupError) (int, string) {
 	}
 }
 
-func (a *httpApi) displayLoginError(err auth.LoginError) (int, string) {
+func (a *httpApiAccounts) displayLoginError(err auth.LoginError) (int, string) {
 	switch err.Kind {
 	case auth.LoginErrorNoMatchingAccount:
 		return http.StatusForbidden, "There is no account matching this email and password"

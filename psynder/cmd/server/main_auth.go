@@ -8,19 +8,32 @@ import (
 	"github.com/peltorator/psynder/internal/api/httpapi"
 	"github.com/peltorator/psynder/internal/repo/postgres"
 	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
-	"github.com/peltorator/psynder/internal/serviceimpl/shelterservice"
+	"github.com/peltorator/psynder/internal/serviceimpl/tokenissuer"
 	"go.uber.org/zap"
+	"io/ioutil"
 	"net/http"
-	"time"
 )
 
-func getShelterService() (*shelterservice.ShelterService, AppConfig) {
+func getAuthService() (*authservice.AuthService, AppConfig) {
 
-	yamlConfigPath := "config-shelters.yml"
+	yamlConfigPath := "config-accounts.yml"
 	flag.Parse()
 
 	var cfg AppConfig
 	err := cleanenv.ReadConfig(yamlConfigPath, &cfg)
+	if err != nil {
+		panic(err)
+	}
+
+	privateBytes, err := ioutil.ReadFile(cfg.JWT.KeyPath)
+	if err != nil {
+		panic(err)
+	}
+	publicBytes, err := ioutil.ReadFile(cfg.JWT.PublicKeyPath)
+	if err != nil {
+		panic(err)
+	}
+	tokenIssuer, err := tokenissuer.NewJWT(privateBytes, publicBytes, cfg.JWT.TokenDuration)
 	if err != nil {
 		panic(err)
 	}
@@ -32,15 +45,12 @@ func getShelterService() (*shelterservice.ShelterService, AppConfig) {
 		panic(err)
 	}
 
-	shelterRepo := postgres.NewShelterRepo(conn)
-	shelterService := shelterservice.New(shelterRepo)
-	return shelterService, cfg
+	accountRepo := postgres.NewAccountRepo(conn)
+	authService := authservice.New(accountRepo, tokenIssuer)
+	return authService, cfg
 }
 
-func run_shelters(a *authservice.AuthService, sh *shelterservice.ShelterService, cfg AppConfig) {
-	const readTimeout = 10 * time.Second
-	const writeTimeout = 10 * time.Second
-
+func run_auth(a *authservice.AuthService, cfg AppConfig) {
 	var logger *zap.Logger
 	var err error
 	if cfg.DevMode {
@@ -52,20 +62,19 @@ func run_shelters(a *authservice.AuthService, sh *shelterservice.ShelterService,
 		panic(err)
 	}
 
-	api := httpapi.NewShelters(httpapi.ArgsShelters{
-		DevMode:        cfg.DevMode,
-		AuthService:    a,
-		ShelterService: sh,
-		Logger:         logger.Sugar(),
+	api := httpapi.NewAcccounts(httpapi.ArgsAccounts{
+		DevMode:     cfg.DevMode,
+		AuthService: a,
+		Logger:      logger.Sugar(),
 	})
 
 	addr := fmt.Sprintf("%v:%v", cfg.Server.Host, cfg.Server.Port)
 	fmt.Printf("Starting on %v...\n", addr)
 	server := http.Server{
 		Addr:         addr,
-		ReadTimeout:  readTimeout,
-		WriteTimeout: writeTimeout,
-		Handler:      api.RouterShelters(),
+		ReadTimeout:  ReadTimeout,
+		WriteTimeout: WriteTimeout,
+		Handler:      api.RouterAccounts(),
 	}
 
 	if cfg.TLS.Enable {

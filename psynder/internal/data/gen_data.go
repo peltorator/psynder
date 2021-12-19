@@ -6,8 +6,10 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/peltorator/psynder/internal/domain"
 	"github.com/peltorator/psynder/internal/domain/auth"
+	"github.com/peltorator/psynder/internal/domain/swipe"
 	"github.com/peltorator/psynder/internal/pagination"
 	"github.com/peltorator/psynder/internal/serviceimpl/authservice"
+	"github.com/peltorator/psynder/internal/serviceimpl/shelterservice"
 	"github.com/peltorator/psynder/internal/serviceimpl/swipeservice"
 	"math/rand"
 	"net/http"
@@ -15,14 +17,12 @@ import (
 	"strings"
 )
 
-
 const sheltersNumber = 10
 const dogsPerShelter = 20
 const passwordLength = 10
 const personsNumber = 100
 const likeProbability = 0.8
 const seed = 1337
-
 
 var breed = regexp.MustCompile("https://images\\.dog\\.ceo/breeds/([^/-]*)(?:-([^/]*))?/.*")
 
@@ -38,14 +38,15 @@ func getBreedFromURL(url string) string {
 	return res
 }
 
-
 func GenerateData(a *authservice.AuthService,
-				  sw *swipeservice.SwipeService) {
+	sw *swipeservice.SwipeService,
+	sh *shelterservice.ShelterService) {
 
 	gofakeit.Seed(seed)
+	fmt.Printf("DATADATADATADATADATADATADATADATADATADATADATADATADATADATADATADATA")
 
 	for i := 0; i < sheltersNumber; i++ {
-		_, err := a.Signup(auth.SignupArgs{
+		id, err := a.Signup(auth.SignupArgs{
 			Credentials: auth.Credentials{
 				Email:    gofakeit.Email(),
 				Password: gofakeit.Password(true, true, true, false, true, passwordLength),
@@ -56,7 +57,18 @@ func GenerateData(a *authservice.AuthService,
 			return
 		}
 
-		r, err:= http.Get(fmt.Sprintf("https://dog.ceo/api/breeds/image/random/%v", dogsPerShelter))
+		address := gofakeit.Address()
+		err = sh.AddInfo(id, domain.ShelterInfo{
+			AccountId: id,
+			City:      address.City,
+			Address:   address.Street,
+			Phone:     gofakeit.PhoneFormatted(),
+		})
+		if err != nil {
+			return
+		}
+
+		r, err := http.Get(fmt.Sprintf("https://dog.ceo/api/breeds/image/random/%v", dogsPerShelter))
 		if err != nil {
 			return
 		}
@@ -72,6 +84,19 @@ func GenerateData(a *authservice.AuthService,
 			return
 		}
 
+		for j := 0; j < dogsPerShelter; j++ {
+			dogURL := dogs.Message[j]
+			breed := getBreedFromURL(dogURL)
+			_, err := sh.AddPsyna(id, swipe.PsynaData{
+				Name:        gofakeit.PetName(),
+				Breed:       breed,
+				Description: breed,
+				PhotoLink:   dogURL,
+			})
+			if err != nil {
+				return
+			}
+		}
 	}
 
 	for i := 0; i < personsNumber; i++ {

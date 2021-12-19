@@ -1,13 +1,23 @@
 package authservice
 
 import (
+	"context"
+	"fmt"
 	"github.com/peltorator/psynder/internal/domain"
 	"github.com/peltorator/psynder/internal/domain/auth"
 	"github.com/peltorator/psynder/internal/repo"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
 	"net/mail"
+	"regexp"
 	"unicode"
 )
+
+const (
+	CtxUidKey = iota + 10 // TODO: does this clash with mux?
+)
+
+var BearerTokenRegexp = regexp.MustCompile("Bearer (.*)")
 
 type AuthService struct {
 	accRepo   repo.Accounts
@@ -109,6 +119,30 @@ func (a *AuthService) AuthByToken(tok auth.Token) (domain.AccountId, error) {
 	}
 
 	return uid, nil
+}
+
+func (a *AuthService) Authenticate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		submatches := BearerTokenRegexp.FindStringSubmatch(authHeader)
+		if len(submatches) != 2 {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+		tok := submatches[1]
+		uid, err := a.AuthByToken(auth.NewTokenFromString(tok))
+		if err != nil {
+			if errToken, ok := err.(auth.TokenError); ok && errToken.Kind == auth.TokenErrorInvalidToken {
+				w.Header().Set("WWW-Authenticate", `Bearer error="invalid_token"`)
+				w.WriteHeader(http.StatusUnauthorized)
+			} else {
+				fmt.Printf("Unknown auth by token error: %v", err)
+			}
+			return
+		}
+		ctx := context.WithValue(r.Context(), CtxUidKey, uid)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
 }
 
 func validateEmail(email string) error {

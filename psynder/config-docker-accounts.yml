@@ -2,7 +2,7 @@ dev-mode: true
 
 server:
   host: 0.0.0.0
-  port: 443
+  port: 444
 
 tls:
   enable: true
@@ -15,7 +15,7 @@ jwt:
   token-duration: 1h
   cookie-duration: 48h
   issuer: psynder
-  url: https://localhost:443
+  url: https://localhost:444
 
 postgres:
   username: postgres

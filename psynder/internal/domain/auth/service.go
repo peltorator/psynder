@@ -3,6 +3,7 @@ package auth
 import (
 	"github.com/peltorator/psynder/internal/domain"
 	"github.com/peltorator/psynder/internal/errf"
+	"net/http"
 )
 
 type SignupErrorKind int
@@ -67,6 +68,7 @@ type Service interface {
 	Signup(args SignupArgs) (domain.AccountId, error)
 	Login(cred Credentials) (Token, domain.AccountKind, error)
 	AuthByToken(tok Token) (domain.AccountId, error)
+	Authenticate(next http.Handler) http.Handler
 }
 
 type TokenIssuer interface {
