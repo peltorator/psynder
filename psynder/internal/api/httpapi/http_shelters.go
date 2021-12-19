@@ -1,6 +1,7 @@
 package httpapi
 
 import (
+	"context"
 	"github.com/gorilla/mux"
 	"github.com/peltorator/psynder/internal/api/httpapi/httperror"
 	"github.com/peltorator/psynder/internal/api/httpapi/json"
@@ -25,7 +26,7 @@ type ArgsShelters struct {
 	Logger         *zap.SugaredLogger
 }
 
-func NewShelters(args Args) *httpApiShelters {
+func NewShelters(args ArgsShelters) *httpApiShelters {
 	jsonRW := json.NewReadWriter()
 	return &httpApiShelters{
 		authService:    args.AuthService,
@@ -40,7 +41,7 @@ func NewShelters(args Args) *httpApiShelters {
 	}
 }
 
-func (a *httpApi) RouterShelters() http.Handler {
+func (a *httpApiShelters) RouterShelters() http.Handler {
 	r := mux.NewRouter()
 
 	ar := r.NewRoute().Subrouter()
@@ -51,7 +52,7 @@ func (a *httpApi) RouterShelters() http.Handler {
 	return r
 }
 
-func (a *httpApi) psynaLikes(w http.ResponseWriter, r *http.Request) error {
+func (a *httpApiShelters) psynaLikes(w http.ResponseWriter, r *http.Request) error {
 	var m psynaLikesRequest
 	err := a.jsonRW.ReadJson(r, &m)
 	if err != nil {
@@ -65,4 +66,28 @@ func (a *httpApi) psynaLikes(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return a.jsonRW.RespondWithJson(w, http.StatusOK, likes)
+}
+
+func (a *httpApiShelters) authenticate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		submatches := bearerTokenRegexp.FindStringSubmatch(authHeader)
+		if len(submatches) != 2 {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+		tok := submatches[1]
+		uid, err := a.authService.AuthByToken(auth.NewTokenFromString(tok))
+		if err != nil {
+			if errToken, ok := err.(auth.TokenError); ok && errToken.Kind == auth.TokenErrorInvalidToken {
+				w.Header().Set("WWW-Authenticate", `Bearer error="invalid_token"`)
+				w.WriteHeader(http.StatusUnauthorized)
+			} else {
+				a.logger.DPanicf("Unknown auth by token error: %v", err)
+			}
+			return
+		}
+		ctx := context.WithValue(r.Context(), ctxUidKey, uid)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
 }

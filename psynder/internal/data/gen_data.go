@@ -45,7 +45,7 @@ func GenerateData(a *authservice.AuthService,
 	gofakeit.Seed(seed)
 
 	for i := 0; i < sheltersNumber; i++ {
-		id, err := a.Signup(auth.SignupArgs{
+		_, err := a.Signup(auth.SignupArgs{
 			Credentials: auth.Credentials{
 				Email:    gofakeit.Email(),
 				Password: gofakeit.Password(true, true, true, false, true, passwordLength),
