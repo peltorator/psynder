@@ -20,11 +20,11 @@ func run_shelters() {
 	const readTimeout = 10 * time.Second
 	const writeTimeout = 10 * time.Second
 
-	yamlConfigPath := flag.String("config", "config.yml", "path to the YAML config file")
+	yamlConfigPath := "config_shelters.yml"
 	flag.Parse()
 
 	var cfg AppConfig
-	err := cleanenv.ReadConfig(*yamlConfigPath, &cfg)
+	err := cleanenv.ReadConfig(yamlConfigPath, &cfg)
 	if err != nil {
 		panic(err)
 	}

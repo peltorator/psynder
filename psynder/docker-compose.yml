@@ -6,9 +6,11 @@ services:
       - db
     ports:
       - "443:443"
+      - "444:444"
     volumes:
       - ./keys:/keys
       - ./config-docker.yml:/config.yml
+      - ./config-docker-shelters.yml:/config_shelters.yml
   db:
     image: postgres:14.0-alpine3.14
     environment:
