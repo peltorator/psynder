@@ -57,7 +57,7 @@ private fun provideMoshi(): Moshi {
 private fun getBaseURL(callType: String): String {
     return if (callType == "REGISTER" || callType == "SIGNIN") {
         "https://10.0.2.2:444/"
-    } else if (callType == "LOAD") {
+    } else if (callType == "LOADPSYNALIKES") {
         "https://10.0.2.2:443/"
     } else {
         "https://10.0.2.2:445/"
