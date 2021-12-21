@@ -23,7 +23,7 @@ object AuthRepository {
 
     suspend fun signIn(email: String, password: String) {
         val result = safeApiCall(Dispatchers.IO) {
-            provideApi().login(LoginData(email, password))
+            provideApi("SIGNIN").login(LoginData(email, password))
         }
         if (result is ResultWrapper.Success) {
             _token = result.value.token

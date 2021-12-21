@@ -44,7 +44,7 @@ class SwipeViewModel: ViewModel() {
 
     private suspend fun loadPsynas(token : String): List<Profile> {
             val psynas = safeApiCall(Dispatchers.IO) {
-                com.psinder.myapplication.network.provideApi().loadpsynas(
+                com.psinder.myapplication.network.provideApi("LOADLIKES").loadpsynas(
                     bearerToken = "Bearer $token"
                 )
             }
@@ -78,7 +78,7 @@ class SwipeViewModel: ViewModel() {
         Log.d(LOG_TAG, "Like $psynaId")
         viewModelScope.launch {
             safeApiCall(Dispatchers.IO) {
-                com.psinder.myapplication.network.provideApi().like(
+                com.psinder.myapplication.network.provideApi("LIKE").like(
                     bearerToken = "Bearer ${token.value}",
                     LikeRequest(psynaId)
                 )

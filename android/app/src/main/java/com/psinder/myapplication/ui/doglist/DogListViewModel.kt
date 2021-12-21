@@ -77,7 +77,7 @@ class DogListViewModel : ViewModel() {
 
     private suspend fun loadPsynas(token: String): List<Psyna> {
         val psynas = safeApiCall(Dispatchers.IO) {
-            provideApi().loadpsynas(
+            provideApi("LOAD").loadpsynas(
                 bearerToken = "Bearer $token"
             )
         }

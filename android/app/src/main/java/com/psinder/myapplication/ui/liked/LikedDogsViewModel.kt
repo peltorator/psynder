@@ -45,7 +45,7 @@ class LikedDogsViewModel : ViewModel() {
 
     private suspend fun liked(token: String): List<Psyna> {
         val psynas = safeApiCall(Dispatchers.IO) {
-            provideApi().liked(
+            provideApi("LIKED").liked(
                 bearerToken = "Bearer $token"
             )
         }
