@@ -58,7 +58,6 @@ func GenerateData(a *authservice.AuthService,
 
 		address := gofakeit.Address()
 		err = sh.AddInfo(id, domain.ShelterInfo{
-			AccountId: id,
 			City:      address.City,
 			Address:   address.Street,
 			Phone:     gofakeit.PhoneFormatted(),
