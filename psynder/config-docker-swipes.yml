@@ -1,0 +1,24 @@
+dev-mode: true
+
+server:
+  host: 0.0.0.0
+  port: 445
+
+tls:
+  enable: true
+  cert-path: /keys/server.crt
+  key-path: /keys/server.key
+
+jwt:
+  key-path: /keys/app.rsa
+  public-key-path: /keys/app.rsa.pub
+  token-duration: 1h
+  cookie-duration: 48h
+  issuer: psynder
+  url: https://localhost:445
+
+postgres:
+  username: postgres
+  password: 12345678
+  host: db
+  dbname: postgres

@@ -1,0 +1,15 @@
+server:
+  host: localhost
+  port: 8080
+
+tls:
+  cert-path: server.crt
+  key-path: server.key
+
+jwt:
+  key-path: app.rsa
+  public-key-path: app.rsa.pub
+  token-duration: 5m
+  cookie-duration: 48h
+  issuer: psynder
+  url: https://localhost:445

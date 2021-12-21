@@ -17,14 +17,12 @@ import (
 	"strings"
 )
 
-
 const sheltersNumber = 10
 const dogsPerShelter = 20
 const passwordLength = 10
 const personsNumber = 100
 const likeProbability = 0.8
 const seed = 1337
-
 
 var breed = regexp.MustCompile("https://images\\.dog\\.ceo/breeds/([^/-]*)(?:-([^/]*))?/.*")
 
@@ -40,12 +38,12 @@ func getBreedFromURL(url string) string {
 	return res
 }
 
-
 func GenerateData(a *authservice.AuthService,
-				  sw *swipeservice.SwipeService,
-				  sh *shelterservice.ShelterService) {
+	sw *swipeservice.SwipeService,
+	sh *shelterservice.ShelterService) {
 
 	gofakeit.Seed(seed)
+	fmt.Printf("DATADATADATADATADATADATADATADATADATADATADATADATADATADATADATADATA")
 
 	for i := 0; i < sheltersNumber; i++ {
 		id, err := a.Signup(auth.SignupArgs{
@@ -70,7 +68,7 @@ func GenerateData(a *authservice.AuthService,
 			return
 		}
 
-		r, err:= http.Get(fmt.Sprintf("https://dog.ceo/api/breeds/image/random/%v", dogsPerShelter))
+		r, err := http.Get(fmt.Sprintf("https://dog.ceo/api/breeds/image/random/%v", dogsPerShelter))
 		if err != nil {
 			return
 		}
