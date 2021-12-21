@@ -27,6 +27,9 @@ interface Api {
 
     @GET("liked-psynas?limit=100&offset=0")
     suspend fun liked(@Header("Authorization") bearerToken: String): List<Psyna>
+
+    @POST("browse-my-psynas?limit=100&offset=0")
+    suspend fun browseShleterPsynas(@Header("Authorization") bearerToken: String): List<Psyna>
 }
 
 //@JsonClass(generateAdapter = true)

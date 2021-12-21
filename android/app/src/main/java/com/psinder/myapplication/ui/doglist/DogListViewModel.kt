@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psinder.myapplication.network.*
+import com.psinder.myapplication.repository.AuthRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +26,7 @@ class DogListViewModel : ViewModel() {
         viewModelScope.launch {
             _viewState.emit(ViewState.Loading)
             Log.d(LOG_TAG, "Start loading users")
-            val psynas = mockPsynas() //loadPsynas()
+            val psynas = loadPsynas(AuthRepository.token) //loadPsynas()
             Log.d(LOG_TAG, "End loading users")
             _viewState.emit(ViewState.Data(psynas))
         }
@@ -77,7 +78,7 @@ class DogListViewModel : ViewModel() {
 
     private suspend fun loadPsynas(token: String): List<Psyna> {
         val psynas = safeApiCall(Dispatchers.IO) {
-            provideApi("LOAD").loadpsynas(
+            provideApi("LOADPSYNALIKES").browseShleterPsynas(
                 bearerToken = "Bearer $token"
             )
         }
