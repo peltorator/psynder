@@ -57,13 +57,8 @@ func (a *httpApiSwipes) Router() http.Handler {
 	ar.HandleFunc("/like-psyna", a.eh.HandleErrors(a.likePsyna)).Methods(http.MethodPost)
 	withPaginationQueries(ar.HandleFunc("/liked-psynas", a.eh.HandleErrors(a.getLikedPsynas))).Methods(http.MethodGet)
 
-	// TODO(antoha): add shelter http api
-
 	r.HandleFunc("/psyna-info", a.eh.HandleErrors(a.psynaInfo)).Methods(http.MethodPost)
 	r.HandleFunc("/get-all-info", a.eh.HandleErrors(a.allInfo)).Methods(http.MethodPost)
-
-	//ar.HandleFunc("/likepsyna", handleErrors(a.likePsyna)).Methods(http.MethodPost)
-	//ar.HandleFunc("/getfavoritepsynas", handleErrors(a.getFavoritePsynas)).Methods(http.MethodGet)
 
 	return r
 }
