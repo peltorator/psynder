@@ -94,8 +94,8 @@ func shelterFromDb(shelterRecord ShelterInfo) repo.Shelter {
 
 func (l *likeRepo) GetPsynaInfo(pid domain.PsynaId) (repo.Shelter, error) {
 	var shelterRecord ShelterInfo
-	if err := l.db.Table("shelter_info").
-		Joins("JOIN shelter_dogs ON shelter_info.account_id = shelter_dogs.account_id").
+	if err := l.db.Table("shelter_infos").
+		Joins("JOIN shelter_dogs ON shelter_infos.account_id = shelter_dogs.account_id").
 		Where("shelter_dogs.psyna_id = ?", pid).
 		Find(&shelterRecord).Error; err != nil {
 		return repo.Shelter{}, err

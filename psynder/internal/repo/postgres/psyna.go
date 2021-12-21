@@ -53,12 +53,12 @@ func (p *psynaRepo) LoadSlice(uid domain.AccountId, pg pagination.Info, f domain
 	if f.Shelter != nil || (f.ShelterCity != nil && *f.ShelterCity != "") {
 		table = table.
 			Joins("JOIN shelter_dogs ON psynas.id = shelter_dogs.psyna_id").
-			Joins("JOIN shelter_info ON shelter_info.account_id = shelter_dogs.account_id")
+			Joins("JOIN shelter_infos ON shelter_infos.account_id = shelter_dogs.account_id")
 		if f.Shelter != nil {
-			table = table.Where("shelter_info.account_id = ?", *f.Shelter)
+			table = table.Where("shelter_infos.account_id = ?", *f.Shelter)
 		}
 		if f.ShelterCity != nil && *f.ShelterCity != "" {
-			table = table.Where("shelter_info.city = ?", *f.ShelterCity)
+			table = table.Where("shelter_infos.city = ?", *f.ShelterCity)
 		}
 	}
 	if err := table.Find(&psynaRecords).Error; err != nil {
