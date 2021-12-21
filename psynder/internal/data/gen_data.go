@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 )
 
 const sheltersNumber = 10
@@ -42,9 +43,11 @@ func GenerateData(a *authservice.AuthService,
 	sw *swipeservice.SwipeService,
 	sh *shelterservice.ShelterService) {
 
-	gofakeit.Seed(seed)
+	gofakeit.Seed(seed + int64(time.Now().UnixNano()))
 
 	for i := 0; i < sheltersNumber; i++ {
+		println(gofakeit.Email())
+		println("AAAAAAAAAAAAAAA HELP", i)
 		id, err := a.Signup(auth.SignupArgs{
 			Credentials: auth.Credentials{
 				Email:    gofakeit.Email(),
@@ -53,6 +56,7 @@ func GenerateData(a *authservice.AuthService,
 			Kind: domain.AccountKindShelter,
 		})
 		if err != nil {
+			println(err.Error())
 			return
 		}
 
@@ -63,11 +67,13 @@ func GenerateData(a *authservice.AuthService,
 			Phone:     gofakeit.PhoneFormatted(),
 		})
 		if err != nil {
+			println(err.Error())
 			return
 		}
 
 		r, err := http.Get(fmt.Sprintf("https://dog.ceo/api/breeds/image/random/%v", dogsPerShelter))
 		if err != nil {
+			println(err.Error())
 			return
 		}
 

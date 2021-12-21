@@ -51,7 +51,7 @@ func (p *shelterRepo) AddInfo(uid domain.AccountId, info domain.ShelterInfo) err
 		Address:   info.Address,
 		Phone:     info.Phone,
 	}
-	return p.db.Table("shelter_info").Create(&shelterInfo).Error
+	return p.db.Table("shelter_infos").Create(&shelterInfo).Error
 }
 
 type ShelterPsynas struct {
