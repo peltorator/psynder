@@ -49,22 +49,14 @@ class LikedDogsFragment : Fragment(R.layout.fragment_liked) {
         setupRecyclerView()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d("liked", "STARTED")
                 viewModel.token.emit(
                     AuthRepository.token
                 )
-                Log.d("liked", "BETWEEN")
                 viewModel.reloadLikes()
-                Log.d("liked", "BETWEEN2")
                 viewModel.viewState.collect {
                         viewState ->
-                    Log.d("liked", "render view state")
                     renderViewState(viewState)
-                    Log.d("liked", "rendered")
                 }
-                Log.d("liked", "ENDED")
-//
-
             }
         }
     }
@@ -80,6 +72,7 @@ class LikedDogsFragment : Fragment(R.layout.fragment_liked) {
         recyclerView.layoutManager = GridLayoutManager(context,2)
         val adapter = LikedDogAdapter()
         recyclerView.adapter = adapter
+
         return adapter
     }
 

@@ -15,9 +15,21 @@
     <fragment
         android:id="@+id/likedFragment"
         android:name="com.psinder.myapplication.ui.liked.LikedDogsFragment"
-        android:label="LikedFragment" />
+        android:label="LikedFragment" >
+        <action
+            android:id="@+id/action_likedFragment_to_likedProfileFragment2"
+            app:destination="@id/likedProfileFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.psinder.myapplication.ui.profile.UserProfileFragment"
         android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/likedProfileFragment2"
+        android:name="com.psinder.myapplication.likedprofile.LikedProfileFragment"
+        android:label="LikedProfileFragment" >
+        <action
+            android:id="@+id/action_likedProfileFragment2_to_likedFragment"
+            app:destination="@id/likedFragment" />
+    </fragment>
 </navigation>

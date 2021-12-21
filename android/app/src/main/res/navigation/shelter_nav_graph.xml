@@ -13,5 +13,9 @@
         android:id="@+id/editDogFragment"
         android:name="com.psinder.myapplication.ui.editdog.EditDogFragment"
         android:label="EditDogFragment" />
+    <fragment
+        android:id="@+id/likedProfileFragment"
+        android:name="com.psinder.myapplication.likedprofile.LikedProfileFragment"
+        android:label="LikedProfileFragment" />
 
 </navigation>

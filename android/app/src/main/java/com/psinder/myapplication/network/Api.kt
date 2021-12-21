@@ -30,6 +30,10 @@ interface Api {
 
     @POST("browse-my-psynas?limit=100&offset=0")
     suspend fun browseShleterPsynas(@Header("Authorization") bearerToken: String): List<Psyna>
+
+    @POST("psyna-info")
+    suspend fun getShelterInfo(@Header("Authorization") bearerToken: String,
+    @Body psynasRequest: LikeRequest): Shelter
 }
 
 //@JsonClass(generateAdapter = true)
@@ -111,6 +115,15 @@ data class User(
     @Json(name = "first_name") val userName: String,
     @Json(name = "email") val groupName: String
 )
+
+@JsonClass(generateAdapter = true)
+data class Shelter(
+    @Json(name = "account_id") val accountId: Int,
+    @Json(name = "city") val city: String,
+    @Json(name = "address") val address: String,
+    @Json(name = "phone") val phone: String,
+)
+
 
 sealed class ResultWrapper<out T> {
     data class Success<out T>(val value: T) : ResultWrapper<T>()
