@@ -43,7 +43,6 @@ func GenerateData(a *authservice.AuthService,
 	sh *shelterservice.ShelterService) {
 
 	gofakeit.Seed(seed)
-	fmt.Printf("DATADATADATADATADATADATADATADATADATADATADATADATADATADATADATADATA")
 
 	for i := 0; i < sheltersNumber; i++ {
 		id, err := a.Signup(auth.SignupArgs{
