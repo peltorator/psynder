@@ -23,7 +23,7 @@ import android.R.string.no
 
 // works only with emulator, to run on local device:
 // https://stackoverflow.com/questions/4779963/how-can-i-access-my-localhost-from-my-android-device
-private const val BASE_URL = "https://10.0.2.2:443/"
+//private const val BASE_URL = "https://10.0.2.2:443/"
 
 private fun provideOkHttpClient(): OkHttpClient {
     // TODO: this is not safe
@@ -54,10 +54,20 @@ private fun provideMoshi(): Moshi {
     return Moshi.Builder().build()
 }
 
-fun provideApi(): Api {
+private fun getBaseURL(callType: String): String {
+    return if (callType == "REGISTER" || callType == "SIGNIN") {
+        "https://10.0.2.2:444/"
+    } else if (callType == "LOADPSYNALIKES") {
+        "https://10.0.2.2:443/"
+    } else {
+        "https://10.0.2.2:445/"
+    }
+}
+
+fun provideApi(callType: String): Api {
     return Retrofit.Builder()
         .client(provideOkHttpClient())
-        .baseUrl(BASE_URL)
+        .baseUrl(getBaseURL(callType))
         .addConverterFactory(MoshiConverterFactory.create(provideMoshi()))
         .build()
         .create(Api::class.java)

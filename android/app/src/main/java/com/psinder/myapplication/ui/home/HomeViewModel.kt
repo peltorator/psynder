@@ -27,7 +27,7 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             _viewState.emit(ViewState.Loading)
             val response = safeApiCall(Dispatchers.IO) {
-                provideApi().getInfo(
+                provideApi("GETINFO").getInfo(
                     bearerToken = "Bearer $token"
                 )
             }

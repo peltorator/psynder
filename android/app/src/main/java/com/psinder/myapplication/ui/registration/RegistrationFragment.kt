@@ -50,7 +50,7 @@ class RegistrationFragment: Fragment() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 val result = safeApiCall(Dispatchers.IO) {
-                    provideApi().register(
+                    provideApi("REGISTER").register(
                         RegisterData(
                             binding.editTextEmail.text.toString(),
                             binding.editTextPassword.text.toString(),
