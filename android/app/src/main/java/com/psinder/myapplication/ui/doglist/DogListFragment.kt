@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -13,12 +14,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentDogListBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DogListFragment : Fragment(R.layout.fragment_dog_list) {
-    val viewModel: DogListViewModel
-            by navGraphViewModels(R.id.shelter_nav_graph)
+    val viewModel: DogListViewModel by viewModels()
     private val viewBinding by viewBinding(FragmentDogListBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -8,7 +8,9 @@ import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentShelterMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ShelterMainFragment: Fragment(R.layout.fragment_shelter_main)  {
     private val viewBinding by viewBinding(FragmentShelterMainBinding::bind)
 

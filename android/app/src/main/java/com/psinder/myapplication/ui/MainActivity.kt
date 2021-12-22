@@ -12,11 +12,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.ActivityMainBinding
 import com.psinder.myapplication.entity.AccountKind
-import com.psinder.myapplication.repository.AuthState
-import kotlinx.coroutines.flow.collect
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val viewBinding by viewBinding(ActivityMainBinding::bind)
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun subscribeToAuthorizationStatus() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.authStateFlow.collect {
+                viewModel.accountKindFlow().collect {
                     showSuitableNavigationFlow(it)
                 }
             }
@@ -39,21 +39,23 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     // This method have to be idempotent. Do not override restored backstack.
-    private fun showSuitableNavigationFlow(authState: AuthState) {
+    private fun showSuitableNavigationFlow(accountKind: AccountKind) {
         val navController = findNavController(R.id.mainActivityNavigationHost)
-        when (authState.isAuthorized) {
-            true -> {
-                if (navController.backQueue.any { it.destination.id == R.id.user_nav_graph}) {
+        when (accountKind) {
+            AccountKind.PERSON -> {
+                if (navController.backQueue.any { it.destination.id == R.id.user_nav_graph }) {
                     return
                 }
-                if (authState.kind == AccountKind.PERSON) {
-                    navController.navigate(R.id.action_userNavGraph)
-                } else {
-                    navController.navigate(R.id.action_shelterNavGraph)
-                }
+                navController.navigate(R.id.action_userNavGraph)
             }
-            false -> {
-                if (navController.backQueue.any { it.destination.id == R.id.guest_nav_graph}) {
+            AccountKind.SHELTER -> {
+                if (navController.backQueue.any { it.destination.id == R.id.user_nav_graph }) {
+                    return
+                }
+                navController.navigate(R.id.action_shelterNavGraph)
+            }
+            AccountKind.UNDEFINED -> {
+                if (navController.backQueue.any { it.destination.id == R.id.guest_nav_graph }) {
                     return
                 }
                 navController.navigate(R.id.action_guestNavGraph)

@@ -11,9 +11,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentLoginBinding
 import com.psinder.myapplication.network.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineExceptionHandler
 
 // TODO: Hide keyboard at login form (after clocking login?)
+@AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private val viewBinding by viewBinding(FragmentLoginBinding::bind)
     private val viewModel: LoginViewModel by viewModels()

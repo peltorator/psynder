@@ -3,6 +3,7 @@ package com.psinder.myapplication.ui.editdog
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
 import com.psinder.myapplication.R
@@ -10,12 +11,12 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.psinder.myapplication.databinding.FragmentEditDogBinding
 import com.psinder.myapplication.network.Psyna
 import com.psinder.myapplication.ui.doglist.DogListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class EditDogFragment : Fragment(R.layout.fragment_edit_dog) {
     private val viewBinding by viewBinding(FragmentEditDogBinding::bind)
-    val viewModel: DogListViewModel
-            by navGraphViewModels(R.id.shelter_nav_graph)
+    val viewModel: DogListViewModel by navGraphViewModels(R.id.shelter_nav_graph)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
