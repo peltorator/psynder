@@ -22,8 +22,8 @@ interface SwipeApi {
     @GET("liked-psynas?limit=100&offset=0")
     suspend fun liked(): List<Psyna>
 
-    @GET("browse-psynas?limit=50&offset=0")
-    suspend fun loadpsynas(): List<Psyna>
+    @GET("browse-psynas?limit=50")
+    suspend fun loadpsynas(@Query("offset") offset: Int): List<Psyna>
 
     @POST("psyna-info")
     suspend fun getShelterInfo(@Body psynasRequest: LikeRequest): Shelter
