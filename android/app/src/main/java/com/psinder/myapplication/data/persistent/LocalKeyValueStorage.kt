@@ -20,6 +20,11 @@ class LocalKeyValueStorage(
         moshi.adapter(AuthToken::class.java)
     )
 
+    var swipeOffset: Int? by IntDelegate(
+        SWIPE_OFFSET,
+        pref
+    )
+
     private class JsonDelegate<T>(
         private val key: String,
         private val pref: SharedPreferences,
@@ -43,7 +48,30 @@ class LocalKeyValueStorage(
         }
     }
 
+    private class IntDelegate(
+        private val key: String,
+        private val pref: SharedPreferences
+    ) : ReadWriteProperty<LocalKeyValueStorage, Int?> {
+
+        override fun setValue(thisRef: LocalKeyValueStorage, property: KProperty<*>, value: Int?) {
+            pref.edit(commit = true) {
+                if (value == null) remove(key)
+                else putString(key, value.toString())
+            }
+        }
+
+        override fun getValue(thisRef: LocalKeyValueStorage, property: KProperty<*>): Int? {
+            return try {
+                pref.getString(key, null)?.toInt()
+            } catch (e: JsonDataException) {
+                setValue(thisRef, property, null)
+                null
+            }
+        }
+    }
+
     companion object {
         private const val AUTH_TOKEN = "auth_token"
+        private const val SWIPE_OFFSET = "swipe_offset"
     }
 }
