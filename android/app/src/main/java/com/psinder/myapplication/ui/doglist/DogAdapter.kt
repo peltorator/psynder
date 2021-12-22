@@ -35,7 +35,7 @@ class DogAdapter : RecyclerView.Adapter<DogAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(holder.avatarImageView)
-            .load(psynasList[position].photoLink)
+            .load(if (psynasList[position].photoLink.isEmpty()) "https://emojigraph.org/media/openmoji/dog-face_1f436.png" else psynasList[position].photoLink)
             .circleCrop()
             .into(holder.avatarImageView)
 
