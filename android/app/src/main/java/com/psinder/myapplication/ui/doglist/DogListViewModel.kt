@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DogListViewModel @Inject constructor(
-    private val api: SwipeApi
+    private val api: ShelterApi
 ) : ViewModel() {
 
     companion object {
@@ -96,25 +96,6 @@ class DogListViewModel @Inject constructor(
             is ResultWrapper.GenericError -> {
                 Log.d("Psynas", psynas.code.toString() + psynas.error)
                 emptyList()
-            }
-        }
-    }
-
-    fun addPsyna(dog: Psyna) {
-        Log.d(LOG_TAG, "i am inside add psynas")
-        viewModelScope.launch {
-            if (_viewState.value is ViewState.Data) {
-                Log.d(LOG_TAG, "Start updating psynas")
-
-                _viewState.emit(
-                    ViewState.Data(
-                        (_viewState.value as ViewState.Data).psynaList + listOf(dog)
-                    )
-                )
-
-                Log.d(LOG_TAG, "Psynas updated")
-            } else {
-                TODO("Not implemented")
             }
         }
     }

@@ -20,7 +20,6 @@ interface SwipeApi {
     suspend fun like(@Body likeData: LikeRequest)
 
     @GET("liked-psynas?limit=100&offset=0")
-
     suspend fun liked(): List<Psyna>
 
     @GET("browse-psynas?limit=50&offset=0")
@@ -32,7 +31,7 @@ interface SwipeApi {
 
 interface ShelterApi {
     @POST("browse-my-psynas?limit=100&offset=0")
-    suspend fun browseShleterPsynas(): List<Psyna>
+    suspend fun loadpsynas(): List<Psyna>
 
     @POST("add-psyna")
     suspend fun addPsyna(@Body addPsynaRequest: AddPsynaRequest)
@@ -52,7 +51,7 @@ data class LoadPsynasRequest(
 data class Psyna(
     @Json(name = "id") val id: Int,
     @Json(name = "name") val name: String,
-    @Json(name = "breed") val breed: String,
+    @Json(name = "breed") val breed: String?,
     @Json(name = "description") val description: String,
     @Json(name = "photoLink") val photoLink: String
 )
