@@ -1,76 +1,45 @@
 package com.psinder.myapplication.ui.registration
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentRegistrationBinding
 import com.psinder.myapplication.entity.AccountKind
-import com.psinder.myapplication.network.RegisterData
-import com.psinder.myapplication.network.ResultWrapper
-import com.psinder.myapplication.network.provideApi
-import com.psinder.myapplication.network.safeApiCall
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
-class RegistrationFragment: Fragment() {
+@AndroidEntryPoint
+class RegistrationFragment : Fragment(R.layout.fragment_registration) {
+    private val viewBinding by viewBinding(FragmentRegistrationBinding::bind)
+    private val viewModel: RegistrationViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding = DataBindingUtil.inflate<FragmentRegistrationBinding>(inflater,
-            R.layout.fragment_registration,container,false)
-        binding.navigateButton.setOnClickListener {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewBinding.navigateButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
         }
-        changeStatusBarColor()
 
-        binding.cirRegisterButton.setOnClickListener {
-            onRegisterClick(binding)
+        viewBinding.cirRegisterButton.setOnClickListener {
+            onRegisterClick(viewBinding)
         }
-
-        return binding.root
-    }
-    private fun changeStatusBarColor() {
-        // TODO: changeStatusBar Color for registration layout
     }
 
     private fun onRegisterClick(binding: FragmentRegistrationBinding) {
         binding.cirRegisterButton.startAnimation()
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val result = safeApiCall(Dispatchers.IO) {
-                    provideApi("REGISTER").register(
-                        RegisterData(
-                            binding.editTextEmail.text.toString(),
-                            binding.editTextPassword.text.toString(),
-                            when(binding.userTypeButton.checkedRadioButtonId) {
-                                R.id.lookingForDog -> AccountKind.PERSON
-                                R.id.lookingForOwner -> AccountKind.SHELTER
-                                else -> AccountKind.UNDEFINED
-                            }.identifier
-                        )
-                    )
-                }
-
-                val message = when(result) {
-                    is ResultWrapper.Success -> "Вы успешно зарегистрировались!"
-                    is ResultWrapper.NetworkError -> "network error"
-                    is ResultWrapper.GenericError ->  result.error.toString()
-                }
-                Toast.makeText(this@RegistrationFragment.context, message, Toast.LENGTH_SHORT).show()
-                binding.cirRegisterButton.revertAnimation()
+        viewModel.signUp(
+            binding.editTextEmail.text.toString(),
+            binding.editTextPassword.text.toString(),
+            when (binding.userTypeButton.checkedRadioButtonId) {
+                R.id.lookingForDog -> AccountKind.PERSON
+                R.id.lookingForOwner -> AccountKind.SHELTER
+                else -> AccountKind.UNDEFINED
             }
-        }
+        )
+
+        binding.cirRegisterButton.revertAnimation()
     }
 }

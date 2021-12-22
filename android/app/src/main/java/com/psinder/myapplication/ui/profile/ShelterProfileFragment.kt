@@ -8,7 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentShelterProfileBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ShelterProfileFragment : Fragment() {
 
     override fun onCreateView(

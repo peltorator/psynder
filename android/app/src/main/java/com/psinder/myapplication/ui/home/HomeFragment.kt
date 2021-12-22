@@ -14,10 +14,12 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.psinder.myapplication.R
 import com.psinder.myapplication.databinding.FragmentHomeBinding
 import com.psinder.myapplication.util.setAmount
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val viewBinding by viewBinding(FragmentHomeBinding::bind)
     private val viewModel: HomeViewModel by viewModels()

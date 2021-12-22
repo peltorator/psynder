@@ -25,9 +25,11 @@ import com.psinder.myapplication.databinding.FragmentSwipeBinding
 import com.yuyakaido.android.cardstackview.*
 import com.psinder.myapplication.entity.Profile
 import com.psinder.myapplication.repository.AuthRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 // TODO: Use https://github.com/yuyakaido/CardStackView
+@AndroidEntryPoint
 class SwipeFragment : Fragment(), CardStackListener {
 
     private val adapter = ProfilesAdapter()
@@ -62,11 +64,7 @@ class SwipeFragment : Fragment(), CardStackListener {
         setupButton(binding.stackView)
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.token.emit(
-                    AuthRepository.token
-                )
-                viewModel.viewState.collect {
-                        viewState ->
+                viewModel.viewState.collect { viewState ->
                     Log.d("ViewStateLog", viewState.toString())
                     renderViewState(viewState)
                 }

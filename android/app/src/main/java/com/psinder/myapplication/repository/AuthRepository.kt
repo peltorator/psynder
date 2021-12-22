@@ -1,47 +1,54 @@
 package com.psinder.myapplication.repository
 
+import com.psinder.myapplication.data.persistent.LocalKeyValueStorage
+import com.psinder.myapplication.di.AppCoroutineScope
+import com.psinder.myapplication.di.IoCoroutineDispatcher
 import com.psinder.myapplication.entity.AccountKind
-import com.psinder.myapplication.entity.toAccountKind
-import com.psinder.myapplication.network.LoginData
-import com.psinder.myapplication.network.ResultWrapper
-import com.psinder.myapplication.network.provideApi
-import com.psinder.myapplication.network.safeApiCall
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.psinder.myapplication.entity.AuthToken
+import com.psinder.myapplication.network.*
+import com.psinder.myapplication.util.safeApiCall
+import dagger.Lazy
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-data class AuthState(val isAuthorized: Boolean, val kind: AccountKind)
+@Singleton
+class AuthRepository @Inject constructor(
+    private val apiLazy: Lazy<AuthorizationApi>,
+    private val localKeyValueStorage: LocalKeyValueStorage,
+    @AppCoroutineScope externalCoroutineScope: CoroutineScope,
+    @IoCoroutineDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
 
-object AuthRepository {
+    private val api by lazy { apiLazy.get() }
 
-    private val _authStateFlow = MutableStateFlow(AuthState(false, AccountKind.UNDEFINED))
-    private var _token = ""
-
-    val authStateFlow = _authStateFlow.asStateFlow()
-    val token
-        get() = _token
-
-    suspend fun signIn(email: String, password: String) {
-        val result = safeApiCall(Dispatchers.IO) {
-            provideApi("SIGNIN").login(LoginData(email, password))
+    private val authTokenFlow: Deferred<MutableStateFlow<AuthToken?>> =
+        externalCoroutineScope.async(context = ioDispatcher, start = CoroutineStart.LAZY) {
+            MutableStateFlow(localKeyValueStorage.authToken)
         }
-        if (result is ResultWrapper.Success) {
-            _token = result.value.token
-            val kind = result.value.kind.toAccountKind()
-            if (kind == AccountKind.UNDEFINED) {
-                throw Exception("Undefined kind!")
-            }
-            _authStateFlow.emit(AuthState(true, kind))
-        } else {
-            val message = when (result) {
-                is ResultWrapper.GenericError -> result.error.toString()
-                else -> "network error"
-            }
-            throw Exception(message)
-        }
+
+    suspend fun getAuthTokenFlow(): StateFlow<AuthToken?> {
+        return authTokenFlow.await().asStateFlow()
     }
 
-    suspend fun logout() {
-        _authStateFlow.emit(AuthState(false, AccountKind.UNDEFINED))
+    suspend fun saveAuthToken(authToken: AuthToken?) {
+        withContext(ioDispatcher) {
+            localKeyValueStorage.authToken = authToken
+        }
+        authTokenFlow.await().emit(authToken)
+    }
+
+    suspend fun accountKindFlow(): Flow<AccountKind> {
+        return authTokenFlow
+            .await()
+            .asStateFlow()
+            .map { it?.kind ?: AccountKind.UNDEFINED }
+    }
+
+    suspend fun generateAuthToken(email: String, password: String): ResultWrapper<LoginResponse> {
+        return safeApiCall(Dispatchers.IO) {
+            api.login(LoginData(email, password))
+        }
     }
 }

@@ -4,32 +4,36 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psinder.myapplication.entity.Info
+import com.psinder.myapplication.interactor.AuthInteractor
 import com.psinder.myapplication.network.ResultWrapper
-import com.psinder.myapplication.network.provideApi
-import com.psinder.myapplication.network.safeApiCall
-import com.psinder.myapplication.repository.AuthRepository
+import com.psinder.myapplication.network.SwipeApi
+import com.psinder.myapplication.util.safeApiCall
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val api: SwipeApi,
+    private val authInteractor: AuthInteractor
+): ViewModel() {
     private val _viewState = MutableStateFlow<ViewState>(ViewState.Loading)
     val viewState: Flow<ViewState> get() = _viewState.asStateFlow()
 
     init {
-        loadInfo(AuthRepository.token)
+        loadInfo()
     }
 
-    private fun loadInfo(token: String) {
+    private fun loadInfo() {
         viewModelScope.launch {
             _viewState.emit(ViewState.Loading)
             val response = safeApiCall(Dispatchers.IO) {
-                provideApi("GETINFO").getInfo(
-                    bearerToken = "Bearer $token"
-                )
+                api.getInfo()
             }
 
             when (response) {
@@ -53,7 +57,7 @@ class HomeViewModel : ViewModel() {
 
     fun signOut(coroutineExceptionHandler: CoroutineExceptionHandler) {
         viewModelScope.launch(coroutineExceptionHandler) {
-            AuthRepository.logout()
+            authInteractor.logout()
         }
     }
 

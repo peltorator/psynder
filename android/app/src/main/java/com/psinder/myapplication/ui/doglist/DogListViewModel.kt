@@ -4,15 +4,19 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psinder.myapplication.network.*
-import com.psinder.myapplication.repository.AuthRepository
+import com.psinder.myapplication.util.safeApiCall
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class DogListViewModel : ViewModel() {
+@HiltViewModel
+class DogListViewModel @Inject constructor(
+    private val api: SwipeApi
+) : ViewModel() {
 
     companion object {
         val LOG_TAG = "DogListViewModel"
@@ -26,7 +30,7 @@ class DogListViewModel : ViewModel() {
         viewModelScope.launch {
             _viewState.emit(ViewState.Loading)
             Log.d(LOG_TAG, "Start loading users")
-            val psynas = loadPsynas(AuthRepository.token) //loadPsynas()
+            val psynas = loadPsynas()
             Log.d(LOG_TAG, "End loading users")
             _viewState.emit(ViewState.Data(psynas))
         }
@@ -76,11 +80,9 @@ class DogListViewModel : ViewModel() {
         )
     }
 
-    private suspend fun loadPsynas(token: String): List<Psyna> {
+    private suspend fun loadPsynas(): List<Psyna> {
         val psynas = safeApiCall(Dispatchers.IO) {
-            provideApi("LOADPSYNALIKES").browseShleterPsynas(
-                bearerToken = "Bearer $token"
-            )
+            api.loadpsynas()
         }
 
         return when (psynas) {

@@ -5,14 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psinder.myapplication.network.*
 import com.psinder.myapplication.repository.AuthRepository
+import com.psinder.myapplication.util.safeApiCall
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class LikedProfileViewModel : ViewModel() {
+@HiltViewModel
+class LikedProfileViewModel @Inject constructor(
+    private val api: SwipeApi
+): ViewModel() {
 
     companion object {
         val LOG_TAG = "DogListViewModel"
@@ -27,8 +32,7 @@ class LikedProfileViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             _viewState.emit(ViewState.Loading)
-
-            val shelterInfo = getInfo(AuthRepository.token) //loadPsynas()
+            val shelterInfo = getInfo()
             Log.d(LOG_TAG, "End loading users")
             _viewState.emit(ViewState.Data(shelterInfo))
         }
@@ -38,12 +42,9 @@ class LikedProfileViewModel : ViewModel() {
         return Shelter(0, "nizhny novgorod", "da", "da")
     }
 
-    private suspend fun getInfo(token: String): Shelter? {
+    private suspend fun getInfo(): Shelter? {
         val shelter = safeApiCall(Dispatchers.IO) {
-            provideApi("").getShelterInfo(
-                bearerToken = "Bearer $token",
-                psynasRequest = LikeRequest(psynaId = psynaId)
-            )
+            api.getShelterInfo(psynasRequest = LikeRequest(psynaId = psynaId))
         }
 
 

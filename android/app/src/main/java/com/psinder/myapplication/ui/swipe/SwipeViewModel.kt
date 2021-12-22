@@ -4,19 +4,20 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psinder.myapplication.entity.Profile
-import com.psinder.myapplication.network.LikeRequest
-import com.psinder.myapplication.network.LoadPsynasRequest
-import com.psinder.myapplication.network.ResultWrapper
-import com.psinder.myapplication.network.safeApiCall
+import com.psinder.myapplication.network.*
+import com.psinder.myapplication.util.safeApiCall
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class SwipeViewModel: ViewModel() {
+@HiltViewModel
+class SwipeViewModel @Inject constructor(
+    private val api: SwipeApi
+): ViewModel() {
 
 
     companion object {
@@ -30,23 +31,15 @@ class SwipeViewModel: ViewModel() {
 
     init {
         viewModelScope.launch {
-            _viewState.emit(ViewState.Loading)
-            Log.d(LOG_TAG, "Start loading psynas")
-            token.collect { token ->
-                Log.d(LOG_TAG, "Token recieved ${token}")
-                val users = loadPsynas(token)
-                Log.d(LOG_TAG, "End loading psynas")
-                _viewState.emit(ViewState.Data(users))
-            }
+            val users = loadPsynas()
+            _viewState.emit(ViewState.Data(users))
         }
     }
 
 
-    private suspend fun loadPsynas(token : String): List<Profile> {
+    private suspend fun loadPsynas(): List<Profile> {
             val psynas = safeApiCall(Dispatchers.IO) {
-                com.psinder.myapplication.network.provideApi("LOADLIKES").loadpsynas(
-                    bearerToken = "Bearer $token"
-                )
+                api.loadpsynas()
             }
 
            when (psynas) {
@@ -78,10 +71,7 @@ class SwipeViewModel: ViewModel() {
         Log.d(LOG_TAG, "Like $psynaId")
         viewModelScope.launch {
             safeApiCall(Dispatchers.IO) {
-                com.psinder.myapplication.network.provideApi("LIKE").like(
-                    bearerToken = "Bearer ${token.value}",
-                    LikeRequest(psynaId)
-                )
+                api.like(LikeRequest(psynaId))
             }
         }
     }
