@@ -93,7 +93,7 @@
                 android:id="@+id/navRegister"
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin"
-                android:text="Впервые в Psynder?\nЗарегестрируйтесь сейчас"
+                android:text="Впервые в Psynder?\nЗарегистрируйтесь сейчас"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="17sp"
